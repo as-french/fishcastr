@@ -4,11 +4,14 @@
 # fishcastr
 
 <!-- badges: start -->
+
+[![R build
+status](https://github.com/as-french/fishcastr/workflows/R-CMD-check/badge.svg)](https://github.com/as-french/fishcastr/actions)
 <!-- badges: end -->
 
-# What is the aim of *fishcastr*?
+# What is fishcastr?
 
-The aim of *fishcastr* is to provide a collection of R based tools for
+`fishcastr` is an R package that provides a collection of tools for
 generating seasonal migration forecasts for the timing of seaward
 movements of diadromous fishes.
 
@@ -44,7 +47,7 @@ and 4/25 predict middle tercile (average migration).
 
 # Why develop seasonal forecasts for diadromous fishes?
 
-The potential of seasonal *climate* forecasts for informing
+The potential of *seasonal climate forecasts* for informing
 environmental and ecological management through operational forecasts is
 receiving increasing attention (e.g., in marine and freshwater settings,
 as well as fire risk).
@@ -77,7 +80,7 @@ plans.
 
 # What does fishcastr do?
 
-*fishcastr*’s functionality is demonstrated in the package vignettes.
+`fishcastr`’s functionality is demonstrated in the package vignettes.
 The vignettes “manuscript” and “supplementary materials” describe the
 process of accessing and pre-process publicly available fish count data,
 environmental data and climate data and use open-source statistical and
@@ -92,19 +95,21 @@ the credibility of its predictions by retrospective skill assessment.
     forecasts for a range of seasonal timing summary statistics (mean
     day of migration, percentiles etc.)
 -   Visualise uncertainty in probabilistic predictions, building on some
-    of the functionality in the *visualizeR* package for seasonal
+    of the functionality in the `visualizeR` package for seasonal
     climate forecast visualization
 -   Predict water temperature from air temperature
 -   Calculate moonlight exposure
 -   Stratify count census data into “forecast years” based on biological
     information (thermal/daylength thresholds)
 
-***Model chain*** The example seasonal migration forecasts contained in
-the *forecastr* vignettes are derived from a model chain that includes a
-process based rainfall run-off model (using *airGR*) and correlative
-fish count models (using *glmmTMB*). Additional elements of the model
-chain, including a statistical water temperature model and moonlight
-exposure estimates are implemented within *forecastr*.
+***Model chain***
+
+The example seasonal migration forecasts contained in the `forecastr`
+vignettes are derived from a model chain that includes a process based
+rainfall run-off model (using `airGR`) and correlative fish count models
+(using `glmmTMB`). Additional elements of the model chain, including a
+statistical water temperature model and moonlight exposure estimates are
+implemented within `forecastr`.
 
 # How to install
 
@@ -130,7 +135,7 @@ you find an issue, please raise it at:
 
 # Credits
 
-The *fishcastr* package was built to support the ClimateJPI ERA4CS
-WATExR project 2017 - 2021 (<https://watexr.eu>).
+`fishcastr` was built to support the ClimateJPI ERA4CS WATExR project
+2017 - 2021 (<https://watexr.eu>).
 
 # Literature cited
