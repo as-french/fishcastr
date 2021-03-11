@@ -1,0 +1,35 @@
+---
+title: "An example of seasonal forecast development for Atlantic salmon smolts"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{salmon}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# (1) DATA PROVENANCE AND PRE-PROCESSING
+
+## (1a) Compile catchment specific data
+
+```{r catchment_specific_data}
+# FISH COUNTS ----
+library(fishcastr)
+data_ssmolt <- fishcastr::data_ssmolt
+
+# WATER TEMPERATURE ----
+data_Feeagh2m_temp <- fishcastr::data_Feeagh2m_temp
+
+# CATCHMENT DISCHARGE ----
+
+# DATES AND LOCATION OF CATCHMENT ----
+dates <- data_ssmolt$date
+latitude <- 53.932458
+longitude <- -9.575556
+```

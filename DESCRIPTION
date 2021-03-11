@@ -1,0 +1,24 @@
+Package: fishcastr
+Title: Generate seasonal migration timing forecasts for diadromous fishes
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Andrew",
+           family = "French",
+           role = c("aut", "cre"),
+           email = "Andrew.French@Marine.ie",
+           comment = c(ORCID = "0000-0001-6662-4113"))
+Description: This package provides a collection of R based tools for generating seasonal migration forecasts for the timing of seaward movements of diadromous fishes.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
+Imports: 
+    suncalc,
+    lubridate
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Depends: 
+    R (>= 2.10)
