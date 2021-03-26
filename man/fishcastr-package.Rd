@@ -4,9 +4,9 @@
 \name{fishcastr-package}
 \alias{fishcastr}
 \alias{fishcastr-package}
-\title{fishcastr: Generate seasonal migration timing forecasts for diadromous fishes}
+\title{fishcastr: Generate Seasonal Migration Timing Forecasts for Diadromous Fishes}
 \description{
-This package provides a collection of R based tools for generating seasonal migration forecasts for the timing of seaward movements of diadromous fishes.
+A collection of tools for generating seasonal migration forecasts for the timing of seaward movements of diadromous fishes.
 }
 \author{
 \strong{Maintainer}: Andrew French \email{Andrew.French@Marine.ie} (\href{https://orcid.org/0000-0001-6662-4113}{ORCID})

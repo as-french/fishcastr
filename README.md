@@ -5,8 +5,6 @@
 
 <!-- badges: start -->
 
-[![R build
-status](https://github.com/as-french/fishcastr/workflows/R-CMD-check/badge.svg)](https://github.com/as-french/fishcastr/actions)
 [![R-CMD-check](https://github.com/as-french/fishcastr/workflows/R-CMD-check/badge.svg)](https://github.com/as-french/fishcastr/actions)
 <!-- badges: end -->
 
@@ -37,10 +35,11 @@ Seasonal migration forecasts are communicated in terms of probabilistic
 predictions of timing anomalies (e.g., early, late or average mean date
 of migration). The first step in producing a Seasonal migration
 forecasts are produced is to apply a *seasonal climate forecast*
-multi-member ensemble, such as ECMWF’s SEAS5 forecast product, to a
-model chain to produce an ensemble of plausible daily count
-simulations/scenarios within a target season of interest (e.g., March
-through July). From these ensemble simulations, migration timing
+multi-member ensemble, such as [ECMWF’s
+SEAS5](https://gmd.copernicus.org/articles/12/1087/2019/) forecast
+product, to a model chain to produce an ensemble of plausible daily
+count simulations/scenarios within a target season of interest (e.g.,
+March through July). From these ensemble simulations, migration timing
 statistics (e.g., mean date of migration) are calculated for each member
 and ranked by tercile frequencies; i.e., 1/25 members predict lower
 tercile (early migration), 20/25 predict upper tercile (late migration),
@@ -96,21 +95,23 @@ the credibility of its predictions by retrospective skill assessment.
     forecasts for a range of seasonal timing summary statistics (mean
     day of migration, percentiles etc.)
 -   Visualise uncertainty in probabilistic predictions, building on some
-    of the functionality in the `visualizeR` package for seasonal
-    climate forecast visualization
+    of the functionality in the
+    [visualizeR](https://github.com/SantanderMetGroup/visualizeR)
+    package for seasonal climate forecast visualization
 -   Predict water temperature from air temperature
 -   Calculate moonlight exposure
 -   Stratify count census data into “forecast years” based on biological
-    information (thermal/daylength thresholds)
+    information (thermal/day length thresholds)
 
 ***Model chain***
 
-The example seasonal migration forecasts contained in the `forecastr`
+The example seasonal migration forecasts contained in the `fishcastr`
 vignettes are derived from a model chain that includes a process based
-rainfall run-off model (using `airGR`) and correlative fish count models
-(using `glmmTMB`). Additional elements of the model chain, including a
-statistical water temperature model and moonlight exposure estimates are
-implemented within `forecastr`.
+rainfall run-off model (using [airGR](https://github.com/cran/airGR))
+and correlative fish count models (using
+[glmmTMB](https://github.com/glmmTMB/glmmTMB)). Additional elements of
+the model chain, including a statistical water temperature model and
+moonlight exposure estimates are implemented within `fishcastr`.
 
 # How to install
 
@@ -122,6 +123,93 @@ Install R package:
 install.packages("devtools")
 devtools::install_github("as-french/fishcastr",
                          build_vignettes = FALSE)
+```
+
+## A note on access to archived seasonal climate forecasts and grid pseudo-observations
+
+`fishcastr` includes all data required to reproduce the analysis
+described in the “vignettes/Manuscript”. For example, re-forecasts and
+archived operational forecasts for 1993 to 2019 interpolated to the
+location of the Burrishoole catchment in the west of Ireland can be
+found in raw form
+(`fishcastr::grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_raw`) and
+bias corrected form
+(`fishcastr::grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_bc`) -
+though note the values in both these datasets are rounded to reduce
+package size.
+
+For users who wish to access raw seasonal climate forecast data for
+other locations, there are two options.
+
+-   Contact the University of Santander Met Group for access to archived
+    SEAS5 forecasts through the
+    [Climate4R](https://github.com/SantanderMetGroup/climate4R) package
+    bundle using functions such as `loadeR::loadSeasonalForecast`, or..
+
+-   Download climate data directly from the [Copernicus Climate Data
+    Store (CDS)](https://cds.climate.copernicus.eu/#!/home) in netcdf
+    format. If you choose this option, we recommend using the
+    [ecmwfr](https://cran.r-project.org/web/packages/ecmwfr/vignettes/webapi_vignette.html)
+    package for data download/documentation, and we recommend you use
+    the `Climate4R` tools for data processing. The /raw-data/ folder in
+    this package contains example scripts for accessing ECMWF’s ERA5
+    reanalysis and operational SEAS5 data from Copernicus CDS.
+
+In both instances, we recommend installation of the `Climate4R` bundle -
+see instructions on each github page, taking particular care with
+loadeR, owing to its dependency on a Java installation and the R package
+rJava, which has [known
+issues](https://github.com/SantanderMetGroup/loadeR/wiki/Installation).
+
+Install in following order:
+
+-   [rJava](https://cran.r-project.org/web/packages/rJava/index.html)
+-   [loadeR.java](https://github.com/SantanderMetGroup/loadeR.java)
+-   [climate4R.UDG](https://github.com/SantanderMetGroup/climate4R.UDG)
+-   [loadeR](https://github.com/SantanderMetGroup/loadeR)
+
+``` r
+# ----------------------------------------------------------------------------------- #
+# SETTING UP R FOR fishcastr PACKAGE INSTALLATION (FOR WINDOWS 10)
+# ----------------------------------------------------------------------------------- #
+
+# NOTES ----
+# Package built using R version 3.6.3 on windows 10
+# Might need to disable some aspect of anti-virus software to allow packages to be installed (e.g., "Safe Files" for Bitdefender 2018v onwards)
+
+# DOWNLOAD AND INSTALL Java ----
+# Download java 12.0.2 jdk 64 bit (note version 14 is not compatible; date 19-09-2020)
+# https://www.oracle.com/java/technologies/javase/jdk12-archive-downloads.html
+# see https://www.oracle.com/java/technologies/javase-downloads.html for other versions
+
+# SET NEW ENVIRONMENT VARIABLE "JAVA_HOME" ----
+# either manually by adding to environment path JAVA_HOME: C:\Program Files\Java\jdk-12.0.2 
+# or set in r using code
+# Sys.setenv(JAVA_HOME="C:/Program Files/Java/jdk-12.0.2/")
+
+# ADD JDK bin PATH TO SYSTEM ENV PATH ----
+# C:\Program Files\Java\jdk-12.0.2\bin to system Path variable
+
+# INSTALL Rtools35 ----
+# https://cran.r-project.org/bin/windows/Rtools/history.html
+
+# INSTALL devtools R package ----
+# install.packages("devtools")
+
+# INSTALL rJava R package ----
+# install.packages("rJava",type = "source")
+
+# INSTALL UNICAN R packages ----
+# NOTE - this is not necessary for fishcastr to install, or for vignette
+# functions to work, but is necessary for developing forecasts for other regions
+# following protocol contained in the Manuscript vignette
+#### noting we have installed 64-bit java only; hence "--no-multiarch"
+# devtools::install_github("SantanderMetGroup/loadeR.java", INSTALL_opts=c("--no-multiarch"))
+# devtools::install_github("SantanderMetGroup/climate4R.UDG", INSTALL_opts=c("--no-multiarch"))
+# devtools::install_github("SantanderMetGroup/loadeR", INSTALL_opts=c("--no-multiarch"))
+# devtools::install_github(c("SantanderMetGroup/visualizeR",
+#                            "SantanderMetGroup/downscaleR",
+#                            "SantanderMetGroup/transformeR"))
 ```
 
 # How to use
