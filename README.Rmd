@@ -27,7 +27,7 @@ Diadromous fish migration forecasts can inform management of in-river infrastruc
 
 # What is a seasonal migration forecast?
 
-Seasonal migration forecasts are communicated in terms of probabilistic predictions of timing anomalies (e.g., early, late or average mean date of migration). The first step in producing a Seasonal migration forecasts are produced is to apply a *seasonal climate forecast* multi-member ensemble, such as [ECMWF's SEAS5](https://gmd.copernicus.org/articles/12/1087/2019/) forecast product, to a model chain to produce an ensemble of plausible daily count simulations/scenarios within a target season of interest (e.g., March through July). From these ensemble simulations, migration timing statistics (e.g., mean date of migration) are calculated for each member and ranked by tercile frequencies; i.e., 1/25 members predict lower tercile (early migration), 20/25 predict upper tercile (late migration), and 4/25 predict middle tercile (average migration).
+Seasonal migration forecasts are communicated in terms of probabilistic predictions of timing anomalies (e.g., early, late or average mean date of migration). For consistency with other seasonal environmental forecasts, seasonal migration forecast are produced by applying multi-member ensemble *seasonal climate forecast* forcing data, such as [ECMWF's SEAS5](https://gmd.copernicus.org/articles/12/1087/2019/) product, to a model chain. This application produces an ensemble of plausible daily count simulations/scenarios within a target season of interest (e.g., March through July). From these ensemble simulations, migration timing statistics (e.g., mean date of migration) are calculated for each member and ranked by tercile frequencies; i.e., 1/25 members predict lower tercile (early migration), 20/25 predict upper tercile (late migration), and 4/25 predict middle tercile (average migration).
 
 # Why develop seasonal forecasts for diadromous fishes?
  
@@ -124,9 +124,10 @@ Install in following order:
 # devtools::install_github("SantanderMetGroup/loadeR.java", INSTALL_opts=c("--no-multiarch"))
 # devtools::install_github("SantanderMetGroup/climate4R.UDG", INSTALL_opts=c("--no-multiarch"))
 # devtools::install_github("SantanderMetGroup/loadeR", INSTALL_opts=c("--no-multiarch"))
-# devtools::install_github(c("SantanderMetGroup/visualizeR",
+# devtools::install_github(c("SantanderMetGroup/transformeR",
 #                            "SantanderMetGroup/downscaleR",
-#                            "SantanderMetGroup/transformeR"))
+#                            "SantanderMetGroup/visualizeR",
+#                            "SantanderMetGroup/drought4R"))
 ```
 
 # How to use

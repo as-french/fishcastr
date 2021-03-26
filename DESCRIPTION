@@ -19,9 +19,6 @@ Imports:
     bbmle (>= 1.0.23.1),
     utils,
     transformeR (>= 2.1.0),
-    downscaleR (>= 3.3.1),
-    drought4R (>= 0.2.0),
-    visualizeR (>= 1.6.1),
     airGR (>= 1.6.10.4),
     MASS,
     data.table (>= 1.14.0),
@@ -30,12 +27,10 @@ Imports:
     VGAM (>= 1.1-5),
     DHARMa (>= 0.3.0),
     plyr (>= 1.8.6),
-    qdapRegex (>= 0.7.2)
+    qdapRegex (>= 0.7.2),
+    SpecsVerification
 Remotes: 
-    github::SantanderMetGroup/transformeR,
-    github::SantanderMetGroup/drought4R,
-    github::SantanderMetGroup/downscaleR,
-    github::SantanderMetGroup/visualizeR
+    github::SantanderMetGroup/transformeR
 Suggests: 
     knitr,
     rmarkdown,
