@@ -1,0 +1,24 @@
+#' Bias adjusted ECMWF's ERA5 climate reanalysis at Burrishoole, Co Mayo,
+#' Ireland
+#'
+#' A grid containing bias adjusted daily mean air temperature at 2m, daily total
+#' precipitation and potential evapotranspiration (calculated using the
+#' Hargreaves-Samani equation). Data were obtained from the Copernicus Climate
+#' Data Store gridded reanalysis dataset. Dates 1979-01-01 to 2019-01-31. These
+#' grid data are posterior bias adjusted and rounded to 2 decimal places. Data
+#' were bias adjusted using leave-one-out cross validation and empirical
+#' quantile mapping implemented in downscaleR::biasCorrection. Data were
+#' primarily bias adjusted against measurements Met Éireann's Furnace manual
+#' weather station at Burrishoole; however, gaps were filled in the manual
+#' station data using a nearby automatic station (2005-present) and EWEMBI
+#' gridded pseudo-observations (1979-2016) (see raw-data documentation for
+#' grid_met_obs_1979_2019).
+#'
+#' @format A list of three grids: \describe{
+#'   \item{tas}{mean air temperature, in degrees Celsius}
+#'   \item{pr}{total precipitation, in millimetres}
+#'   \item{petH}{potential evapotranspiration, in millimetres}... }
+#' @source
+#' \url{https://doi.org/10.24381/cds.adbb2d47}
+#'
+"grid_ERA5_1979_2019_Jan_bc"

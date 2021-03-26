@@ -1,0 +1,19 @@
+#' Daily catchment freshwater discharge at Burrishoole, Co. Mayo, Ireland.
+#'
+#' A dataset containing daily discharge values estimated using a rating curve
+#' fitted to 20 data points for the combined outflows from Lough Feeagh, Mill
+#' Race and Salmon Leap. Discharge estimates were calculated using Irish
+#' Environmental Protection Agency Lough Feeagh water level data (1976-03-04 to
+#' 2021-03-07) that has been corrected for a step change that occurred during
+#' the mid 1990s. It is unclear on which date the bias was introduced; however,
+#' all data post mid-1990s does not reach the historic low levels pre-1990s. To
+#' adjust for this, all daily water levels pre 1997-08-27 have been increased by
+#' 0.065m. Note, that owing to gaps in water level records, concurrent gaps
+#' occur in the rating curve calculated discharge. Correction carried out by SK.
+#'
+#' @format A data frame with 16440 rows and two variables: \describe{
+#'   \item{date}{date, a date} \item{discharge_m3.s}{discharge, in cubic metres
+#'   per second} ... }
+#' @source \url{https://www.epa.ie/hydronet/#32070}
+#'
+"data_Feeagh_discharge_corr"

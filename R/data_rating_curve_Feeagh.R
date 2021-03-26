@@ -1,0 +1,18 @@
+#' Rating curve data collected from the outflows of, Lough Feeagh, Burrishoole,
+#' Co. Mayo, Ireland.
+#'
+#' A dataset containing 20 measurements of combined discharge from the two Lough
+#' Feeagh outflows (Mill Race and Salmon leap). Measurements were collected and
+#' data collated by Sean Kelly (Marine Institute, Ireland) between 2016 and
+#' 2018.
+#'
+#' @format A data frame with 20 rows and four variables: \describe{
+#'   \item{date}{date, a date}
+#'   \item{Total_Q_m3_s}{discharge, in metres cubed
+#'   per second}
+#'   \item{Feeagh_EPA_ht_m}{Lough Feeagh water level height, in metres}
+#'   \item{comments}{comments}... }
+#' @source
+#'   \url{https://doi.org/10.1371/journal.pone.0235963}
+#'
+"data_rating_curve_Feeagh"

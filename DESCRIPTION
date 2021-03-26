@@ -12,13 +12,42 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Imports: 
-    suncalc,
-    lubridate
+    suncalc (>= 0.5.0),
+    lubridate (>= 1.7.10),
+    bbmle (>= 1.0.23.1),
+    utils,
+    transformeR (>= 2.1.0),
+    downscaleR (>= 3.3.1),
+    drought4R (>= 0.2.0),
+    visualizeR (>= 1.6.1),
+    airGR (>= 1.6.10.4),
+    MASS (>= 7.3-53),
+    data.table (>= 1.14.0),
+    RMKdiscrete (>= 0.1),
+    gamlss.dist (>= 5.1-7),
+    VGAM (>= 1.1-5),
+    DHARMa (>= 0.3.0),
+    plyr (>= 1.8.6),
+    qdapRegex (>= 0.7.2)
+Remotes: 
+    github::SantanderMetGroup/loadeR,
+    github::SantanderMetGroup/transformeR,
+    github::SantanderMetGroup/loadeR.ECOMS,
+    github::SantanderMetGroup/convertR,
+    github::SantanderMetGroup/drought4R,
+    github::SantanderMetGroup/downscaleR,
+    github::SantanderMetGroup/loadeR.java,
+    github::SantanderMetGroup/visualizeR
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    loadeR,
+    loadeR.ECOMS,
+    convertR,
+    loadeR.java,
+    hydroGOF
 VignetteBuilder: knitr
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5.0)
