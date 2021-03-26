@@ -7,6 +7,7 @@
 
 [![R build
 status](https://github.com/as-french/fishcastr/workflows/R-CMD-check/badge.svg)](https://github.com/as-french/fishcastr/actions)
+[![R-CMD-check](https://github.com/as-french/fishcastr/workflows/R-CMD-check/badge.svg)](https://github.com/as-french/fishcastr/actions)
 <!-- badges: end -->
 
 # What is fishcastr?

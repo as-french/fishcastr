@@ -32,21 +32,23 @@ Imports:
     plyr (>= 1.8.6),
     qdapRegex (>= 0.7.2)
 Remotes: 
+    github::SantanderMetGroup/loadeR.java,
+    github::SantanderMetGroup/climate4R.UDG,
     github::SantanderMetGroup/loadeR,
-    github::SantanderMetGroup/transformeR,
     github::SantanderMetGroup/loadeR.ECOMS,
     github::SantanderMetGroup/convertR,
+    github::SantanderMetGroup/transformeR,
     github::SantanderMetGroup/drought4R,
     github::SantanderMetGroup/downscaleR,
-    github::SantanderMetGroup/loadeR.java,
     github::SantanderMetGroup/visualizeR
 Suggests: 
-    knitr,
-    rmarkdown,
+    loadeR.java,
+    climate4R.UDG,
     loadeR,
     loadeR.ECOMS,
     convertR,
-    loadeR.java,
+    knitr,
+    rmarkdown,
     hydroGOF
 VignetteBuilder: knitr
 Depends: 
