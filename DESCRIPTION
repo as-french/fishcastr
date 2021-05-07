@@ -36,15 +36,13 @@ Imports:
     fields,
     pBrackets,
     pROC,
-    loadeR,
     drought4R,
     ncdf4,
     zoo,
     strucchange
 Remotes: 
     github::SantanderMetGroup/transformeR,
-    github::SantanderMetGroup/drought4R,
-    github::SantanderMetGroup/loadeR
+    github::SantanderMetGroup/drought4R
 Suggests: 
     knitr,
     rmarkdown,
