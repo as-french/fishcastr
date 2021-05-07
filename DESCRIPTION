@@ -18,7 +18,7 @@ Imports:
     lubridate (>= 1.7.10),
     bbmle (>= 1.0.23.1),
     utils,
-    transformeR (>= 2.1.0),
+    transformeR (>= 1.7.4),
     airGR (>= 1.6.10.4),
     MASS,
     data.table (>= 1.14.0),
@@ -28,13 +28,38 @@ Imports:
     DHARMa (>= 0.3.0),
     plyr (>= 1.8.6),
     qdapRegex (>= 0.7.2),
-    SpecsVerification
+    SpecsVerification,
+    caret,
+    Hmisc,
+    broom,
+    dplyr,
+    fields,
+    pBrackets,
+    pROC,
+    loadeR,
+    drought4R,
+    ncdf4,
+    zoo,
+    strucchange
 Remotes: 
-    github::SantanderMetGroup/transformeR
+    github::SantanderMetGroup/transformeR,
+    github::SantanderMetGroup/drought4R,
+    github::SantanderMetGroup/loadeR
 Suggests: 
     knitr,
     rmarkdown,
-    hydroGOF
+    hydroGOF,
+    doSNOW,
+    ggpubr,
+    glmmTMB,
+    interactions,
+    reshape2,
+    car,
+    ggplot2,
+    lme4,
+    downloader,
+    ecmwfr,
+    keyring
 VignetteBuilder: knitr
 Depends: 
     R (>= 3.5.0)

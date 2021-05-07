@@ -1,8 +1,8 @@
 #' Calculate photoperiod from latitude and longitude
 #'
-#' This function takes a date vector and latitude and longitude and calculates
-#' photoperiod (daylength) from sunrise and sunset times using the suncalc
-#' package.
+#' @description This function takes a date vector and latitude and longitude and
+#'   calculates photoperiod (daylength) from sunrise and sunset times using the
+#'   suncalc package.
 #'
 #' @param dates Vector of dates in class "Date".
 #' @param latitude Latitude in decimal degrees WGS84

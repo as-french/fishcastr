@@ -1,0 +1,60 @@
+#' Fitted model parameters for an inverted exponentially modified Gaussian
+#' response function
+#'
+#' @description The coefficients of a fitted bbmle::mle2 (Bolker & R Core Team.
+#'   2017) object that relates downstream migrating silver eel count data to
+#'   photoperiod weighted degree days post winter solstice immediately preceding
+#'   the migration run (in the following autumn; i.e., 9 months on). This
+#'   unimodal function was fitted to count data that had been scaled to
+#'   percentage of annual migration runs and transformed back into counts. The
+#'   count data used to fit the curve were collected in two complete upstream
+#'   and downstream in-river trapping facilities between 1981-01-01 and
+#'   1992-12-21 (Rogan et al. 2020). Water temperature data used for calibration
+#'   of an air to water temperature statistical model and subsequent calculation
+#'   of photoperiod weighted degree days were collected between 2004 and 2014 at
+#'   2m depth using an Automatic Water Quality Monitoring Station (AWQMS) on
+#'   Lough Feeagh, Burrishoole, Ireland (de Eyto et al. 2019). Air temperature
+#'   data used for calibrating the air to water temperature model were computed
+#'   by bias adjustment of ECMWF's ERA5 climate reanalysis (Hersbach et al.
+#'   2020). See fishcastr documentation and package folders
+#'   /data-raw/data_air_to_water_model.R and
+#'   /data-raw/model_physio_expmG_inv_eel_calibration.R for details of model fitting
+#'   procedure and validation.
+#'
+#' @references
+#' Bolker, B. & R Core Team. (2017). bbmle: Tools for General Maximum Likelihood
+#' Estimation (R package version 1.0.20).
+#' https://CRAN.R-project.org/package=bbmle
+#'
+#' de Eyto, E., Dillane, M., Cooney, J., Hughes, P., Murphy, M., Nixon, P.,
+#' Sweeney, D., Poole, R., & Rouen, M. (2019). Water quality and meteorological
+#' data from the Lough Feeagh Automatic Water Quality Monitoring Station (AWQMS),
+#' 2004-2019 (Version 1). Marine Institute, Ireland.
+#' https://doi.org/10.20393/EDD58462-AE36-44B2-BF36-0EF06C6E8357
+#'
+#' Rogan, G., French, A. S., Poole, W. R., Kelly, S., Cooney, J., de Eyto, E.,
+#' Dillane, M., Drumm, A., Hughes, P., Nixon, P., Maxwell, H., & Sweeney, D.
+#' (2020). Daily counts of seaward migration of Atlantic salmon (Salmo salar),
+#' trout (Salmo trutta) and European eel (Anguilla anguilla), through the
+#' Burrishoole traps, Co. Mayo, Ireland, 1970-2019. Marine Institute, Ireland.
+#' https://data.marine.ie/geonetwork/srv/api/records/ie.marine.data:dataset.4343
+#'
+#' Hersbach, H., Bell, B., Berrisford, P., Hirahara, S., Horányi, A.,
+#' Muñoz‐Sabater, J., Nicolas, J., Peubey, C., Radu, R., Schepers, D., Simmons,
+#' A., Soci, C., Abdalla, S., Abellan, X., Balsamo, G., Bechtold, P., Biavati,
+#' G., Bidlot, J., Bonavita, M., … Thépaut, J.-N. (2020). The ERA5 global
+#' reanalysis. Quarterly Journal of the Royal Meteorological Society, 146(730),
+#' 1999–2049. https://doi.org/10.1002/qj.3803
+#'
+#' @format A list of three items containing parameter estimates of a bbmle::mle2
+#'   S4 class object: \describe{
+#'   \item{data}{A list with two numeric vectors used for model fitting
+#'   (seel_perc_run_int: re-scaled silver eel count data;
+#'   weighted_dds_water: photoperiod weighted degree days), data.frame object}
+#'   \item{coefs}{A numeric vector of fitted model coefficients (see
+#'   R/exp_mod_Gaussian_resp.R for explanation of model coefficients), bbmle:mle2
+#'   object}
+#'   \item{vcov_mat}{The variance covariance matrix of the fitted bbmle::mle2
+#'   object} ... }
+#'
+"model_physio_expmG_inv_eel"

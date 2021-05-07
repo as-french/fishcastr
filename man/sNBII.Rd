@@ -16,12 +16,12 @@ sNBII(sigma, mu)
 A vector of random deviates.
 }
 \description{
-This function generates summary statistics when supplied with a vector of
-conditional means and dispersion parameter. Implemented for compatibility
-with bbmle::mle2 (Bolker & R Core Team 2017), which requires "s" functions
-associated with "d" functions. The corresponding discrete density (or
-probability mass) function, dNBII, of the negative binomial type II is
-contained in package gamlss.dist.
+This function generates summary statistics when supplied with a
+vector of conditional means and dispersion parameter. Implemented for
+compatibility with bbmle::mle2 (Bolker & R Core Team 2017), which requires
+"s" functions associated with "d" functions. The corresponding discrete
+density (or probability mass) function, dNBII, of the negative binomial
+type II is contained in package gamlss.dist.
 }
 \examples{
 sNBII(mu = fishcastr::exp_mod_Gaussian_resp(x = 1:365,

@@ -20,16 +20,16 @@ double} \item{rout.stor.cap_mm}{routing store capacity (mm), a double}
 GR4J_Burr_params_ERA5_bcc
 }
 \description{
-A dataset containing four parameters for running the GR4J model for the
-Burrishole catchment, Ireland. Parameters are: (i) production store capacity
-(mm), (ii) inter-catchment exchange coefficient (mm/d), (iii) routing store
-capacity (mm), (iv) unit hydrograph time constant (d). A model for
-Burrishoole was calibrated using the airGR package, Irish EPA Lough Feeagh
-lake level data, a ratings curve fitted (using bbmle::mle2) using flow
-measurements taken by SK at the Marine Institute, Furnace, Ireland,
-statistically downscaled (bias corrected) ECMWF ERA5 reanalysis precipitation
-data, and estimated daily potential evapotranspiration using the
-Hargreaves-Samani equation in the drought4R package. Further details on
+A dataset containing four parameters for running the GR4J model
+for the Burrishole catchment, Ireland. Parameters are: (i) production store
+capacity (mm), (ii) inter-catchment exchange coefficient (mm/d), (iii)
+routing store capacity (mm), (iv) unit hydrograph time constant (d). A
+model for Burrishoole was calibrated using the airGR package, Irish EPA
+Lough Feeagh lake level data, a ratings curve fitted (using bbmle::mle2)
+using flow measurements taken by SK at the Marine Institute, Furnace,
+Ireland, statistically downscaled (bias corrected) ECMWF ERA5 reanalysis
+precipitation data, and estimated daily potential evapotranspiration using
+the Hargreaves-Samani equation in the drought4R package. Further details on
 calibration can be found within the EcoCountForecastR package in
 /data-raw/data_est_catchment_discharge.R.
 }

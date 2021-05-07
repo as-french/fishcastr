@@ -7,9 +7,20 @@
 # ----------------------------------------------------------------------------------------------- #
 # LOAD OBSERVATIONS AND DATA TO BE BIAS CORRECTED ----
 # ----------------------------------------------------------------------------------------------- #
-data_reforecast <- fishcastr::grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_raw
+#data_reforecast <- fishcastr::grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_raw
 
-obs.data <- fishcastr::grid_met_obs_1979_2019[-c(3,4)]
+data_reforecast <- readRDS(file = paste0(
+  system.file("inst", package = "fishcastr"),
+  "/extdata/grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_raw_CDS.rds"
+))
+
+#obs.data <- fishcastr::grid_met_obs_1979_2019[-c(3,4)]
+
+obs.data <- readRDS(file = paste0(
+  system.file("inst", package = "fishcastr"),
+  "/extdata/grid_met_obs_1979_2019.rds"
+))[-c(3,4)]
+
 obs.data$petH$Variable$varName <- "petH"
 
 # Subset all datasets to the same Dates as the reforcast precipitation. Note that we compute daily accumulated
@@ -93,3 +104,9 @@ grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_bc$petH$Data <- round(grid_SEAS5
 
 # export data
 usethis::use_data(grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_bc, overwrite = TRUE)
+
+saveRDS(grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_bc,
+        file = paste0(
+          system.file("inst", package = "fishcastr"),
+          "/extdata/grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_bc_CDS.rds"
+        ))

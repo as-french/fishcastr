@@ -1,0 +1,699 @@
+---
+title: "An example of seasonal forecast development for Atlantic salmon smolts: Part III of IV"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{An example of seasonal forecast development for Atlantic salmon smolts: Part III of IV}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# INTRODUCTION
+
+This document demonstrates the use of a calibrated model chain for generating simulated fish count ensembles for the Atlantic salmon (*Salmo salar*) smolt seasonal migration timing forecasts presented in the accompanying manuscript. A separate vignettes, "salmon_2c.Rmd", describes fish count model fitting and checking procedure.
+
+All R scripts required to calibrate each element of the model chain (e.g., the GR4J hydrologic model calibration) are contained in the `data_raw` folder of the package and are named accordingly (e.g., `data_raw/model_GR4J_calibration.R`.
+
+The following sections correspond to numbered items in **Figure 1** of the accompanying manuscript.
+
+# (3) EVALUATE FORECAST PERFORMANCE
+
+## (3a) Generate migration forecast ensmbles
+
+### Known conditions (ECMWF's ERA5)
+
+The following code produces a 25 member ensemble of plausible Atlantic salmon smolt daily counts under known conditions. We consider the model chain forcing data a "synthetic ensemble" of bias corrected ECMWF ERA5 data, whereby each member for a given forecast year is identical, but different years contained different data. Owing to the simulation based approach, ensemble fish counts are produced stochastically and are effectively random draws from the (generalised Poisson) conditional distribution; thus each member of the output fish count ensemble is unique.
+
+```{r figure_5a_salmon_methods, warning = FALSE, echo = FALSE,  fig.height=7, fig.width=7, eval = FALSE}
+
+# load physio response model
+mod_physio_expmG <- fishcastr::model_physio_expmG_salmon
+
+# load and subset list into model and scaling lists for relevant years only 1993 - 2019
+model_list_1of2 <- readRDS(paste0(system.file("vignettes", package = "fishcastr"),
+                                   "/vignette_data/mTrain_genpois_salmon_list_1of2.rds"))
+model_list_2of2 <- readRDS(paste0(system.file("vignettes", package = "fishcastr"),
+                                   "/vignette_data/mTrain_genpois_salmon_list_2of2.rds"))
+
+mTrain_genpois_list <- list()
+mTrain_genpois_list[1:length(model_list_1of2)] <- model_list_1of2
+mTrain_genpois_list[(1 + length(model_list_1of2)):(length(model_list_1of2)+length(model_list_2of2))] <- model_list_2of2
+
+ # add 2019 data
+ mTrain_genpois_salmon_2019 <- model_list_1of2 <- readRDS(paste0(system.file("vignettes", package = "fishcastr"),
+                                    "/vignette_data/mTrain_genpois_salmon_2019.rds"))
+ pP_params_salmon_2019 <- model_list_1of2 <- readRDS(paste0(system.file("vignettes", package = "fishcastr"),
+                                    "/vignette_data/pP_params_salmon_2019.rds"))
+ 
+ mTrain_genpois_list[[39]] <- list(mTrain_genpois_salmon_2019,
+                                 pP_params_salmon_2019)
+
+names(mTrain_genpois_list) <- 1981:2019
+
+# subset to 2015 - 2019 models for testing function
+mTrain_genpois_list_sub <- mTrain_genpois_list[which(names(mTrain_genpois_list) %in% c(1981:2019))]
+
+# model list
+mTrain_genpois_list_sub_mod <- sapply(mTrain_genpois_list_sub, "[", 1)
+# scaling param list
+mTrain_genpois_list_sub_scPara <- sapply(mTrain_genpois_list_sub, "[", 2)
+
+# --------------------------------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------------------------------
+# GENERATE LIST OF DF THAT CONTAIN COMBINED LEAD IN REANALYSIS AND SEASONAL FORECASTS FOR EACH INDIVIDUAL MEMBER
+# AND SEASONAL FORECASTS DAILY GLMM SIMULATED PREDICTIONS ------------------------------------------
+
+#install.packages("formatR")
+#library(formatR)
+#formatR::tidy_source()
+#obj <- tidy_source("C:\\Users\\afrench.INSTITUTE\\OneDrive - Marine Institute\\fishcastr_dev\\fishcastr\\R\\compile_seasonal_forecast_list_glmm.R", reindent.space=5)
+
+# reanalysis data subset to 2019 for (antecedent in conditions must run to end of Jan 2019)
+data_ERA5_1979_2019_Jan_bc <- fishcastr::convert_grid_to_dataframe(grid_obj = fishcastr::grid_ERA5_1979_2019_Jan_bc)[,-2]
+names(data_ERA5_1979_2019_Jan_bc)[which(names(data_ERA5_1979_2019_Jan_bc) == "dates1")] <- "date"
+
+# # reanalysis data subset to 2019
+# path_to_reanalysis = paste0(getwd(),"/inst\\extdata\\ERA5_bcc_op\\meteo_file.dat")
+#   reanalysis_loc <- path_to_reanalysis
+#   reanalysis_data <- read.table(reanalysis_loc, sep = '\t',header = FALSE, colClasses=c("V1"="Date"))
+# # subset
+#   reanalysis_data_sub <- subset(reanalysis_data, V1 <= as.Date("2019-08-31"))
+#   # save
+# dir.data <-  paste0(getwd(),'/vignettes/vignette_data/ERA5_bcc_ideal_salmon')
+# dirName <- paste0(dir.data, "/", sep = "", collapse = NULL)
+# dir.create(dirName, showWarnings = TRUE, recursive = TRUE, mode = "0777")
+# write.table(reanalysis_data_sub, paste0(dirName,"meteo_file.dat", sep = "", collapse = NULL), sep = "\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
+
+data_ssmolt_enviro_1981_2019 <- readRDS(paste0(system.file("vignettes", package = "fishcastr"),
+                                   "/vignette_data/data_ssmolt_enviro_1981_2019.rds"))
+
+# subset the seasonal forecast grid to test using 5 years of data for example check
+#seas_subset <- lapply(fishcastr::grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_bc,
+#                      function(x){transformeR::subsetGrid(x,years = 2017:2019)})
+
+seas_subset <- lapply(fishcastr::grid_ERA5_1981_2019_2_3_4_5_6_7_8_tas_pr_petH_bc,
+                      function(x){transformeR::subsetGrid(x,years = 1981:2019)})
+
+# GENERATE FORECAST DATA
+system.time({seasonal_forecast_list_dfs_ssmolt_daily_stoc <-
+  fishcastr::compile_seasonal_forecast_list_glmm(
+    calibrated_physio_model = mod_physio_expmG,
+    calibrated_daily_model = mTrain_genpois_list_sub_mod,
+    predictor_scaling_params = mTrain_genpois_list_sub_scPara,
+    hydro_GR4J_model_params = fishcastr::GR4J_Burr_params_ERA5_bcc,
+    air_to_water_model_params = fishcastr::air_to_water_Feeagh_params_ERA5_bcc,
+    seasonal_forecast_grid = seas_subset,
+    reanalysis_data = data_ERA5_1979_2019_Jan_bc,
+    counts_and_antecedent_conditions = data_ssmolt_enviro_1981_2019,
+    species_bio_year_name = "salmonid_year",
+    species_bio_yday_name = "salmonid_yday",
+    fish_reaction_time = 20,
+    initialisation_month = 2,
+    no_forecast_months = 6,
+    forecast_method = "stochastic",
+    parallel = TRUE,
+    parallel_seed_no = 23456,
+    operational_year = 2019
+  )})
+#174.14/60 # 3 mins for 3 years
+ 2003.06/60 # 33 mins for 39 years
+
+saveRDS(seasonal_forecast_list_dfs_ssmolt_daily_stoc,
+        paste0(system.file("vignettes",
+                           package = "fishcastr"),
+               "/vignette_data/SF_salmon_ideal_loo_cv_23456.rds"))
+
+#saveRDS(seasonal_forecast_list_dfs_ssmolt_daily_stoc,
+#        paste0(getwd(),"/vignettes",
+#               "/vignette_data/SF_salmon_ideal_loo_cv.rds"))
+
+  rm(list = ls(all.names = TRUE))
+invisible(gc())
+```
+
+```{r figure_5a_salmon_plots, warning = FALSE, echo = FALSE,  fig.height=7, fig.width=7, eval = FALSE}
+
+# load predictions in list format
+seasonal_forecast_list_dfs_ssmolt_daily_stoc <- readRDS(paste0(system.file("vignettes", package = "fishcastr"),
+                                   "/vignette_data/SF_salmon_ideal_loo_cv_23456.rds"))
+
+#seasonal_forecast_list_dfs_ssmolt_daily_stoc <- readRDS(file = paste0(getwd(),"/vignettes/vignette_data\\SF_salmon_ideal_loo_cv.rds"))
+
+summary_stats = c("mean","50th","5th", "25th","33rd", "66th", "75th", "95th")
+pred_or_sim = "forecast_sim_counts"
+#pred_or_sim = "forecast_sim_mean"
+
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                                   "/vignette_figures/Fig5a/")
+
+#dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/Fig5a/", sep = "",
+#                  collapse = NULL)
+dir.create(dirName, showWarnings = TRUE, mode = "0777")
+
+sum_stats_list <- lapply(summary_stats, FUN = function(stat){
+
+# --------------------------------------------------------------------------------------------------#
+# EXTRACT TERCILE CLASSES FOR OBS DATA ----
+# --------------------------------------------------------------------------------------------------#
+seas_fore_df_ssmolt_daily_full_obs <- do.call(rbind,lapply(X = seasonal_forecast_list_dfs_ssmolt_daily_stoc,
+                                                  FUN = function(x){x[[1]]}))
+
+seas_fore_df_ssmolt_daily <- seas_fore_df_ssmolt_daily_full_obs[seas_fore_df_ssmolt_daily_full_obs$salmonid_year <= 2019,]
+
+# add observed 2019 smolts to df
+data_ssmolt <- fishcastr::data_ssmolt
+NA_dates_2019 <- seas_fore_df_ssmolt_daily$date[which(is.na(seas_fore_df_ssmolt_daily$ssmolt))]
+data_ssmolt$ssmolt[data_ssmolt$date %in% NA_dates_2019]
+seas_fore_df_ssmolt_daily$ssmolt[seas_fore_df_ssmolt_daily$date %in% NA_dates_2019] <- data_ssmolt$ssmolt[data_ssmolt$date %in% NA_dates_2019]
+
+seas_fore_df_ssmolt_daily_tercile_data <-
+  fishcastr::boxplot_phenology(
+    bio_year = seas_fore_df_ssmolt_daily$salmonid_year,
+    counts = seas_fore_df_ssmolt_daily$ssmolt,
+    yday = seas_fore_df_ssmolt_daily$salmonid_yday,
+    dates = seas_fore_df_ssmolt_daily$date,
+    method = stat,
+    species_name = "Atlantic salmon (smolt)",
+    season = "Spring",
+    summary_stat_calculation_months = c(3:7),
+    plot = FALSE,
+    detrended = FALSE
+  )
+
+obs <- seas_fore_df_ssmolt_daily_tercile_data
+
+# ------------------------------------------------------------------------------------------------------------- #
+# EXTRACT TERCILE CLASSES FOR FORECAST DATA ----
+# ------------------------------------------------------------------------------------------------------------- #
+seas_list <- plyr::llply(.data = 1:25,.fun = function(y){
+  #y = 1
+  seas_fore_df_ssmolt_daily_full <- do.call(rbind,lapply(X = seasonal_forecast_list_dfs_ssmolt_daily_stoc,
+                                                         FUN = function(x){x[[y]]}))
+  seas_fore_df_ssmolt_daily <- seas_fore_df_ssmolt_daily_full[seas_fore_df_ssmolt_daily_full$salmonid_year <= 2019,]
+ # any(is.na(seas_fore_df_ssmolt_daily[[pred_or_sim]]))
+  
+  # 3. use existing function to calculate quantile trends in observed data
+  seas_fore_df_ssmolt_daily_tercile_data_new <-
+    fishcastr::boxplot_phenology(
+      bio_year = seas_fore_df_ssmolt_daily$salmonid_year,
+      counts = seas_fore_df_ssmolt_daily[[pred_or_sim]],
+      yday = seas_fore_df_ssmolt_daily$salmonid_yday,
+      dates = seas_fore_df_ssmolt_daily$date,
+      method = stat,
+      species_name = "Atlantic salmon (smolt)",
+      season = "Spring",
+      summary_stat_calculation_months = c(3:7),
+      plot = FALSE,
+      detrended = FALSE
+    )
+  
+ reforecasts <- seas_fore_df_ssmolt_daily_tercile_data_new$summary_stats
+ return(list(reforecasts_list = reforecasts,
+             mean_terciles = seas_fore_df_ssmolt_daily_tercile_data_new$mean_terciles))
+})
+ #
+ names(seas_list) <- 1:25
+ 
+ all_sum_stats_seas_list <- lapply(X = seas_list,FUN = function(x){
+    result <- cbind(x[["reforecasts_list"]][["year"]],
+                    x[["reforecasts_list"]][[stat]])
+return(result)
+ })
+ 
+ # bind summ stats together
+ all_sum_stats_seas_list.bind <- do.call(cbind,all_sum_stats_seas_list)
+ # subset columns to just one year column and 25 members
+ all_sum_stats_seas_list.bind.sub <- as.data.frame(cbind(all_sum_stats_seas_list.bind[,1],
+                                           all_sum_stats_seas_list.bind[,seq(from = 2, to = ncol(all_sum_stats_seas_list.bind), by = 2)]))
+ colnames(all_sum_stats_seas_list.bind.sub) <- c("year",paste0("member_",1:25))
+
+  # compute terciles using all member and year summary stats
+ all_member_sum_stats <- c(as.matrix(all_sum_stats_seas_list.bind.sub[,-1]))
+#tercile_bnds <- quantile(all_member_sum_stats,probs = c(1/3,2/3))
+tercile_bnds <- as.numeric(Hmisc::cut2(all_member_sum_stats,
+                                       g=3,
+                                       onlycuts = TRUE))[2:3]
+ 
+# assign each member a tercile anomaly
+tercile_anoms_sf_ensemble <- cbind(ifelse(all_sum_stats_seas_list.bind.sub[,-1] < tercile_bnds[1],"early",
+                              ifelse(all_sum_stats_seas_list.bind.sub[,-1] >= tercile_bnds[2],"late","average")))
+
+rownames(tercile_anoms_sf_ensemble) <- all_sum_stats_seas_list.bind.sub[,1]
+colnames(tercile_anoms_sf_ensemble) <- 1:25
+
+# ------------------------------------------------------------------------------------------------------------- #
+# TERCILE PLOT ----
+# ------------------------------------------------------------------------------------------------------------- #
+# dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/Fig5a", "/salmon/", sep = "",
+#                  collapse = NULL)
+#dir.create(dirName, showWarnings = FALSE, mode = "0777")
+
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                                   "/vignette_figures/Fig5a/salmon/")
+dir.create(dirName, showWarnings = FALSE, mode = "0777")
+
+ # plot tercile plot -----
+# install latest transformeR
+#devtools::install_github("SantanderMetGroup/transformeR@v2.0.1") # was 2.0.1
+#devtools::install_github("SantanderMetGroup/downscaleR@v3.3.1") # was 3.3.1
+
+type_of_pred <- ifelse(pred_or_sim == "forecast_sim_counts","sim","pred")
+
+  png(file = paste0(dirName,"Fig5a_ideal_",type_of_pred,"_",stat,".png"), width=2100, height=2200, res=300)
+terciles_summary_stat_plot <-
+  fishcastr::tercile_plot_summary_stats(
+    seasonal_forecast_predictions = tercile_anoms_sf_ensemble,
+    observed_anomalies = obs,
+    species_name = "Atlantic salmon (smolt)",
+    season = "spring",
+    method = stat,
+    plot = TRUE
+  )
+  invisible(dev.off())
+  
+  return(list("seas_list"= seas_list,
+              "obs" = obs,
+              "terciles_summary_stat_plot" = terciles_summary_stat_plot,
+              "seas_fore_df_ssmolt_daily_full_obs" = seas_fore_df_ssmolt_daily_full_obs,
+              "tercile_anoms_sf_ensemble" = tercile_anoms_sf_ensemble))
+  
+})
+  names(sum_stats_list) <- summary_stats
+
+# --------------------------------------------------------------------------------------------------#
+# COMPILE WINDOWS OF OPPORTUNITY SUMMARY TABLE ----
+# --------------------------------------------------------------------------------------------------#
+windows_op_table_data <- sapply(sapply(sum_stats_list, "[", 3),"[",2)
+
+df <- plyr::ldply(windows_op_table_data, data.frame)
+
+windows_op_table <- t(data.frame("statistic" = sapply(strsplit(df$.id, "\\."),"[",1),
+  "early" = paste0(df$early_ROC.score,ifelse(df$early_ROC.significant_0_05 ==TRUE,"*","")),
+                  "average" = paste0(df$average_ROC.score,ifelse(df$average_ROC.significant_0_05 ==TRUE,"*","")),
+                  "late" = paste0(df$late_ROC.score,ifelse(df$late_ROC.significant_0_05 ==TRUE,"*",""))))
+# export table
+dir.data <- paste0(system.file("vignettes", package = "fishcastr"),
+                                   "/vignette_figures/Fig5a/salmon/")
+dirName <- paste0(dir.data, "/", sep = "", collapse = NULL)
+#dir.create(dirName, showWarnings = TRUE, recursive = TRUE, mode = "0777")
+write.table(x = windows_op_table, file = paste0(dirName,"windows_op_salmon_ideal.csv"), row.names = TRUE, sep = ",",col.names = FALSE)
+  
+# --------------------------------------------------------------------------------------------------#
+# PLOT ALL SIMULATIONS (uncomment if required) ----
+# --------------------------------------------------------------------------------------------------#
+#    dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/Fig5a", "/salmon/year_mem_plot/", sep = "",
+#                   collapse = NULL)
+# dir.create(dirName, showWarnings = FALSE, mode = "0777")
+# 
+# type_of_pred <- ifelse(pred_or_sim == "forecast_sim_counts","sim","pred")
+# 
+#   for(i in 1981:2019){
+#  # plot ensemble predictions individually ----
+#     png(file = paste0(dirName,'Fig5a_',type_of_pred,'_ideal',i,'.png'), width=8200, height=2500, res=300)
+#     ensemble_forecast_data_sumstat <-
+#       plot_ensemble_forecast_data_sumstat(
+#         seasonal_forecast_predictions = sum_stats_list$mean$tercile_anoms_sf_ensemble,
+#         observed_anomalies = sum_stats_list$mean$obs,
+#         forecast_list_object = seasonal_forecast_list_dfs_ssmolt_daily_stoc,
+#         bioyear_name = "salmonid_year",
+#         bioyear_yday_name = "salmonid_yday",
+#         count_name = "ssmolt",
+#         forecast_data_name = pred_or_sim,
+#         plot = TRUE,
+#         plot_CIs = FALSE,
+#         plot_op_year = i,
+#         plot_op_year_obs = TRUE
+#       )
+#     invisible(dev.off())
+#   }
+
+# --------------------------------------------------------------------------------------------------#
+# PLOT SIMULATED COUNTS FOR ALL YEARS IN RIDGE LINE PLOT STYLE ----
+# --------------------------------------------------------------------------------------------------#
+
+dirName_plots <- paste0(
+     system.file("vignettes", package = "fishcastr"),
+     "/vignette_figures/FigS6/"
+   )
+dir.create(dirName_plots, showWarnings = TRUE, mode = "0777")
+png(file = paste0(dirName_plots,"FigS6a_ridge_mean.png"), width=9000, height=13000, res=300)
+salmon_anoms <- fishcastr::ridgeline_plot_phenology(bio_year = sum_stats_list$mean$seas_fore_df_ssmolt_daily_full_obs$salmonid_year,
+                                         counts = sum_stats_list$mean$seas_fore_df_ssmolt_daily_full_obs[[pred_or_sim]],
+                                         yday = sum_stats_list$mean$seas_fore_df_ssmolt_daily_full_obs$salmonid_yday,
+                                         dates = sum_stats_list$mean$seas_fore_df_ssmolt_daily_full_obs$date,
+                                         method = "mean",
+                                         species_name = "Atlantic salmon (smolt)",
+                                         season = "spring",
+                                         plot = TRUE,
+                                         detrended = FALSE,
+                                         xlims_plot = c(0.020,0.950))
+invisible(dev.off())
+
+  rm(list = ls(all.names = TRUE))
+invisible(gc())
+```
+
+### Seasonal forecast (ECMWF's SEAS5)
+
+The following code produces a 25 member ensemble of plausible Atlantic salmon smolt daily counts under seasonal forecast conditions. Here, the model chain forcing data is a true ensemble of bias corrected ECMWF SEAS5 data, whereby each member for a given forecast year is unique and different years contained different data. Likewise for the known condition ensemble scenario described above, ensemble fish counts are produced stochastically and are effectively random draws from the (generalised Poisson) conditional distribution. In the SEAS5 scenario, the uniqueness of members of the output fish count ensemble within years are therefore consequence of both the unique forcing data per member *and* the random draw element.
+
+```{r figure_5b_salmon_methods, warning = FALSE, echo = FALSE,  fig.height=7, fig.width=7, eval = FALSE}
+
+# load physio response model
+mod_physio_expmG <- fishcastr::model_physio_expmG_salmon
+
+# load and subset list into model and scaling lists for relevant years only 1993 - 2019
+model_list_1of2 <- readRDS(paste0(system.file("vignettes", package = "fishcastr"),
+                                   "/vignette_data/mTrain_genpois_salmon_list_1of2.rds"))
+model_list_2of2 <- readRDS(paste0(system.file("vignettes", package = "fishcastr"),
+                                   "/vignette_data/mTrain_genpois_salmon_list_2of2.rds"))
+
+mTrain_genpois_list <- list()
+mTrain_genpois_list[1:length(model_list_1of2)] <- model_list_1of2
+mTrain_genpois_list[(1 + length(model_list_1of2)):(length(model_list_1of2)+length(model_list_2of2))] <- model_list_2of2
+
+ # add 2019 data
+ mTrain_genpois_salmon_2019 <- model_list_1of2 <- readRDS(paste0(system.file("vignettes", package = "fishcastr"),
+                                    "/vignette_data/mTrain_genpois_salmon_2019.rds"))
+ pP_params_salmon_2019 <- model_list_1of2 <- readRDS(paste0(system.file("vignettes", package = "fishcastr"),
+                                    "/vignette_data/pP_params_salmon_2019.rds"))
+ 
+ mTrain_genpois_list[[39]] <- list(mTrain_genpois_salmon_2019,
+                                 pP_params_salmon_2019)
+
+names(mTrain_genpois_list) <- 1981:2019
+
+# subset to 1993 - 2019 models for testing function
+mTrain_genpois_list_sub <- mTrain_genpois_list[which(names(mTrain_genpois_list) %in% c(1993:2019))]
+
+# model list
+mTrain_genpois_list_sub_mod <- sapply(mTrain_genpois_list_sub, "[", 1)
+# scaling param list
+mTrain_genpois_list_sub_scPara <- sapply(mTrain_genpois_list_sub, "[", 2)
+
+# --------------------------------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------------------------------
+# GENERATE LIST OF DF THAT CONTAIN COMBINED LEAD IN REANALYSIS AND SEASONAL FORECASTS FOR EACH INDIVIDUAL MEMBER
+# AND SEASONAL FORECASTS DAILY GLMM SIMULATED PREDICTIONS ------------------------------------------
+
+#install.packages("formatR")
+#library(formatR)
+#formatR::tidy_source()
+#obj <- tidy_source("C:\\Users\\afrench.INSTITUTE\\OneDrive - Marine Institute\\fishcastr_dev\\fishcastr\\R\\compile_seasonal_forecast_list_glmm.R", reindent.space=5)
+
+# reanalysis data subset to 2019 for (antecedent in conditions must run to end of Jan 2019)
+data_ERA5_1979_2019_Jan_bc <- fishcastr::convert_grid_to_dataframe(grid_obj = fishcastr::grid_ERA5_1979_2019_Jan_bc)[,-2]
+names(data_ERA5_1979_2019_Jan_bc)[which(names(data_ERA5_1979_2019_Jan_bc) == "dates1")] <- "date"
+
+# # reanalysis data subset to 2019
+# path_to_reanalysis = paste0(getwd(),"/inst\\extdata\\ERA5_bcc_op\\meteo_file.dat")
+#   reanalysis_loc <- path_to_reanalysis
+#   reanalysis_data <- read.table(reanalysis_loc, sep = '\t',header = FALSE, colClasses=c("V1"="Date"))
+# # subset
+#   reanalysis_data_sub <- subset(reanalysis_data, V1 <= as.Date("2019-08-31"))
+#   # save
+# dir.data <-  paste0(getwd(),'/vignettes/vignette_data/ERA5_bcc_ideal_salmon')
+# dirName <- paste0(dir.data, "/", sep = "", collapse = NULL)
+# dir.create(dirName, showWarnings = TRUE, recursive = TRUE, mode = "0777")
+# write.table(reanalysis_data_sub, paste0(dirName,"meteo_file.dat", sep = "", collapse = NULL), sep = "\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
+
+data_ssmolt_enviro_1981_2019 <- readRDS(paste0(system.file("vignettes", package = "fishcastr"),
+                                   "/vignette_data/data_ssmolt_enviro_1981_2019.rds"))
+
+data_ssmolt_enviro_1993_2019 <- data_ssmolt_enviro_1981_2019[data_ssmolt_enviro_1981_2019$salmonid_year %in% c(1993:2019),]
+
+#View(data_ssmolt_enviro_1981_2019)
+
+# subset the seasonal forecast grid to test using 5 years of data for example check
+#seas_subset <- lapply(fishcastr::grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_bc,
+#                      function(x){transformeR::subsetGrid(x,years = 2017:2019)})
+
+seas_subset <- lapply(fishcastr::grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_bc,
+                      function(x){transformeR::subsetGrid(x,years = 1993:2019)})
+
+# GENERATE FORECAST DATA
+system.time({seasonal_forecast_list_dfs_ssmolt_daily_stoc <-
+  fishcastr::compile_seasonal_forecast_list_glmm(
+    calibrated_physio_model = mod_physio_expmG,
+    calibrated_daily_model = mTrain_genpois_list_sub_mod,
+    predictor_scaling_params = mTrain_genpois_list_sub_scPara,
+    hydro_GR4J_model_params = fishcastr::GR4J_Burr_params_ERA5_bcc,
+    air_to_water_model_params = fishcastr::air_to_water_Feeagh_params_ERA5_bcc,
+    seasonal_forecast_grid = seas_subset,
+    reanalysis_data = data_ERA5_1979_2019_Jan_bc,
+    counts_and_antecedent_conditions = data_ssmolt_enviro_1993_2019,
+    species_bio_year_name = "salmonid_year",
+    species_bio_yday_name = "salmonid_yday",
+    fish_reaction_time = 20,
+    initialisation_month = 2,
+    no_forecast_months = 6,
+    forecast_method = "stochastic",
+    parallel = TRUE,
+    parallel_seed_no = 23456,
+    operational_year = 2019
+  )})
+#174.14/60 # 3 mins for 3 years
+ #1307.40/60 # 22 mins for 27 years
+
+saveRDS(seasonal_forecast_list_dfs_ssmolt_daily_stoc,
+        paste0(system.file("vignettes",
+                           package = "fishcastr"),
+               "/vignette_data/SF_salmon_loo_cv_23456.rds"))
+
+#saveRDS(seasonal_forecast_list_dfs_ssmolt_daily_stoc,
+#        paste0(getwd(),"/vignettes",
+#               "/vignette_data/SF_salmon_loo_cv.rds"))
+
+  rm(list = ls(all.names = TRUE))
+invisible(gc())
+```
+
+```{r figure_5b_salmon_plots, warning = FALSE, echo = FALSE,  fig.height=7, fig.width=7, eval = FALSE}
+library(fishcastr)
+
+# load predictions in list format
+seasonal_forecast_list_dfs_ssmolt_daily_stoc <- readRDS(file = paste0(getwd(),"/vignettes/vignette_data\\SF_salmon_loo_cv_23456.rds"))
+#seasonal_forecast_list_dfs_ssmolt_daily_stoc <- readRDS(file = paste0(getwd(),"/vignettes/vignette_data\\SF_salmon_loo_cv_2021.rds"))
+
+forecast_op_year <- 2019
+
+#seasonal_forecast_list_dfs_ssmolt_daily_stoc_new
+
+summary_stats = c("mean","50th","5th", "25th","33rd", "66th", "75th", "95th")
+pred_or_sim = "forecast_sim_counts"
+#pred_or_sim = "forecast_sim_mean"
+#stat = "mean"
+#devtools::install_github("SantanderMetGroup/transformeR@v2.0.1") # was 1.7.4
+#devtools::install_github("SantanderMetGroup/downscaleR@v3.3.1") # was 3.1.3
+
+ dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/Fig5b/", sep = "",
+                  collapse = NULL)
+dir.create(dirName, showWarnings = TRUE, mode = "0777")
+
+sum_stats_list <- lapply(summary_stats, FUN = function(stat){
+# --------------------------------------------------------------------------------------------------#
+# EXTRACT TERCILE CLASSES FOR OBS DATA ----
+# --------------------------------------------------------------------------------------------------#
+seas_fore_df_ssmolt_daily_full_obs <- do.call(rbind,lapply(X = seasonal_forecast_list_dfs_ssmolt_daily_stoc,
+                                                  FUN = function(x){x[[1]]}))
+
+seas_fore_df_ssmolt_daily <- seas_fore_df_ssmolt_daily_full_obs[seas_fore_df_ssmolt_daily_full_obs$salmonid_year <= 2019,]
+
+# add observed 2019 smolts to df
+data_ssmolt <- fishcastr::data_ssmolt
+NA_dates_2019 <- seas_fore_df_ssmolt_daily$date[which(is.na(seas_fore_df_ssmolt_daily$ssmolt))]
+data_ssmolt$ssmolt[data_ssmolt$date %in% NA_dates_2019]
+seas_fore_df_ssmolt_daily$ssmolt[seas_fore_df_ssmolt_daily$date %in% NA_dates_2019] <- data_ssmolt$ssmolt[data_ssmolt$date %in% NA_dates_2019]
+
+#par(mfrow = c(1,1))
+# 3. use existing function to calculate quantile trends in obs data
+#dev.new()
+seas_fore_df_ssmolt_daily_tercile_data <- boxplot_phenology(bio_year = seas_fore_df_ssmolt_daily$salmonid_year,
+                                                            counts = seas_fore_df_ssmolt_daily$ssmolt,
+                                                            yday = seas_fore_df_ssmolt_daily$salmonid_yday,
+                                                            dates = seas_fore_df_ssmolt_daily$date,
+                                                            method = stat,
+                                                            species_name = "Atlantic salmon (smolt)",
+                                                            season = "Spring",
+                                                            plot = FALSE,
+                                                            summary_stat_calculation_months = c(3:7),
+                                                            detrended = FALSE)
+
+obs <- seas_fore_df_ssmolt_daily_tercile_data
+
+# ------------------------------------------------------------------------------------------------------------- #
+# EXTRACT TERCILE CLASSES FOR FORECAST DATA ----
+# ------------------------------------------------------------------------------------------------------------- #
+ seas_list <- plyr::llply(.data = 1:25,.fun = function(y){
+   #y = 1
+   seas_fore_df_ssmolt_daily_full <- do.call(rbind,lapply(X = seasonal_forecast_list_dfs_ssmolt_daily_stoc,
+                                                   FUN = function(x){x[[y]]}))
+# which(is.na(seas_fore_df_ssmolt_daily_full$rain_mm_1day))
+ seas_fore_df_ssmolt_daily <- seas_fore_df_ssmolt_daily_full[seas_fore_df_ssmolt_daily_full$salmonid_year <= 2019,]
+#any(is.na(seas_fore_df_ssmolt_daily[[pred_or_sim]]))
+ # 3. use existing function to calculate quantile trends in observed data
+ seas_fore_df_ssmolt_daily_tercile_data_new <- boxplot_phenology(bio_year = seas_fore_df_ssmolt_daily$salmonid_year,
+                                                            counts = seas_fore_df_ssmolt_daily[[pred_or_sim]],
+                                                            yday = seas_fore_df_ssmolt_daily$salmonid_yday,
+                                                            dates = seas_fore_df_ssmolt_daily$date,
+                                                            method = stat,
+                                                            species_name = "Atlantic salmon (smolt)",
+                                                            season = "Spring",
+                                                            plot = FALSE,
+                                                            summary_stat_calculation_months = c(3:7),
+                                                            detrended = FALSE)
+ 
+ reforecasts <- seas_fore_df_ssmolt_daily_tercile_data_new$summary_stats
+ return(list(reforecasts_list = reforecasts,
+             mean_terciles = seas_fore_df_ssmolt_daily_tercile_data_new$mean_terciles))
+ })
+ #
+ names(seas_list) <- 1:25
+ 
+ all_sum_stats_seas_list <- lapply(X = seas_list,FUN = function(x){
+    result <- cbind(x[["reforecasts_list"]][["year"]],
+                    x[["reforecasts_list"]][[stat]])
+return(result)
+ })
+ 
+ # bind summ stats together
+ all_sum_stats_seas_list.bind <- do.call(cbind,all_sum_stats_seas_list)
+ # subset columns to just one year column and 25 members
+ all_sum_stats_seas_list.bind.sub <- as.data.frame(cbind(all_sum_stats_seas_list.bind[,1],
+                                           all_sum_stats_seas_list.bind[,seq(from = 2, to = ncol(all_sum_stats_seas_list.bind), by = 2)]))
+ colnames(all_sum_stats_seas_list.bind.sub) <- c("year",paste0("member_",1:25))
+
+  # compute terciles using all member and year summary stats (removing op year
+  # data before computing tercile boundaries) # note this differs from
+  # calculation in visualizeR::tercilePlot in that tercile boundaries and
+  # tercile classifications for visualizeR are computed for each member in turn
+  # (using summary stats calculated for all years for that member), not using
+  # all members of all years lumped together.
+ 
+ #all_member_sum_stats_old <- c(as.matrix(all_sum_stats_seas_list.bind.sub[,-1]))
+  #tercile_bnds <- quantile(all_member_sum_stats,probs = c(1/3,2/3))
+ 
+  all_member_sum_stats <- c(as.matrix(all_sum_stats_seas_list.bind.sub[-which(all_sum_stats_seas_list.bind.sub[,"year"] == forecast_op_year),-1]))
+  tercile_bnds <- as.numeric(Hmisc::cut2(all_member_sum_stats,
+                                       g=3,
+                                       onlycuts = TRUE))[2:3]
+ 
+# assign each member a tercile anomaly
+tercile_anoms_sf_ensemble <- cbind(ifelse(all_sum_stats_seas_list.bind.sub[,-1] < tercile_bnds[1],"early",
+                              ifelse(all_sum_stats_seas_list.bind.sub[,-1] >= tercile_bnds[2],"late","average")))
+
+rownames(tercile_anoms_sf_ensemble) <- all_sum_stats_seas_list.bind.sub[,1]
+colnames(tercile_anoms_sf_ensemble) <- 1:25
+
+
+# ------------------------------------------------------------------------------------------------------------- #
+# TERCILE PLOT ----
+# ------------------------------------------------------------------------------------------------------------- #
+dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/Fig5b", "/salmon/", sep = "",
+                  collapse = NULL)
+dir.create(dirName, showWarnings = FALSE, mode = "0777")
+
+type_of_pred <- ifelse(pred_or_sim == "forecast_sim_counts","sim","pred")
+
+#seasonal_forecast_predictions = seas_list
+
+ # plot tercile plot -----
+  png(file = paste0(dirName,"Fig6a_SF21_",type_of_pred,"_",stat,".png"), width=2100, height=2200, res=300)
+terciles_summary_stat_plot <-
+  tercile_plot_summary_stats(
+    seasonal_forecast_predictions = tercile_anoms_sf_ensemble,
+    observed_anomalies = obs,
+    species_name = "Atlantic salmon (smolt)",
+    season = "spring",
+    method = stat,
+    plot = TRUE
+  )
+  invisible(dev.off())
+  
+    return(list("seas_list"= seas_list,
+              "obs" = obs,
+              "terciles_summary_stat_plot" = terciles_summary_stat_plot,
+              "seas_fore_df_ssmolt_daily_full_obs" = seas_fore_df_ssmolt_daily_full_obs,
+              "tercile_anoms_sf_ensemble" = tercile_anoms_sf_ensemble))
+  
+})
+    names(sum_stats_list) <- summary_stats
+
+# --------------------------------------------------------------------------------------------------#
+# COMPILE WINDOWS OF OPPORTUNITY SUMMARY TABLE ----
+# --------------------------------------------------------------------------------------------------#
+windows_op_table_data <- sapply(sapply(sum_stats_list, "[", 3),"[",2)
+
+df <- plyr::ldply(windows_op_table_data, data.frame)
+
+windows_op_table <- t(data.frame("statistic" = sapply(strsplit(df$.id, "\\."),"[",1),
+  "early" = paste0(df$early_ROC.score,ifelse(df$early_ROC.significant_0_05 ==TRUE,"*","")),
+                  "average" = paste0(df$average_ROC.score,ifelse(df$average_ROC.significant_0_05 ==TRUE,"*","")),
+                  "late" = paste0(df$late_ROC.score,ifelse(df$late_ROC.significant_0_05 ==TRUE,"*",""))))
+# export table
+dir.data <-  paste0(getwd(),'/vignettes/vignette_figures/Fig5b/salmon/')
+dirName <- paste0(dir.data, "/", sep = "", collapse = NULL)
+#dir.create(dirName, showWarnings = TRUE, recursive = TRUE, mode = "0777")
+write.table(x = windows_op_table, file = paste0(dirName,"windows_op_salmon.csv"), row.names = TRUE, sep = ",",col.names = FALSE)
+  
+# --------------------------------------------------------------------------------------------------#
+# PLOT ALL SIMULATIONS (uncomment if required) ----
+# --------------------------------------------------------------------------------------------------#
+# dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/Fig6", "/salmon/year_mem_plot/", sep = "",
+#                   collapse = NULL)
+# dir.create(dirName, showWarnings = FALSE, mode = "0777")
+# 
+# type_of_pred <- ifelse(pred_or_sim == "forecast_sim_counts","sim","pred")
+# 
+#   for(i in 1993:2019){
+#  # plot ensemble predictions individually ----
+#     png(file = paste0(dirName,'Fig6a_',type_of_pred,'_SF',i,'.png'), width=8200, height=2500, res=300)
+#     ensemble_forecast_data_sumstat <-
+#       plot_ensemble_forecast_data_sumstat(
+#         seasonal_forecast_predictions = sum_stats_list$mean$tercile_anoms_sf_ensemble,
+#         observed_anomalies = sum_stats_list$mean$obs,
+#         forecast_list_object = seasonal_forecast_list_dfs_ssmolt_daily_stoc,
+#         bioyear_name = "salmonid_year",
+#         bioyear_yday_name = "salmonid_yday",
+#         count_name = "ssmolt",
+#         forecast_data_name = pred_or_sim,
+#         plot = TRUE,
+#         plot_CIs = FALSE,
+#         plot_op_year = i,
+#         plot_op_year_obs = TRUE
+#       )
+#     invisible(dev.off())
+#   }
+
+# --------------------------------------------------------------------------------------------------#
+# PLOT ANOMALY HISTORICAL CONTEXT (experimental) ----
+# --------------------------------------------------------------------------------------------------#
+# seas_fore_df_ssmolt_daily <- sum_stats_list$mean$seas_fore_df_ssmolt_daily_full_obs[sum_stats_list$mean$seas_fore_df_ssmolt_daily_full_obs$salmonid_year <= 2019,]
+# 
+#  dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/Fig7", "/", sep = "",
+#                   collapse = NULL)
+#  dir.create(dirName, showWarnings = FALSE, mode = "0777")
+# 
+#   png(file = paste0(dirName,"Fig7a.png"), width=8200, height=2500, res=300)
+#  plot_hist_context_op_forecast_sumstat_poly(seasonal_reforecasts_df = seas_fore_df_ssmolt_daily,
+#                                             seasonal_reforecast_summary = sum_stats_list$mean$terciles_summary_stat_plot$tercile_data,
+#                                             biological_year_name = "salmonid_year",
+#                                             biological_yday_name = "salmonid_yday",
+#                                             count_name = "ssmolt",
+#                                             style = "poly")
+#  invisible(dev.off())
+
+rm(list = ls(all.names = TRUE))
+invisible(gc())
+```
+

@@ -13,8 +13,8 @@
 #'   write.table)
 #' @return A data.frame (if single member). A list of data.frames if
 #'   multi-member grid.
-#' @export
 #' @examples
+#' \dontrun{
 #' # single member reanalysis
 #' grid_sub <- lapply(fishcastr::grid_ERA5_1979_2019_Jan_bc,
 #'                    function(x){
@@ -32,7 +32,21 @@
 #' convert_grid_to_dataframe(grid_obj = grid_sub_mm,
 #'                           output_dir = paste0(getwd(),
 #'                                               "/inst/extdata/SEAS5_archive_1993_2019"))
+#' # single member reanalysis
+#' grid_sub <- lapply(fishcastr::grid_ERA5_1979_2019_Jan_bc,
+#'                    function(x){
+#'                    transformeR::subsetGrid(x,
+#'                                              years = 1996:1998)})
+#' convert_grid_to_dataframe(grid_obj = grid_sub)
 #'
+#' # multi-member seasonal forecast
+#' grid_sub_mm <- lapply(fishcastr::grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_bc,
+#'                    function(x){
+#'                      transformeR::subsetGrid(x,
+#'                                              years = 1996:1998)})
+#' convert_grid_to_dataframe(grid_obj = grid_sub_mm)
+#' }
+#' @export
 convert_grid_to_dataframe <- function(grid_obj,
                                       output_dir = NULL,
                                       output_folder_name = "output",

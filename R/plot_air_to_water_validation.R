@@ -1,20 +1,21 @@
 #' Air to water temperature model validation plot.
 #'
-#' This function returns a variety of validation plots and validation statistics
-#' for the air two water temperature model that builds on the three-parameter
-#' equation defined by A. Ducharne (2008). Ducharne's equation describes the
-#' statistical relationship between lagged rolling average air temperature and
-#' water temperature in streams (whereby lag period is a constant in days). We
-#' extended Ducharne's equation to a four-parameter model to account for
-#' stratification in lakes, whereby the lag period between air temperature and
-#' water temperature shortens during the summer owing to the shallower mixed
-#' layer depth during stratification. These validation plots are intended for
-#' use on out-of-sample air and water temperature data. See Piccolroaz et al.,
-#' (2013) for further discussion of lake thermal dynamics in relation to
-#' meteorological forcing, and see and Calderó-Pascual et al., (2020) for
-#' description of Lough Feeagh, Burrishoole, Ireland example. A bias adjustment
-#' multiplication factor that varies with year day was included to reduce
-#' residual hysteresis present in the basic lagged air temperature model.
+#' @description This function returns a variety of validation plots and
+#'   validation statistics for the air two water temperature model that builds
+#'   on the three-parameter equation defined by A. Ducharne (2008). Ducharne's
+#'   equation describes the statistical relationship between lagged rolling
+#'   average air temperature and water temperature in streams (whereby lag
+#'   period is a constant in days). We extended Ducharne's equation to a
+#'   four-parameter model to account for stratification in lakes, whereby the
+#'   lag period between air temperature and water temperature shortens during
+#'   the summer owing to the shallower mixed layer depth during stratification.
+#'   These validation plots are intended for use on out-of-sample air and water
+#'   temperature data. See Piccolroaz et al., (2013) for further discussion of
+#'   lake thermal dynamics in relation to meteorological forcing, and see and
+#'   Calderó-Pascual et al., (2020) for description of Lough Feeagh,
+#'   Burrishoole, Ireland example. A bias adjustment multiplication factor that
+#'   varies with year day was included to reduce residual hysteresis present in
+#'   the basic lagged air temperature model.
 #'
 #' @param Tw A numeric vector of water temperatures.
 #' @param Ta A numeric vector of air temperatures.

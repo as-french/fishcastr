@@ -7,12 +7,23 @@
 # ----------------------------------------------------------------------------------------------- #
 # LOAD OBSERVATIONS AND DATA TO BE BIAS CORRECTED ----
 # ----------------------------------------------------------------------------------------------- #
-data_reforecast <- fishcastr::grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_raw
+#data_reforecast <- fishcastr::grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_raw
 
-obs.data <- fishcastr::grid_met_obs_1979_2019[-c(3,4)]
+data_reforecast <- readRDS(file = paste0(
+  system.file("inst", package = "fishcastr"),
+  "/extdata/grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_raw_CDS.rds"
+))
+
+#obs.data <- fishcastr::grid_met_obs_1979_2019[-c(3,4)]
+
+obs.data <- readRDS(file = paste0(
+  system.file("inst", package = "fishcastr"),
+  "/extdata/grid_met_obs_1979_2019.rds"
+))[-c(3,4)]
+
 obs.data$petH$Variable$varName <- "petH"
 
-# Subset all datasets to the same Dates as the reforcast precipitation. Note that we compute daily accumulated
+# Subset all datasets to the same Dates as the reforecast precipitation. Note that we compute daily accumulated
 # precipitation, for this reason this variable has no value for the first day of every season.
 if (sum(names(data_reforecast)=="pr")>0){
   data <- lapply(1:length(data_reforecast), function(x)  {transformeR::intersectGrid(data_reforecast[[x]], obs.data[[which(names(data_reforecast)=="pr")]], type = "temporal", which.return = 1)})
@@ -52,9 +63,9 @@ if (!identical(names(obs.data), names(data))) stop("variables in obs.data and da
 #with downscaleR@v3.3.1
 # Error in arr[, , , ind, , ] <- grid[["Data"]] :
 # number of items to replace is not a multiple of replacement length, so install old versions again
-# try downscaler 3.1.3 if 3.3.1 fails (see (probably) same issue posted on github July 2020,
+# try downscaler 3.1.3 if 3.3.1 or 3.3.2 fails (see (probably) same issue posted on github July 2020,
 #https://github.com/search?q=org%3ASantanderMetGroup+%22arr%5B%2C+%2C+%2C+ind%2C+%2C+%5D%22&type=issues),but also seen this separate error: Error: object ‘draw.world.lines’ is not exported by 'namespace:transformeR'
-#devtools::install_github("SantanderMetGroup/transformeR@v1.7.4") # was 2.0.1
+#devtools::install_github("SantanderMetGroup/transformeR@v1.7.4") # was 2.0.1 (or 2.1.0 on 2021_05_05)
 #devtools::install_github("SantanderMetGroup/downscaleR@v3.1.3") # was 3.3.1
 #revert back to 3.1.3 if required
 # ------------------------------------------------------------------------------------------------- #
@@ -94,3 +105,9 @@ grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_bc$petH$Data <- round(grid_SEAS5_
 
 # export data
 usethis::use_data(grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_bc, overwrite = TRUE)
+
+saveRDS(grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_bc,
+        file = paste0(
+          system.file("inst", package = "fishcastr"),
+          "/extdata/grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_bc_CDS.rds"
+        ))

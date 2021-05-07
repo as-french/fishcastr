@@ -1,2 +1,5 @@
 *.html
 *.R
+vignette_tables
+vignette_data
+vignette_figures

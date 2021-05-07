@@ -20,7 +20,13 @@ The ROC area skill score and the significance (TRUE or FALSE)
 }
 \description{
 Computes the skill score for the area under the ROC curve
-compared to an arbitrary reference forecast.
+compared to an arbitrary reference forecast. The code for this function is
+attributed to MD Frias and J Fernandez, which was originally included in
+the visualizeR package, which is stored in the University of Santander's
+Met Group GitHub page
+(https://github.com/SantanderMetGroup/visualizeR/blob/devel/R/auxiliaryFun.R),
+and was written under license GPL-v3
+(https://github.com/SantanderMetGroup/visualizeR/blob/devel/LICENSE).
 }
 \author{
 M. D. Frias \email{mariadolores.frias@unican.es} and J. Fernandez

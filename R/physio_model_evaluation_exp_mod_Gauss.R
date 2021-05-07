@@ -1,19 +1,21 @@
 #' Fit an exponentially modified Gaussian response curve to count data
 #'
-#' @description This function produces a series of plots that can be used to evaluate the fit
-#' of an exponentially modified Gaussian response curve to unimodal count data.
-#' Specifically, plots are intended for checking the consistency of curve fit
-#' (i.e., inter-decadal variability in a proxy for attainment of migration
-#' preparedness) among multiple decades (e.g., fitting curves for pooled count
-#' data from windows 1990 - 2000, 2011 - 2010, 20011 - 2020). Residual plots use
-#' the functionality of the DHARMa package (Hartig 2019). The intended
-#' implementation of the exponentially modified Gaussian curve as a proxy for
-#' physiological preparedness for migration of diadromous fishes assumes that
-#' physiological preparedness for sea entry increases with degree days that
-#' reflect an increase in physiological condition for marine endurance (e.g.,
-#' gill Na+/K+-ATPase activity in salmonids; Sykes et al., 2009; Zydlewski et
-#' al., 2005). See /data-raw/model_physio_expmG_salmon.R for usage example.
+#' @description This function produces a series of plots that can be used to
+#'   evaluate the fit of an exponentially modified Gaussian response curve to
+#'   unimodal count data. Specifically, plots are intended for checking the
+#'   consistency of curve fit (i.e., inter-decadal variability in a proxy for
+#'   attainment of migration preparedness) among multiple decades (e.g., fitting
+#'   curves for pooled count data from windows 1990 - 2000, 2011 - 2010, 20011 -
+#'   2020). Residual plots use the functionality of the DHARMa package (Hartig
+#'   2019). The intended implementation of the exponentially modified Gaussian
+#'   curve as a proxy for physiological preparedness for migration of diadromous
+#'   fishes assumes that physiological preparedness for sea entry increases with
+#'   degree days that reflect an increase in physiological condition for marine
+#'   endurance (e.g., gill Na+/K+-ATPase activity in salmonids; Sykes et al.,
+#'   2009; Zydlewski et al., 2005). See /data-raw/model_physio_expmG_salmon.R
+#'   for usage example.
 #'
+#' @importFrom gamlss.dist dNBII rNBII
 #' @param data_list A list of data frames of ecological counts and environmental
 #'   variables.
 #' @param species_count_lab Column header for y variable.
@@ -38,7 +40,7 @@
 #' @references
 #' Zydlewski, G. B., Haro, A., & McCormick, S. D. (2005). Evidence for
 #' cumulative temperature as an initiating and terminating factor in downstream
-#' migratory behavior of Atlantic salmon (Salmo salar) smolts. Canadian Journal
+#' migratory behaviour of Atlantic salmon (Salmo salar) smolts. Canadian Journal
 #' of Fisheries and Aquatic Sciences, 62(1), 68–78.
 #' https://doi.org/10.1139/f04-179
 #' Sykes, G. E., Johnson, C. J., & Shrimpton, J. M. (2009). Temperature and Flow
@@ -218,7 +220,7 @@ physio_model_evaluation_exp_mod_Gauss <- function(data_list,
          lty = rep(1, times = (length(data_list)-1)),
          pt.lwd = rep(1, times = (length(data_list)-1)),
          lwd = rep(2, times = (length(data_list)-1)),
-         cex = 0.80, inset = c(0,0), xpd = NA, title = species_name)
+         cex = 0.80, inset = c(0,0.1), xpd = NA, title = species_name)
 
   # --------------------------------------------------------------------------------------------------
   # SIMULATE AND PLOT MIRRORING OBS DATA FOR VISUAL VALIDATION TO ILLUSTRATE "CAPTURED DYNAMICS" FOR MODEL TRAINED ON ALL YEARS

@@ -19,9 +19,9 @@ photper_calc(dates, latitude, longitude, ...)
 A vector of daylengths.
 }
 \description{
-This function takes a date vector and latitude and longitude and calculates
-photoperiod (daylength) from sunrise and sunset times using the suncalc
-package.
+This function takes a date vector and latitude and longitude and
+calculates photoperiod (daylength) from sunrise and sunset times using the
+suncalc package.
 }
 \examples{
 photper_calc(dates = seq(from = as.Date("1981-01-01"),

@@ -33,6 +33,7 @@ seasonal climate forecast) and extracts variable information and concurrent
 dates. Optionally export output to a .dat file
 }
 \examples{
+\dontrun{
 # single member reanalysis
 grid_sub <- lapply(fishcastr::grid_ERA5_1979_2019_Jan_bc,
                    function(x){
@@ -50,5 +51,18 @@ grid_sub_mm <- lapply(fishcastr::grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_
 convert_grid_to_dataframe(grid_obj = grid_sub_mm,
                           output_dir = paste0(getwd(),
                                               "/inst/extdata/SEAS5_archive_1993_2019"))
+# single member reanalysis
+grid_sub <- lapply(fishcastr::grid_ERA5_1979_2019_Jan_bc,
+                   function(x){
+                   transformeR::subsetGrid(x,
+                                             years = 1996:1998)})
+convert_grid_to_dataframe(grid_obj = grid_sub)
 
+# multi-member seasonal forecast
+grid_sub_mm <- lapply(fishcastr::grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_bc,
+                   function(x){
+                     transformeR::subsetGrid(x,
+                                             years = 1996:1998)})
+convert_grid_to_dataframe(grid_obj = grid_sub_mm)
+}
 }

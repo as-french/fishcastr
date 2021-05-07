@@ -1,9 +1,9 @@
 #' Calculate potential evapotranspiration
 #'
-#' This function takes vectors of dates, maximum air temperature and minimum air
-#' temperature and latitude and calculates potential evapotranspiration by the
-#' Hargreaves-Samani equation implemented in *drought4R* package (Bedia &
-#' Iturbide, 2019).
+#' @description This function takes vectors of dates, maximum air temperature
+#'   and minimum air temperature and latitude and calculates potential
+#'   evapotranspiration by the Hargreaves-Samani equation implemented in
+#'   *drought4R* package (Bedia & Iturbide, 2019).
 #'
 #' @param refdates Vector of dates in class "Date".
 #' @param lats Latitude in decimal degrees WGS84

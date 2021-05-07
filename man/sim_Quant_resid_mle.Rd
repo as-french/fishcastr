@@ -37,9 +37,9 @@ sim_Quant_resid_mle(
 A createDHARMa simulated residual object.
 }
 \description{
-This function produces simulated residuals from a fitted bbmle::mle2 (Bolker
-& R Core Team 2017) model object compatible with DHARMa (Hartig 2019)
-functions (e.g., testDispersion).
+This function produces simulated residuals from a fitted
+bbmle::mle2 (Bolker & R Core Team 2017) model object compatible with DHARMa
+(Hartig 2019) functions (e.g., testDispersion).
 }
 \examples{
 \dontrun{

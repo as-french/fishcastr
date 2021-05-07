@@ -19,10 +19,10 @@ potential_ev_HS(tasmin, tasmax, lats, refdates)
 A vector of potential evapotranspiration estimates.
 }
 \description{
-This function takes vectors of dates, maximum air temperature and minimum air
-temperature and latitude and calculates potential evapotranspiration by the
-Hargreaves-Samani equation implemented in \emph{drought4R} package (Bedia &
-Iturbide, 2019).
+This function takes vectors of dates, maximum air temperature
+and minimum air temperature and latitude and calculates potential
+evapotranspiration by the Hargreaves-Samani equation implemented in
+\emph{drought4R} package (Bedia & Iturbide, 2019).
 }
 \examples{
 # simulate min and max temps

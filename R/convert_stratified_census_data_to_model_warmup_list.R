@@ -28,7 +28,7 @@
 #'   using historic data.
 #' @return A two column data.frame with headers: "date" and "pwdds".
 #' @examples
-#'
+#' \dontrun{
 #' # LOAD MET DATA ----
 #' met_data <- fishcastr::grid_ERA5_1979_2019_Jan_bc
 #' met <-
@@ -71,9 +71,8 @@
 #'     dates = data_ssmolt_forecast_years$date,
 #'     no_years_warmup = 0
 #'   )
-#'
+#' }
 #' @export
-#'
 convert_stratified_census_data_to_model_warmup_list <- function(water_temp,
                                                                 photoper,
                                                                 forecast_years,

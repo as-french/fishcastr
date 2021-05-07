@@ -1,7 +1,13 @@
 #' @title Compute the ROC Area Skill Score and the significance of the Area
 #'   under the Curve
 #' @description Computes the skill score for the area under the ROC curve
-#'   compared to an arbitrary reference forecast.
+#'   compared to an arbitrary reference forecast. The code for this function is
+#'   attributed to MD Frias and J Fernandez, which was originally included in
+#'   the visualizeR package, which is stored in the University of Santander's
+#'   Met Group GitHub page
+#'   (https://github.com/SantanderMetGroup/visualizeR/blob/devel/R/auxiliaryFun.R),
+#'   and was written under license GPL-v3
+#'   (https://github.com/SantanderMetGroup/visualizeR/blob/devel/LICENSE).
 #' @param obs A binary observation (code: 0, 1)
 #' @param pred A probability prediction on the interval (0,1)
 #' @param conf.level Confidence level to compute the score significance, by

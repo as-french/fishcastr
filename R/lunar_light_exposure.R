@@ -1,19 +1,20 @@
 #' Generate proxy measure of moonlight exposure.
 #'
-#' This function takes a date and calculates an approximate measure of moonlight
-#' exposure depending on geographic location. The function extracts the duration
-#' of the night (sunrise to sunset) in minutes and calculates the percentage of
-#' the night during which the moon is above the horizon. The function also
-#' extracts the sunlit fraction of the moon at solar midnight (nadir) and the
-#' moon's peak altitude/angle above the horizon during the night in radians. The
-#' approximate measure of exposure is calculated as ln((sin(peak_moon_altitude)
-#' * prop_night_moon_above_horizon * illuminated_fraction_nadir^4) + 0.00001) +
-#' min(exposure). This function requires the suncalc package. This proxy does
-#' not account for opposition surge, but the power of 4 is intended to increase
-#' the relative difference between full moon exposure and other phases. However, NOTE:
-#' the log transformation is used to increase resolution of small changes in
-#' lunar light exposure at low exposure values. This can be removed by setting
-#' the log_result argument to FALSE.
+#' @description This function takes a date and calculates an approximate measure
+#'   of moonlight exposure depending on geographic location. The function
+#'   extracts the duration of the night (sunrise to sunset) in minutes and
+#'   calculates the percentage of the night during which the moon is above the
+#'   horizon. The function also extracts the sunlit fraction of the moon at
+#'   solar midnight (nadir) and the moon's peak altitude/angle above the horizon
+#'   during the night in radians. The approximate measure of exposure is
+#'   calculated as ln((sin(peak_moon_altitude) * prop_night_moon_above_horizon *
+#'   illuminated_fraction_nadir^4) + 0.00001) + min(exposure). This function
+#'   requires the suncalc package. This proxy does not account for opposition
+#'   surge, but the power of 4 is intended to increase the relative difference
+#'   between full moon exposure and other phases. However, NOTE: the log
+#'   transformation is used to increase resolution of small changes in lunar
+#'   light exposure at low exposure values. This can be removed by setting the
+#'   log_result argument to FALSE.
 #'
 #' @param date_of_interest A Date.
 #' @param lat A numeric.

@@ -1,23 +1,24 @@
 #' Fitted model parameters for a exponentially modified Gaussian response
 #' function
 #'
-#' The coefficients of a fitted bbmle::mle2 (Bolker & R Core Team. 2017) object
-#' that relates downstream migrating salmon smolt count data to photoperiod
-#' weighted degree days post winter solstice immediately preceding the migration
-#' run. This unimodal function was fitted to count data that had been scaled to
-#' percentage of annual migration runs and transformed back into counts. The
-#' count data used to fit the curve were collected in two complete upstream and
-#' downstream in-river trapping facilities between 1981-01-01 and 1992-12-21
-#' (Rogan et al. 2020). Water temperature data used for calibration of an air to
-#' water temperature statistical model and subsequent calculation of photoperiod
-#' weighted degree days were collected between 2004 and 2014 at 2m depth using
-#' an Automatic Water Quality Monitoring Station (AWQMS) on Lough Feeagh,
-#' Burrishoole, Ireland (de Eyto et al. 2019). Air temperature data used for
-#' calibrating the air to water temperature model were computed by bias
-#' adjustment of ECMWF's ERA5 climate reanalysis (Hersbach et al. 2020). See
-#' fishcastr documentation and package folders
-#' /data-raw/data_air_to_water_model.R and /data-raw/model_physio_expmG_salmon.R
-#' for details of model fitting procedure and validation.
+#' @description The coefficients of a fitted bbmle::mle2 (Bolker & R Core Team.
+#'   2017) object that relates downstream migrating salmon smolt count data to
+#'   photoperiod weighted degree days post winter solstice immediately preceding
+#'   the migration run. This unimodal function was fitted to count data that had
+#'   been scaled to percentage of annual migration runs and transformed back
+#'   into counts. The count data used to fit the curve were collected in two
+#'   complete upstream and downstream in-river trapping facilities between
+#'   1981-01-01 and 1992-12-21 (Rogan et al. 2020). Water temperature data used
+#'   for calibration of an air to water temperature statistical model and
+#'   subsequent calculation of photoperiod weighted degree days were collected
+#'   between 2004 and 2014 at 2m depth using an Automatic Water Quality
+#'   Monitoring Station (AWQMS) on Lough Feeagh, Burrishoole, Ireland (de Eyto
+#'   et al. 2019). Air temperature data used for calibrating the air to water
+#'   temperature model were computed by bias adjustment of ECMWF's ERA5 climate
+#'   reanalysis (Hersbach et al. 2020). See fishcastr documentation and package
+#'   folders /data-raw/data_air_to_water_model.R and
+#'   /data-raw/model_physio_expmG_salmon_calibration.R for details of model
+#'   fitting procedure and validation.
 #'
 #' @references
 #' Bolker, B. & R Core Team. (2017). bbmle: Tools for General Maximum Likelihood

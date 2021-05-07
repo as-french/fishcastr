@@ -9,6 +9,7 @@ hydrologic_model(
   warm_up_dates_range,
   run_dates_range,
   GR4J_params,
+  log_transform = FALSE,
   ...
 )
 }
@@ -21,6 +22,8 @@ hydrologic_model(
 
 \item{GR4J_params}{A numeric vector containing GR4J parameters.}
 
+\item{log_transform}{natural log transform discharges? TRUE or FALSE}
+
 \item{...}{Other arguments to nested functions.}
 }
 \value{
@@ -32,6 +35,7 @@ period given a series of arguments containing warm-up and target run
 periods and model parameters for GR4J (Coron et al., 2020).
 }
 \examples{
+\dontrun{
 met <- fishcastr::grid_ERA5_1979_2019_Jan_bc
 data_met <-  fishcastr::convert_grid_to_dataframe(grid_obj = met)[, -2]
 names(data_met)[which(names(data_met) == "dates1")] <-  "date"
@@ -41,6 +45,7 @@ hydrologic_model(met_data = data_met[, c("date", "pr", "petH")] ,
                  run_dates_range = c(as.Date("1981-01-01"),
                                     as.Date("2019-01-31")),
                  GR4J_params = as.numeric(fishcastr::GR4J_Burr_params_ERA5_bcc))
+                 }
 }
 \references{
 Coron, L., Delaigue, O., Thirel, G., Perrin, C., & Michel, C. (2020). AirGR:

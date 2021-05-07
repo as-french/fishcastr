@@ -1,9 +1,10 @@
 #' Produce simulated residuals compatible with DHARMa package
 #'
-#' This function produces simulated residuals from a fitted bbmle::mle2 (Bolker
-#' & R Core Team 2017) model object compatible with DHARMa (Hartig 2019)
-#' functions (e.g., testDispersion).
+#' @description This function produces simulated residuals from a fitted
+#'   bbmle::mle2 (Bolker & R Core Team 2017) model object compatible with DHARMa
+#'   (Hartig 2019) functions (e.g., testDispersion).
 #'
+#' @importFrom gamlss.dist dNBII rNBII
 #' @param fittedModel A bbmle::mle2 object.
 #' @param n Number of simulations of mle2 object.
 #' @param count_lab Name of response variable.

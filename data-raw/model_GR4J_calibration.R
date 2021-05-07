@@ -2,13 +2,21 @@
 # A method for calibrating and validating rainfall run-off model GR4J
 # ----------------------------------------------------------------------------------------------------------#
 
+grid_ERA5_1979_2019_Jan_bc <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),
+                                                     "/extdata/grid_ERA5_1979_2019_Jan_bc_CDS.rds"))
+
 # import and convert ERA5 grid to data.frame
-era5_reanalysis_bcc <- fishcastr::convert_grid_to_dataframe(grid_obj = fishcastr::grid_ERA5_1979_2019_Jan_bc)[,-2]
+era5_reanalysis_bcc <- fishcastr::convert_grid_to_dataframe(grid_obj = grid_ERA5_1979_2019_Jan_bc)[,-2]
 names(era5_reanalysis_bcc)[which(names(era5_reanalysis_bcc) == "dates1")] <- "date"
 
 # import discharge
-Feeagh_disch_1976_2021 <- fishcastr::data_Feeagh_discharge
-Feeagh_disch_1976_2021_corr <- fishcastr::data_Feeagh_discharge_corr
+#Feeagh_disch_1976_2021 <- fishcastr::data_Feeagh_discharge
+Feeagh_disch_1976_2021 <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),
+                      "/extdata/data_Feeagh_discharge.rds"))
+
+#Feeagh_disch_1976_2021_corr <- fishcastr::data_Feeagh_discharge_corr
+Feeagh_disch_1976_2021_corr <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),
+                      "/extdata/data_Feeagh_discharge_corr.rds"))
 
 # bind discharge and climate data (knowing climate reanalysis is complete)
 disch_met_complete <- Reduce(function(x,y) merge(x,y,by="date"),
@@ -17,7 +25,7 @@ disch_met_complete <- Reduce(function(x,y) merge(x,y,by="date"),
 
 # filter to only include longest stretch of non-NA discharge values for calibration
 streak <- stats::na.contiguous(disch_met_complete$discharge_m3.s)
-lwr_date <- disch_met_complete$date[attr(streak,which = "tsp")[1]] # "2009-05-27"
+lwr_date <- disch_met_complete$date[attr(streak,which = "tsp")[1]] # "2009-04-08"
 upr_date <- disch_met_complete$date[attr(streak,which = "tsp")[2]] # "2015-06-17"
 
 # convert m3.s to mm per day
@@ -38,14 +46,18 @@ inp$flow.mm.day <- (inp$discharge_m3.s *1000* (60*60*24)) / (catch.area *1000000
 
 # need warm up of at least 1 year
 # single calibration period
+# warm-up 2009-04-08 - 2011-04-08
+# run 2011-04-09 - 2015-06-17
+
 # warm-up 2009-05-27 - 2011-05-27
 # run 2011-05-28 - 2015-06-17
+
 # validate against all data pre 2009-05-27
 # final two years of validation are warm-up for calibration
 
 # set cal and val periods
-inp.cal <- inp[(inp[,1] >= '2011-05-28' & inp[,1] <= '2015-06-17'),]
-inp.warmup <- inp[(inp[,1] >= '2009-05-27' & inp[,1] <= '2011-05-27'),]
+inp.cal <- inp[(inp[,1] >= '2011-04-09' & inp[,1] <= '2015-06-17'),]
+inp.warmup <- inp[(inp[,1] >= '2009-04-08' & inp[,1] <= '2011-04-08'),]
 inp.val <- inp[(inp[,1] >= '1981-01-01' & inp[,1] <= '2011-05-26'),]
 inp.val.warmup <- inp[(inp[,1] >= '1979-01-01' & inp[,1] <= '1980-12-31'),]
 
@@ -104,7 +116,7 @@ summ_tab <- apply(tab_q_pr_pe[1:nrow(tab_q_pr_pe)-1,],
 summ_tab
 # estimated run-off per year
 # Pr/Q
-summ_tab[["Q"]]/summ_tab[["pr"]] # 0.8746454 not implausible
+summ_tab[["Q"]]/summ_tab[["pr"]] # 0.8979052 not implausible
 # ----------------------------------------------------------------------------------------------------------#
 
 inputs <- airGR::CreateInputsModel(airGR::RunModel_GR4J,
@@ -177,8 +189,8 @@ mod1 = airGR::RunModel_GR4J(InputsModel = inputs,
                             Param = Param_median)
 
 # check model fit before calibration
-hydroGOF::NSE(mod1$Qsim, inp.cal$flow.mm.day) # 0.479781 un-calibrated
-hydroGOF::KGE(mod1$Qsim, inp.cal$flow.mm.day) # 0.6221787 un-calibrated
+hydroGOF::NSE(mod1$Qsim, inp.cal$flow.mm.day) # 0.468974 un-calibrated
+hydroGOF::KGE(mod1$Qsim, inp.cal$flow.mm.day) # 0.6136232 un-calibrated
 
 # Calibration
 err_crit <- airGR::CreateInputsCrit(airGR::ErrorCrit_KGE2,
@@ -198,7 +210,7 @@ OutputsCalib <- airGR::Calibration_Michel(InputsModel = inputs,
                                           FUN_MOD = airGR::RunModel_GR4J)
 
 Param <- OutputsCalib$ParamFinalR
-Param # CP boxcox KGE calib 189.815172   2.124977  37.826944   2.120363
+Param # CP boxcox KGE calib 171.290637   2.158486  36.765871   2.133983
 
 # run model with calibrated parameters
 OutputsModel <- airGR::RunModel_GR4J(InputsModel = inputs,
@@ -209,9 +221,9 @@ OutputsModel <- airGR::RunModel_GR4J(InputsModel = inputs,
 
 #write.csv(Burr_mod_2002_2018,file = "C:\\Users\\afrench.INSTITUTE\\OneDrive - Marine Institute\\FeeaghFlow_GR4J\\Burr_flow_mod_Gr4J.csv")
 
-hydroGOF::NSE(OutputsModel$Qsim, inp.cal$flow.mm.day) # 0.6457835
-hydroGOF::KGE(OutputsModel$Qsim, inp.cal$flow.mm.day) # 0.8227817
-hydroGOF::rmse(OutputsModel$Qsim, inp.cal$flow.mm.day) # 2.234569
+hydroGOF::NSE(OutputsModel$Qsim, inp.cal$flow.mm.day) # 0.6349063
+hydroGOF::KGE(OutputsModel$Qsim, inp.cal$flow.mm.day) # 0.8177865
+hydroGOF::rmse(OutputsModel$Qsim, inp.cal$flow.mm.day) # 2.257483
 
 # export validation plots for calibratino period
 dirName <- paste0(getwd(),"/vignettes/vignette_figures/", sep = "",
@@ -227,9 +239,9 @@ plot(OutputsModel, Qobs = inp.cal$flow.mm.day)
 invisible(dev.off())
 
 OutputsCrit <- airGR::ErrorCrit_NSE(InputsCrit = err_crit,
-                                    OutputsModel = OutputsModel) # CP 0.6959
+                                    OutputsModel = OutputsModel) # CP 0.6898
 OutputsCrit <- airGR::ErrorCrit_KGE(InputsCrit = err_crit,
-                                    OutputsModel = OutputsModel) # CP 0.8500
+                                    OutputsModel = OutputsModel) # CP 0.8490
 
 #Validation data
 ## run period selection
@@ -244,9 +256,9 @@ OutputsModel2 <- airGR::RunModel_GR4J(InputsModel = inputs,
                                       RunOptions = opts,
                                       Param = Param)
 
-hydroGOF::NSE(OutputsModel2$Qsim, inp.val$flow.mm.day) # 0.5068104 CP
-hydroGOF::KGE(OutputsModel2$Qsim, inp.val$flow.mm.day) # 0.7091826 CP
-hydroGOF::rmse(OutputsModel2$Qsim, inp.val$flow.mm.day) # 2.458732 CP
+hydroGOF::NSE(OutputsModel2$Qsim, inp.val$flow.mm.day) # 0.5175338 CP
+hydroGOF::KGE(OutputsModel2$Qsim, inp.val$flow.mm.day) # 0.7047436 CP
+hydroGOF::rmse(OutputsModel2$Qsim, inp.val$flow.mm.day) # 2.456921 CP
 
 png(paste0(dirName,"Burr_GR4J_ERA5_Val_results.png"), height = 2500, width = 6500, res =300)
 plot(OutputsModel2,

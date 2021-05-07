@@ -1,6 +1,8 @@
 ^fishcastr\.Rproj$
 ^\.Rproj\.user$
+^data-raw$
 ^LICENSE\.md$
 ^README.Rmd$
-^data-raw$
 ^\.github$
+^doc$
+^Meta$

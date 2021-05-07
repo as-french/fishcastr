@@ -16,14 +16,14 @@ rgenpoisson(mu, disp_param)
 A vector of random deviates.
 }
 \description{
-This function generates random deviates when supplied with a vector of
-conditional means and dispersion parameter. It is important to note that the
-dispersion parameter returned by different models (e.g., those implemented
-using glmmTMB), may have different definitions. For example, extracting
-dispersion parameter from genpois family models will yield "phi-squared"
-dispersion parameter, which must be square rooted before input into
-rgenpoisson (see simulate_glm function for example use and
-https://rdrr.io/cran/glmmTMB/man/sigma.glmmTMB.html for details).
+This function generates random deviates when supplied with a
+vector of conditional means and dispersion parameter. It is important to
+note that the dispersion parameter returned by different models (e.g.,
+those implemented using glmmTMB), may have different definitions. For
+example, extracting dispersion parameter from genpois family models will
+yield "phi-squared" dispersion parameter, which must be square rooted
+before input into rgenpoisson (see simulate_glm function for example use
+and https://rdrr.io/cran/glmmTMB/man/sigma.glmmTMB.html for details).
 }
 \examples{
 set.seed(123)

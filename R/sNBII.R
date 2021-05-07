@@ -1,12 +1,12 @@
 #' Generate summary statistics from a negative binomial type II (quasi-Poisson)
 #' distribution
 #'
-#' This function generates summary statistics when supplied with a vector of
-#' conditional means and dispersion parameter. Implemented for compatibility
-#' with bbmle::mle2 (Bolker & R Core Team 2017), which requires "s" functions
-#' associated with "d" functions. The corresponding discrete density (or
-#' probability mass) function, dNBII, of the negative binomial type II is
-#' contained in package gamlss.dist.
+#' @description This function generates summary statistics when supplied with a
+#'   vector of conditional means and dispersion parameter. Implemented for
+#'   compatibility with bbmle::mle2 (Bolker & R Core Team 2017), which requires
+#'   "s" functions associated with "d" functions. The corresponding discrete
+#'   density (or probability mass) function, dNBII, of the negative binomial
+#'   type II is contained in package gamlss.dist.
 #'
 #' @param mu A vector.
 #' @param sigma A numeric, dispersion parameter.

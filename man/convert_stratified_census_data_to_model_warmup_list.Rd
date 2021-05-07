@@ -56,7 +56,7 @@ years that start on winter solstice (i.e., salmonids in Burrishoole) and
 forecast years that start post winter solstice (i.e, eels in Burrishoole).
 }
 \examples{
-
+\dontrun{
 # LOAD MET DATA ----
 met_data <- fishcastr::grid_ERA5_1979_2019_Jan_bc
 met <-
@@ -99,5 +99,5 @@ data_ssmolt_forecast_years <-
     dates = data_ssmolt_forecast_years$date,
     no_years_warmup = 0
   )
-
+}
 }

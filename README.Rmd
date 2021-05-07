@@ -46,7 +46,7 @@ Diadromous fish migrations occur seasonally (e.g., the seaward spring Atlantic s
 - Visualise uncertainty in probabilistic predictions, building on some of the functionality in the [visualizeR](https://github.com/SantanderMetGroup/visualizeR) package for seasonal climate forecast visualization
 - Predict water temperature from air temperature
 - Calculate moonlight exposure
-- Stratify count census data into "forecast years" based on biological information (thermal/day length thresholds)
+- Stratify count census data into "forecast years" based on biological information (thermal/daylength thresholds)
 
 ***Model chain***
 
@@ -65,20 +65,71 @@ devtools::install_github("as-french/fishcastr",
                          build_vignettes = FALSE)
 ```
 
+## Accessing raw data
 
-## A note on access to archived seasonal climate forecasts and grid pseudo-observations
+`fishcastr` was built to support the WATExR project which requires all outputs to be open access. Therefore, we only use open-access data and include all code required to reproduce the analysis described in the "vignettes/Manuscript". While we do not include published raw data within the package itself, we maximise the length of our reproducibility chain by facilitating access to the raw data according to two current scenarios.
 
-`fishcastr` includes all data required to reproduce the analysis described in the "vignettes/Manuscript". For example, re-forecasts and archived operational forecasts for 1993 to 2019 interpolated to the location of the Burrishoole catchment in the west of Ireland can be found in raw form (`fishcastr::grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_raw`) and bias corrected form (`fishcastr::grid_SEAS5_1993_2019_2_3_4_5_6_7_8_tas_pr_petH_bc`) - though note the values in both these datasets are rounded to reduce package size.
+### Scenario 1 | Data are fully open access
 
-For users who wish to access raw seasonal climate forecast data for other locations, there are two options.
+Where data are "fully open-access" (i.e., registration/login credentials are not required at point of download), we have included several functions within `fishcastr` that should be run immediately after package installation to pull several data sources from web archives. These data sources are as follows:
 
-- Contact the University of Santander Met Group for access to archived SEAS5 forecasts through the [Climate4R](https://github.com/SantanderMetGroup/climate4R) package bundle using functions such as `loadeR::loadSeasonalForecast`, or..
+- Met Éireann's [manual and automatic meteorological station data](https://www.met.ie//climate/available-data/historical-data);
 
-- Download climate data directly from the [Copernicus Climate Data Store (CDS)](https://cds.climate.copernicus.eu/#!/home) in netcdf format. If you choose this option, we recommend using the [ecmwfr](https://cran.r-project.org/web/packages/ecmwfr/vignettes/webapi_vignette.html) package for data download/documentation, and we recommend you use the `Climate4R` tools for data processing. The /raw-data/ folder in this package contains example scripts for accessing ECMWF's ERA5 reanalysis and operational SEAS5 data from Copernicus CDS.
+- Foras na Mara - Marine Institute's [diadromous fish counts](http://data.marine.ie/geonetwork/srv/eng/catalog.search#/metadata/ie.marine.data:dataset.4343);
 
-In both instances, we recommend installation of the `Climate4R` bundle - see instructions on each github page, taking particular care with loadeR, owing to its dependency on a Java installation and the R package rJava, which has [known issues](https://github.com/SantanderMetGroup/loadeR/wiki/Installation).
+- Foras na Mara - Marine Institute's [Lough Feeagh surface water temperature](http://data.marine.ie/geonetwork/srv/eng/catalog.search#/metadata/ie.marine.data:dataset.3757);
 
-Install in following order:
+- Irish Environmental Protection Agency's [Lough Feeagh water levels](https://www.epa.ie/hydronet/#32070);
+
+- Potsdam Institute for Climate Impact Research's [pseudo climate observations (EWEMBI) for bias correction of climate input data](https://dataservices.gfz-potsdam.de/pik/showshort.php?id=escidoc:3928916)
+
+These sources are all licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+
+```{r how_to_download_fully_open_access_data, include = TRUE,eval=FALSE, echo=TRUE}
+library(fishcastr)
+
+# Following package installation, download the following sources (and publisher)
+
+# Lough Feeagh 2m depth water temperature (2004 - 2019) (Foras na Mara - Marine
+# Institute; MI)
+fishcastr::download_Feeagh_water_temp()
+
+# Lough Feeagh water level (1976 - 2019) (Irish Environmental Protection Agency;
+# EPA)
+fishcastr::download_Feeagh_wlevel()
+
+# Seaward migrating diadromous fish counts in Burrishoole recored at the Mill
+# Race and Salmon Leap traps (1970 - 2019) (Foras na Mara - Marine Institute)
+fishcastr::download_fish_data()
+
+# Manual and automatic meteorological station data at Furnace, Burrishoole (Met
+# Éireann) (manual: 1959 - 2019; automatic: 2005 -2019)
+fishcastr::download_Met_Eireann_station_data()
+
+# River water temperature at Mill Race outflow from Lough Feeagh (1970 - 2019).
+# This is a proxy for surface water temperature of Lough Feeagh (Foras na Mara -
+# Marine Institute)
+fishcastr::download_MR_temperature()
+
+# EWEMBI climate pseudo-observations (1979 - 2016) at Burrishoole for infilling gaps in local meteorological station data (Potsdam Institute for Climate Impact Research)
+fishcastr::download_EWEMBI()
+```
+
+### Scenario 2 | Data access requires registration
+
+Where website registration is necessary, we have provided R scripts in the /raw-data/ folder that should facilitate data access if login credentials are updated by the new user. These data sources are as follows:
+
+- ECMWF's climate reanalysis (ERA5);
+- ECMWF's seasonal climate forecasts (SEAS5);
+
+
+#### ISIMIP's pseudo climate observations (EWEMBI) - accessed through University of Cantabria's "User Data Gateway"
+
+The raw netcdf files for EWEMBI are archived by [Potsdam Institute for Climate Impact Research](https://dataservices.gfz-potsdam.de/pik/showshort.php?id=escidoc:3928916). However, an archived copy of ISIMIP's pseudo climate observations (EWEMBI) are maintained by the University of Cantabria Met Group, who facilitate targeted data extraction (e.g., grid references, times, variables), through their R based package bundle [Climate4R](https://github.com/SantanderMetGroup/climate4R). While it is necessary to register with the Met Group's User Data Gateway for data access (see: https://meteo.unican.es/trac/wiki/udg/registration), `Climate4R` provides tools that facilitate reproducibility.
+
+**NOTE** - when installing `Climate4R` packages, see instructions on each package's GitHub page, taking particular care with `loadeR`, owing to its dependency on a *Java* installation and the R package `rJava`, which has [known issues](https://github.com/SantanderMetGroup/loadeR/wiki/Installation).
+
+We recommend installing in following order (see code below for more details):
 
 - [rJava](https://cran.r-project.org/web/packages/rJava/index.html)
 - [loadeR.java](https://github.com/SantanderMetGroup/loadeR.java)
@@ -129,6 +180,14 @@ Install in following order:
 #                            "SantanderMetGroup/visualizeR",
 #                            "SantanderMetGroup/drought4R"))
 ```
+
+Following registration, EWEMBI data can be accessed using the script provided (/data-raw/01_data_grid_ewembi.R); **NOTE** - this script should be run immediately preceding running of script (/data-raw/02_data_grid_met_obs_1979_2019.R).
+
+#### ECMWF data - accessed though the Copernicus "Climate Data Store"
+
+ECMWF's ERA5 and SEAS5 data are available through the [Copernicus Climate Data Store (CDS)](https://cds.climate.copernicus.eu/#!/home) (CDS), which requires registration (https://cds.climate.copernicus.eu/user/register) to obtain an access key that is stored on the user's computer. Following registration, data is downloaded using the CDS Application programming Interface (API; https://confluence.ecmwf.int/display/CKB/How+to+download+ERA5). While building `fishcastr`, we used the `ecmwfr` to facilitate reproducibility in the R environment and recommend users of `fishcastr` to familiarise themselves with `ecmwfr` functionality (e.g., for converting automatically generated python scripts to R;  https://cran.r-project.org/web/packages/ecmwfr/vignettes/cds_vignette.html). These script conversions form the basis of several R scripts we provide to download subsets of ERA5 and SEAS5 (e.g., see /data-raw/grid_ERA5_Jan_2020_download.R for downloading February to December 2019 and January 2020 ERA5).
+
+**NOTE** - We accessed re-forecasts and archived operational forecasts through the University of Cantabria's User Data Gateway; however, this access was [restricted](http://meteo.unican.es/tds5/catalogs/Copernicus/CDS_CopernicusDatasets.html?dataset=Copernicus/SYSTEM5_ecmwf_Seasonal_25Members_SFC.ncml) to WATExR project participants (amongst other European projects). Therefore, users of `fishcastr` must access SEAS5 via the [Copernicus Climate Data Store](https://cds.climate.copernicus.eu/cdsapp#!/dataset/seasonal-original-single-levels?tab=overview).
 
 # How to use
 
