@@ -131,7 +131,7 @@ ncfile <- wf_request(user = "xxxxx",
 #    target = paste0("download_",8,".nc")
 #  )
 #
-#  ncfile <- wf_request(user = "43304",
+#  ncfile <- wf_request(user = "xxxxx",
 #                       request = request,
 #                       transfer = TRUE,
 #                       path = arc_dir,

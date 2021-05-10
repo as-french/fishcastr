@@ -8,7 +8,7 @@ Authors@R:
            email = "Andrew.French@Marine.ie",
            comment = c(ORCID = "0000-0001-6662-4113"))
 Description: A collection of tools for generating seasonal migration forecasts for the timing of seaward movements of diadromous fishes.
-License: MIT + file LICENSE
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
