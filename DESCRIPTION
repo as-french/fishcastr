@@ -43,10 +43,14 @@ Imports:
 Remotes: 
     github::SantanderMetGroup/transformeR,
     github::SantanderMetGroup/drought4R,
+    github::SantanderMetGroup/loadeR.java,
+    github::SantanderMetGroup/climate4R.UDG,
     github::SantanderMetGroup/loadeR
 Suggests: 
     knitr,
     rmarkdown,
+    climate4R.UDG,
+    loadeR.java,
     loadeR,
     hydroGOF,
     doSNOW,
