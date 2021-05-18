@@ -11,26 +11,23 @@ air_to_water_Feeagh_params_ERA5_bcc <- fishcastr::air_to_water_Feeagh_params_ERA
 
 # load reanalysis (bias corrected) contains precipitation and potential evapotranspiration
 # SPRING
-#grid_ERA5_1979_2019_Jun_bc <- fishcastr::grid_ERA5_1979_2019_Jun_bc
-grid_ERA5_1979_2019_Jun_bc <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),
-                                                    "/extdata/grid_ERA5_1979_2019_Jun_bc_CDS.rds"))
+grid_ERA5_1979_2019_Jun_bc <- fishcastr::grid_ERA5_1979_2019_Jun_bc
 
 # convert grid reanalysis to two column table: date, variable
-grid_ERA5_1979_2019_Jun_bc <- fishcastr::convert_grid_to_dataframe(grid_obj = grid_ERA5_1979_2019_Jun_bc)[,-2]
-names(grid_ERA5_1979_2019_Jun_bc)[which(names(grid_ERA5_1979_2019_Jun_bc) == "dates1")] <- "date"
+data_ERA5_1979_2019_Jun_bc <- fishcastr::convert_grid_to_dataframe(grid_obj = grid_ERA5_1979_2019_Jun_bc)[,-2]
+names(data_ERA5_1979_2019_Jun_bc)[which(names(data_ERA5_1979_2019_Jun_bc) == "dates1")] <- "date"
 
 # calculate water temperature
-Tw <- fishcastr::air_to_water_model(Ta = grid_ERA5_1979_2019_Jun_bc$tas,
-                                    Yday = lubridate::yday(grid_ERA5_1979_2019_Jun_bc$date),
+Tw <- fishcastr::air_to_water_model(Ta = data_ERA5_1979_2019_Jun_bc$tas,
+                                    Yday = lubridate::yday(data_ERA5_1979_2019_Jun_bc$date),
                                     A = air_to_water_Feeagh_params_ERA5_bcc$A,
                                     ac = air_to_water_Feeagh_params_ERA5_bcc$ac,
                                     b = air_to_water_Feeagh_params_ERA5_bcc$b,
                                     B = air_to_water_Feeagh_params_ERA5_bcc$B)
-data_water_temp <- data.frame("date" = grid_ERA5_1979_2019_Jun_bc$date,
+data_water_temp <- data.frame("date" = data_ERA5_1979_2019_Jun_bc$date,
                               "water_temp" = Tw)
 
 # stratify forecast years
-
 data_seel_forecast_years <- fishcastr::bio_year_therm(mean_temp = data_water_temp$water_temp,
                                           dates = data_water_temp$date,
                                           biofix_temp = 11,
@@ -103,9 +100,8 @@ data_dds <- data.table::rbindlist(l = list_dds_forecast_year, use.names = T,fill
 
 # --------------------------------------------------------------------------------------------------- #
 # PLOT DDS vs. COUNTS
-#data_seel <- fishcastr::data_seel
-data_seel <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),
-                                     "/extdata/data_seel.rds"))
+fishcastr::download_fish_data()
+data_seel <- fishcastr::import_fish_data(species = "seel")
 
 data_seel_dds.merge <-Reduce(f = function(x,y){merge(x = x,
                                                        y = y,
@@ -161,16 +157,20 @@ dataset_list_nameslist <- lapply(data_list_years,
 names(dataset_list) <- dataset_list_nameslist
 
 # Create vignette sub directories ----
-dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/FigS10", "/", sep = "",
-                  collapse = NULL)
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/vignette_figures/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/FigS10/eel", "/", sep = "",
-                  collapse = NULL)
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/vignette_figures/migration_prep_models/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/FigS9", "/", sep = "",
-                  collapse = NULL)
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/vignette_figures/migration_prep_models/eel/")
+dir.create(dirName, showWarnings = TRUE, mode = "0777")
+
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/vignette_figures/migration_prep_models/eel/val_plots/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
 # # try different conditional distributions ----
@@ -209,17 +209,21 @@ dir.create(dirName, showWarnings = TRUE, mode = "0777")
 #     xlims = c(500,4200)
 #   )
 
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/vignette_figures/migration_prep_models/eel/")
+
+library(RMKdiscrete)
 physio_generalised_Poisson <-
-  physio_model_evaluation_exp_mod_Gauss_inv(
+  fishcastr::physio_model_evaluation_exp_mod_Gauss_inv(
     species_count_lab = "seel_perc_run_int",
     x_variable_lab = "weighted_dds_water",
     data_list = dataset_list,
     error_distribution_name = "generalised_Poisson",
     species_name = "European eel",
-    file_path_plot = paste0(getwd(),'/vignettes/vignette_figures/FigS9/genpois_FigS9c.png'),
-    file_path_resid_fitted_plot = paste0(getwd(),'/vignettes/vignette_figures/FigS10/eel/genpois_FigS10b.png'),
-    file_path_dispersion_zeroinf_acf_plot = paste0(getwd(),'/vignettes/vignette_figures/FigS10/eel/genpois_FigS10c.png'),
-    file_path_coef_profile_plot = paste0(getwd(),'/vignettes/vignette_figures/FigS10/eel/genpois_FigS10d.png'),
+    file_path_plot = paste0(dirName,'genpois_eel.png'),
+    file_path_resid_fitted_plot = paste0(dirName,'val_plots/resid_fitted.png'),
+    file_path_dispersion_zeroinf_acf_plot = paste0(dirName,'val_plots/dispersion.png'),
+    file_path_coef_profile_plot = paste0(dirName,'val_plots/param_profiles.png'),
     start_values = list(c = 200, mu_exmg = 2600,sigma_exmg = 240, lamb = 210,phi = 5),
     lower_lims = list(c = 1, mu_exmg=2000, sigma_exmg=30, lamb = 10, phi = 0.01),
     ylims = c(-500,500),

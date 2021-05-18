@@ -25,8 +25,8 @@ download_Met_Eireann_station_data <- function(){
   # ----------------------------------------------------------------------------------------------------------#
 
   # manual station ----
-  dirName <- paste0(system.file("inst", package = "fishcastr"),
-                    "/extdata/Met_Eireann_station_data/")
+  dirName <- paste0(system.file("extdata", package = "fishcastr"),
+                    "/Met_Eireann_station_data/")
   dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
   url = "https://cli.fusio.net/cli/climate_data/webdata/dly833.zip"
@@ -48,10 +48,11 @@ download_Met_Eireann_station_data <- function(){
 
   # ----------------------------------------------------------------------------------------------------------#
   # import manual data ----
-  dir.dat <- paste0(system.file("inst", package = "fishcastr"),
-         "/extdata/Met_Eireann_station_data/manual_station/dly833.csv")
+  dir.dat <- paste0(system.file("extdata", package = "fishcastr"),
+         "/Met_Eireann_station_data/manual_station/dly833.csv")
 
-  data_manual <- data.table::fread(file = dir.dat,select = c("date","rain","maxt","mint"))
+  data_manual <- data.table::fread(file = dir.dat,select = c("date","rain","maxt","mint"),
+                                   stringsAsFactors = FALSE)
   data_manual$date <- as.Date(data_manual$date, format = c("%d-%b-%Y"))
 
   # keep only max and min where both present
@@ -79,15 +80,16 @@ download_Met_Eireann_station_data <- function(){
 
   # store downloaded and processed data as .rds file
   saveRDS(object = data_met_manual_station_1959_2019,
-          file = paste0(system.file("inst", package = "fishcastr"),
-                                               "/extdata/data_met_manual_station_1959_2019.rds"))
+          file = paste0(system.file("extdata", package = "fishcastr"),
+                                               "/data_met_manual_station_1959_2019.rds"))
 
   # ----------------------------------------------------------------------------------------------------------#
   # import auto data ----
-  dir.dat <- paste0(system.file("inst", package = "fishcastr"),
-                    "/extdata/Met_Eireann_station_data/auto_station/dly1175.csv")
+  dir.dat <- paste0(system.file("extdata", package = "fishcastr"),
+                    "/Met_Eireann_station_data/auto_station/dly1175.csv")
 
-  data_auto <- data.table::fread(file = dir.dat,select = c("date","rain","maxtp","mintp"))
+  data_auto <- data.table::fread(file = dir.dat,select = c("date","rain","maxtp","mintp"),
+                                 stringsAsFactors = FALSE)
   data_auto$date <- as.Date(data_auto$date, format = c("%d-%b-%Y"))
 
   # keep only max and min where both present
@@ -115,6 +117,6 @@ download_Met_Eireann_station_data <- function(){
 
   # store downloaded and processed data as .rds file
   saveRDS(object = data_met_auto_station_2005_2019,
-          file = paste0(system.file("inst", package = "fishcastr"),
-                        "/extdata/data_met_auto_station_2005_2019.rds"))
+          file = paste0(system.file("extdata", package = "fishcastr"),
+                        "/data_met_auto_station_2005_2019.rds"))
 }

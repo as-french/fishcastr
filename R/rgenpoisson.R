@@ -10,6 +10,7 @@
 #'   before input into rgenpoisson (see simulate_glm function for example use
 #'   and https://rdrr.io/cran/glmmTMB/man/sigma.glmmTMB.html for details).
 #'
+#' @importFrom RMKdiscrete sLGP dLGP
 #' @param mu A vector.
 #' @param disp_param A numeric, dispersion parameter.
 #' @return A vector of random deviates.

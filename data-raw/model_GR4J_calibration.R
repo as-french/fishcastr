@@ -2,21 +2,22 @@
 # A method for calibrating and validating rainfall run-off model GR4J
 # ----------------------------------------------------------------------------------------------------------#
 
-grid_ERA5_1979_2019_Jan_bc <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),
-                                                     "/extdata/grid_ERA5_1979_2019_Jan_bc_CDS.rds"))
+grid_ERA5_1979_2019_Jan_bc <- fishcastr::grid_ERA5_1979_2019_Jan_bc
 
 # import and convert ERA5 grid to data.frame
 era5_reanalysis_bcc <- fishcastr::convert_grid_to_dataframe(grid_obj = grid_ERA5_1979_2019_Jan_bc)[,-2]
 names(era5_reanalysis_bcc)[which(names(era5_reanalysis_bcc) == "dates1")] <- "date"
 
-# import discharge
+# import water levels and calculate discharge from rating curve
+fishcastr::download_Feeagh_wlevel()
+
 #Feeagh_disch_1976_2021 <- fishcastr::data_Feeagh_discharge
-Feeagh_disch_1976_2021 <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),
-                      "/extdata/data_Feeagh_discharge.rds"))
+#Feeagh_disch_1976_2021 <- readRDS(file = paste0(system.file("extdata", package = "fishcastr"),
+#                      "/data_Feeagh_discharge.rds"))
 
 #Feeagh_disch_1976_2021_corr <- fishcastr::data_Feeagh_discharge_corr
-Feeagh_disch_1976_2021_corr <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),
-                      "/extdata/data_Feeagh_discharge_corr.rds"))
+Feeagh_disch_1976_2021_corr <- readRDS(file = paste0(system.file("extdata", package = "fishcastr"),
+                      "/data_Feeagh_discharge_corr.rds"))
 
 # bind discharge and climate data (knowing climate reanalysis is complete)
 disch_met_complete <- Reduce(function(x,y) merge(x,y,by="date"),
@@ -61,6 +62,18 @@ inp.warmup <- inp[(inp[,1] >= '2009-04-08' & inp[,1] <= '2011-04-08'),]
 inp.val <- inp[(inp[,1] >= '1981-01-01' & inp[,1] <= '2011-05-26'),]
 inp.val.warmup <- inp[(inp[,1] >= '1979-01-01' & inp[,1] <= '1980-12-31'),]
 
+# multiple validation periods (10 year windows 1981:1990, 1991:2000, 2001:2010, 2011:2019)
+val_years <- list("1981-1990" = c(as.Date("1981-01-01"),as.Date("1990-12-31")),
+                  "1991-2000" = c(as.Date("1991-01-01"),as.Date("2000-12-31")),
+                  "2001-2010" = c(as.Date("2001-01-01"),as.Date("2011-04-08")),
+                  "2015-2019" = c(as.Date("2015-01-01"),as.Date("2019-12-31")))
+val_windows <- lapply(X = val_years,FUN = function(x){
+  inp.val <- inp[(inp[,1] >= x[[1]] & inp[,1] <= x[[2]]),]
+  inp.val.warmup <- inp[(inp[,1] >= (x[[1]] - lubridate::years(2)) & inp[,1] <= x[[1]]- lubridate::days(1)),]
+  return(list("inp.val" = inp.val,
+              "inp.val.warmup" = inp.val.warmup))
+})
+
 # extract met forcing data
 met <- disch_met_complete[,c("date","pr","petH")]
 met$date <- as.POSIXct(met$date, tz = 'UTC')
@@ -91,13 +104,13 @@ testdf <- as.data.frame(inp)
 testdf$year <- lubridate::year(testdf$date)
 #tapply(testdf$flow.mm.day,INDEX = testdf$year, sum)
 mean(tapply(testdf$flow.mm.day,
-            INDEX = testdf$year, sum, na.rm = TRUE)) # 1329.958mm Q per year
+            INDEX = testdf$year, sum, na.rm = TRUE)) # 1484.315mm Q per year
 
 # mean annual precipitation (ERA5)
 met$year <- lubridate::year(met$date)
 mean(tapply(met$pr,
             INDEX = met$year,
-            sum)) # 1651.996mm pr per year
+            sum)) # 1651.574mm pr per year
 tab_q_pr_pe <- as.data.frame(cbind(tapply(testdf$flow.mm.day,
                                           INDEX = testdf$year,
                                           sum,na.rm = TRUE),
@@ -109,14 +122,15 @@ tab_q_pr_pe <- as.data.frame(cbind(tapply(testdf$flow.mm.day,
                                           sum,na.rm = TRUE))) # flow and pr by year
 colnames(tab_q_pr_pe)<- c("Q","pr","PE")
 # underestimating rainfall, owing to elevation? Add correction multiplication factor for mean catchment elevation
-tab_q_pr_pe # pr - Q should approximately equal PE and it does
+tab_q_pr_pe$pr_Q <- tab_q_pr_pe$pr-tab_q_pr_pe$Q
+tab_q_pr_pe$diff <- tab_q_pr_pe$PE - tab_q_pr_pe$pr_Q # pr - Q ideally would be equal to PE
 summ_tab <- apply(tab_q_pr_pe[1:nrow(tab_q_pr_pe)-1,],
                   MARGIN = 2,
                   FUN = mean)
 summ_tab
 # estimated run-off per year
 # Pr/Q
-summ_tab[["Q"]]/summ_tab[["pr"]] # 0.8979052 not implausible
+summ_tab[["Q"]]/summ_tab[["pr"]] # 0.8981404 not implausible
 # ----------------------------------------------------------------------------------------------------------#
 
 inputs <- airGR::CreateInputsModel(airGR::RunModel_GR4J,
@@ -136,8 +150,19 @@ opts <- airGR::CreateRunOptions(airGR::RunModel_GR4J,
 
 
 # # choose starting set of parameters based on similar hydroclimate as defined in Harrigan 2018 et al., sup materials
-Harrigan_params <- as.data.frame(read.csv(paste0(getwd(),
-                                                        "/inst/extdata/Supplementary_Table_S1_Harrigan2018.csv"),stringsAsFactors = TRUE,check.names = FALSE))
+url = "https://hess.copernicus.org/articles/22/2023/2018/hess-22-2023-2018-supplement.zip"
+dirName <- paste0(system.file("extdata", package = "fishcastr"),
+                  "/Harrigan_GR4J_params/")
+dir.create(dirName, showWarnings = TRUE, mode = "0777")
+
+downloader::download(url,
+                     destfile=paste0(dirName, "hess-22-2023-2018-supplement.zip"),
+                     mode="wb")
+unzip(paste0(dirName, "hess-22-2023-2018-supplement.zip"),
+      exdir = paste0(dirName, "Harrigan_GR4J_params_unzip"))
+
+Harrigan_params <- as.data.frame(read.csv(paste0(system.file("extdata", package = "fishcastr"),
+                                                 "/Harrigan_GR4J_params/Harrigan_GR4J_params_unzip/Supplementary_Information/Supplementary_Table_S1.csv"),stringsAsFactors = TRUE,check.names = FALSE))
 
 Harrigan_WS_NWENW <- Harrigan_params[Harrigan_params$`UK Hydroclimate Region` %in% c("WS","NWENW"),
                                      c("GR4J X1 (mm)","GR4J X2 (mm d-1)","GR4J X3 (mm)",
@@ -189,8 +214,8 @@ mod1 = airGR::RunModel_GR4J(InputsModel = inputs,
                             Param = Param_median)
 
 # check model fit before calibration
-hydroGOF::NSE(mod1$Qsim, inp.cal$flow.mm.day) # 0.468974 un-calibrated
-hydroGOF::KGE(mod1$Qsim, inp.cal$flow.mm.day) # 0.6136232 un-calibrated
+hydroGOF::NSE(mod1$Qsim, inp.cal$flow.mm.day) # 0.4773134 un-calibrated
+hydroGOF::KGE(mod1$Qsim, inp.cal$flow.mm.day) # 0.6182741 un-calibrated
 
 # Calibration
 err_crit <- airGR::CreateInputsCrit(airGR::ErrorCrit_KGE2,
@@ -210,40 +235,47 @@ OutputsCalib <- airGR::Calibration_Michel(InputsModel = inputs,
                                           FUN_MOD = airGR::RunModel_GR4J)
 
 Param <- OutputsCalib$ParamFinalR
-Param # CP boxcox KGE calib 171.290637   2.158486  36.765871   2.133983
+Param # CP boxcox KGE calib 175.869269   2.127569  34.630624   2.141893
 
 # run model with calibrated parameters
 OutputsModel <- airGR::RunModel_GR4J(InputsModel = inputs,
                                      RunOptions = opts,
                                      Param = Param)
 
-#Burr_mod_2002_2018 <- data.frame("date" = seq(from = as.Date("2002-01-01"), to = as.Date("2017-12-31"), by = 1), "Qsim" = OutputsModel$Qsim)
+hydroGOF::NSE(OutputsModel$Qsim, inp.cal$flow.mm.day) # 0.6397958
+hydroGOF::KGE(OutputsModel$Qsim, inp.cal$flow.mm.day) # 0.8192696
+hydroGOF::rmse(OutputsModel$Qsim, inp.cal$flow.mm.day) # 2.242316
 
-#write.csv(Burr_mod_2002_2018,file = "C:\\Users\\afrench.INSTITUTE\\OneDrive - Marine Institute\\FeeaghFlow_GR4J\\Burr_flow_mod_Gr4J.csv")
+# export validation plots for calibration period
+#dirName <- paste0(system.file("", package = "fishcastr"),
+#                      "/vignettes/")
+#dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-hydroGOF::NSE(OutputsModel$Qsim, inp.cal$flow.mm.day) # 0.6349063
-hydroGOF::KGE(OutputsModel$Qsim, inp.cal$flow.mm.day) # 0.8177865
-hydroGOF::rmse(OutputsModel$Qsim, inp.cal$flow.mm.day) # 2.257483
-
-# export validation plots for calibratino period
-dirName <- paste0(getwd(),"/vignettes/vignette_figures/", sep = "",
-                  collapse = NULL)
-dir.create(dirName, showWarnings = TRUE, mode = "0777")
-dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/Fig_Burr_GR4J_calib", "/", sep = "",
-                  collapse = NULL)
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/vignette_figures/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-png(paste0(dirName,"Burr_GR4J_ERA5_Calib_results.png"), height = 3000, width = 6500, res =300)
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/vignette_figures/hydrologic_model/")
+dir.create(dirName, showWarnings = TRUE, mode = "0777")
+
+#dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+#                  "/hydrologic_model/Fig_Burr_GR4J_calib/")
+#dir.create(dirName, showWarnings = TRUE, mode = "0777")
+
+png(paste0(dirName,"Burr_GR4J_ERA5_Calib_results.png"), height = 2000, width = 3500, res =300)
 #dev.new()
 plot(OutputsModel, Qobs = inp.cal$flow.mm.day)
 invisible(dev.off())
 
 OutputsCrit <- airGR::ErrorCrit_NSE(InputsCrit = err_crit,
-                                    OutputsModel = OutputsModel) # CP 0.6898
+                                    OutputsModel = OutputsModel) # CP 0.6956
 OutputsCrit <- airGR::ErrorCrit_KGE(InputsCrit = err_crit,
-                                    OutputsModel = OutputsModel) # CP 0.8490
-
-#Validation data
+                                    OutputsModel = OutputsModel) # CP 0.8501
+# ---------------------------------------------------------------------------------------------- #
+# Validation data ----
+# ---------------------------------------------------------------------------------------------- #
+# SINGLE PERIOD 1981 - 2015
 ## run period selection
 Ind_Run <- which(met[,1] >= inp.val[1,1] & met[,1] <= inp.val[nrow(inp.val),1])
 warm_up <- 1:(Ind_Run[1]-1)
@@ -256,14 +288,75 @@ OutputsModel2 <- airGR::RunModel_GR4J(InputsModel = inputs,
                                       RunOptions = opts,
                                       Param = Param)
 
-hydroGOF::NSE(OutputsModel2$Qsim, inp.val$flow.mm.day) # 0.5175338 CP
-hydroGOF::KGE(OutputsModel2$Qsim, inp.val$flow.mm.day) # 0.7047436 CP
-hydroGOF::rmse(OutputsModel2$Qsim, inp.val$flow.mm.day) # 2.456921 CP
+hydroGOF::NSE(OutputsModel2$Qsim, inp.val$flow.mm.day) # 0.5238553 CP
+hydroGOF::KGE(OutputsModel2$Qsim, inp.val$flow.mm.day) # 0.7025954 CP
+hydroGOF::rmse(OutputsModel2$Qsim, inp.val$flow.mm.day) # 2.440771 CP
 
-png(paste0(dirName,"Burr_GR4J_ERA5_Val_results.png"), height = 2500, width = 6500, res =300)
+png(paste0(dirName,"Burr_GR4J_ERA5_Val_results.png"), height = 2000, width = 3500, res =300)
 plot(OutputsModel2,
      Qobs = inp.val$flow.mm.day)
 invisible(dev.off())
+
+# MULTIPLE VALIDATION PERIODS
+OutputsModel2_list <- lapply(val_windows,FUN = function(x){
+  Ind_Run <- which(met[,1] >= x[[1]][1,1] & met[,1] <= x[[1]][nrow(x[[1]]),1])
+  #warm_up <- 1:(Ind_Run[1]-1)
+  warm_up <- which(met[,1] >= x[[2]][1,1] & met[,1] <= x[[2]][nrow(x[[2]]),1])
+  opts <- airGR::CreateRunOptions(airGR::RunModel_GR4J,
+                                  InputsModel = inputs,
+                                  IndPeriod_Run = Ind_Run,
+                                  IndPeriod_WarmUp = warm_up)
+
+  OutputsModel2 <- airGR::RunModel_GR4J(InputsModel = inputs,
+                                        RunOptions = opts,
+                                        Param = Param)
+
+  val_scores <- list("NSE" = hydroGOF::NSE(OutputsModel2[["Qsim"]], x[["inp.val"]][["flow.mm.day"]]),
+                     "KGE" = hydroGOF::KGE(OutputsModel2[["Qsim"]], x[["inp.val"]][["flow.mm.day"]]),
+                     "rmse" = hydroGOF::rmse(OutputsModel2[["Qsim"]], x[["inp.val"]][["flow.mm.day"]]))
+
+  return(list("OutputsModel2" = OutputsModel2,
+              "val_scores" = val_scores))
+})
+names(OutputsModel2_list) <- names(val_windows)
+
+for(i in 1:length(OutputsModel2_list)){
+png(paste0(dirName,paste0("Burr_GR4J_ERA5_Val_results_",
+                          names(OutputsModel2_list[i]),".png")), height = 2000, width = 3500, res =300)
+plot(OutputsModel2_list[[i]][["OutputsModel2"]],
+     Qobs = val_windows[[i]][["inp.val"]][["flow.mm.day"]])
+invisible(dev.off())
+}
+
+val_stats <- lapply(OutputsModel2_list,function(x){
+  list("scores" = x[["val_scores"]],
+       "run_dates" = as.Date(as.character(range(x[["OutputsModel2"]][["DatesR"]]))),
+       "warm-up_dates" = c(as.Date(as.character(range(x[["OutputsModel2"]][["DatesR"]])))[[1]] - lubridate::years(2),
+                           as.Date(as.character(range(x[["OutputsModel2"]][["DatesR"]])))[[1]] - lubridate::days(1)))
+})
+
+cal_stats <-
+  list("2011-2015" = list(
+    "scores" = list(
+      "2011-2015" = list(
+        "NSE" = hydroGOF::NSE(OutputsModel$Qsim,
+                              inp.cal$flow.mm.day),
+        "KGE" = hydroGOF::KGE(OutputsModel$Qsim, inp.cal$flow.mm.day),
+        "rmse" = hydroGOF::rmse(OutputsModel$Qsim, inp.cal$flow.mm.day)
+      )
+    ),
+    "run_dates" = as.Date(as.character(range(OutputsModel[["DatesR"]]))),
+    "warm-up_dates" = c(
+      as.Date(as.character(range(OutputsModel[["DatesR"]])))[[1]] - lubridate::years(2),
+      as.Date(as.character(range(OutputsModel[["DatesR"]])))[[1]] - lubridate::days(1)
+    )
+  ))
+
+# export validation data to rds file
+saveRDS(list("cal_stats" = cal_stats,
+             "val_stats" = val_stats),
+        file = paste0(system.file("vignettes",package = "fishcastr"),
+                      "/vignette_figures/hydrologic_model/GR4J_cal_val_stats.rds"))
 
 GR4J_Burr_params_ERA5_bcc <- data.frame(prod.stor.cap_mm = Param[1],
                                         inter.exch.coeff_mm.d = Param[2],

@@ -3,8 +3,8 @@
 # ----------------------------------------------------------------------------------------------------------#
 # The data used for this rating curve fit were collected by Sean Kelly.
 
-data_rating_curve_Feeagh <- as.data.frame(readr::read_csv(paste0(system.file("inst", package = "fishcastr"),
-                                                                 "/extdata/SK_Feeagh_rating_curve/data_rating_curve_feeagh.csv"),
+data_rating_curve_Feeagh <- as.data.frame(readr::read_csv(paste0(system.file("extdata", package = "fishcastr"),
+                                                                 "/SK_Feeagh_rating_curve/data_rating_curve_feeagh.csv"),
                                                           col_types = readr::cols(date = readr::col_date(format = "%Y-%m-%d"),Feeagh_EPA_ht_m = readr::col_double())))
 usethis::use_data(data_rating_curve_Feeagh, overwrite = TRUE)
 
@@ -88,12 +88,16 @@ pred_intervals <- cbind(level_vals,
                         apply(vardist, MARGIN = 1, FUN = mean))
 colnames(pred_intervals) <- c("wlevel_m","lwr_CI","median","upr_CI","mean")
 
-dirName <- paste0(getwd(),"/vignettes/vignette_figures", sep = "",
-                  collapse = NULL)
+dirName <- paste0(system.file("", package = "fishcastr"),
+                  "/vignettes/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/Fig_Burr_Rating_curve", "/", sep = "",
-                  collapse = NULL)
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/figure/")
+dir.create(dirName, showWarnings = TRUE, mode = "0777")
+
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/figure/Fig_Burr_Rating_curve/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
 png(paste0(dirName,"Rating_curve.png"), height = 1500, width = 1500, res = 300)

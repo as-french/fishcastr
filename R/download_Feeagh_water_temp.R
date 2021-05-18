@@ -24,8 +24,8 @@ download_Feeagh_water_temp <- function(){
   # or
 # url = https://erddap.marine.ie/erddap/tabledap/IMINewportBuoys.csv?station_name%2Clatitude%2Clongitude%2Cstation%2Clnstationid%2Ctime%2Cyear%2Cmonth%2Cday%2Cwater_temp_2pt5m&time%3C=2004-01-01T00%3A00%3A00Z&time%3C=2019-12-31T00%3A00%3A00Z
 
-  dirName <- paste0(system.file("inst", package = "fishcastr"),
-                    "/extdata/MI_Feeagh_2m_temp/")
+  dirName <- paste0(system.file("extdata", package = "fishcastr"),
+                    "/MI_Feeagh_2m_temp/")
   dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
   downloader::download(url,
@@ -51,7 +51,8 @@ download_Feeagh_water_temp <- function(){
   data_list_feeagh <- lapply(dataset_list,FUN = function(x){
 
   # read specified columns
-  fee_data_i <- data.table::fread(file = x,select = c("time","Water_Temp_2m"))[-1,]
+  fee_data_i <- data.table::fread(file = x,select = c("time","Water_Temp_2m"),
+                                  stringsAsFactors = FALSE)[-1,]
 
   # aggregate 2 minutely data to daily means
   fee_data_i$time <- as.POSIXct(fee_data_i$time,tz = "UTC", format ="%d/%m/%Y %H:%M")
@@ -128,6 +129,6 @@ download_Feeagh_water_temp <- function(){
   # -------------------------------------------------------------------------------------------------- #
 
   # store downloaded and processed data as .rds file
-  saveRDS(object = data_Feeagh2m_temp, file = paste0(system.file("inst", package = "fishcastr"),
-                                              "/extdata/data_Feeagh2m_temp.rds"))
+  saveRDS(object = data_Feeagh2m_temp, file = paste0(system.file("extdata", package = "fishcastr"),
+                                              "/data_Feeagh2m_temp.rds"))
 }

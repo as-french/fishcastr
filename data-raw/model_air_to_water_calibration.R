@@ -21,16 +21,15 @@
 # ----------------------------------------------------------------------------------------------- #
 # LOAD DATA FOR CALIBRATION ----
 # ----------------------------------------------------------------------------------------------- #
-# load MR water temp
-#data_MR_temp <- fishcastr::data_MR_temp
-data_MR_temp <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),
-                                             "/extdata/data_MR_temp.rds"))
+# download MR water temp
+fishcastr::download_MR_temperature()
 
+data_MR_temp <- readRDS(file = paste0(system.file("extdata", package = "fishcastr"),
+                                             "/data_MR_temp.rds"))
 colnames(data_MR_temp)<- c("date","Water_Temp_MR")
+
 # load ERA5 BC air Temp
-#grid_ERA5_1979_2019_Jan_bc <- fishcastr::grid_ERA5_1979_2019_Jan_bc
-grid_ERA5_1979_2019_Jan_bc <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),
-                                      "/extdata/grid_ERA5_1979_2019_Jan_bc_CDS.rds"))
+grid_ERA5_1979_2019_Jan_bc <- fishcastr::grid_ERA5_1979_2019_Jan_bc
 
 # convert grid reanalysis to two column table: date, variable
 data_ERA5_1979_2019_Jan_bc <- fishcastr::convert_grid_to_dataframe(grid_obj = grid_ERA5_1979_2019_Jan_bc)[,-2]
@@ -40,10 +39,12 @@ rm(data_ERA5_1979_2019_Jan_bc)
 rm(grid_ERA5_1979_2019_Jan_bc)
 gc()
 
-# Load Feeagh 2m depth water temperature
+# Download Feeagh 2m depth water temperature
+fishcastr::download_Feeagh_water_temp()
+
 #data_Feeagh_temp_2004_2019 <- fishcastr::data_Feeagh2m_temp
-data_Feeagh_temp_2004_2019 <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),
-                                                    "/extdata/data_Feeagh_temp.rds"))
+data_Feeagh_temp_2004_2019 <- readRDS(file = paste0(system.file("extdata", package = "fishcastr"),
+                                                    "/data_Feeagh2m_temp.rds"))
 
 # ----------------------------------------------------------------------------------------------- #
 # MERGE TEMPERATURE DATA ----
@@ -268,10 +269,10 @@ abline(v = c(seq(from = 0, to = 370, by = 10)), lty = 3, col = "grey")
 abline(h = c(seq(from = 0, to = 20, by = 1)), lty = 3, col = "grey")
 lines(1:length(mean_pred_daily.scale), mean_pred_daily.scale, type = "l", col = "red", lwd = 2)
 
-mean_pred.hyst_corr_mean <- tapply(X = mean_pred.hyst_corr,
-                                   data_air_water_merge_Feeagh$day, FUN = mean, na.rm = TRUE)
+#mean_pred.hyst_corr_mean <- tapply(X = mean_pred.hyst_corr,
+#                                   data_air_water_merge_Feeagh$day, FUN = mean, na.rm = TRUE)
 
-lines(1:length(mean_pred.hyst_corr_mean), mean_pred.hyst_corr_mean, col = "red", lwd = 2)
+#lines(1:length(mean_pred.hyst_corr_mean), mean_pred.hyst_corr_mean, col = "red", lwd = 2)
 
 # individual day check
 multip_factor <- function(ydays, magn, phi){
@@ -288,8 +289,8 @@ mean_pred.hyst_corr <- (multip_factor(ydays = data_air_water_merge_Feeagh$day,
                                                  align = "right",
                                                  fill = NA,
                                                  adaptive = TRUE))) + theta[3]
-#plot(1000:2000, data_air_water_merge_Feeagh$Water_Temp_2m[1000:2000], type = "l")
-#lines(1000:2000, mean_pred.hyst_corr[1000:2000], col = "red")
+plot(1000:2000, data_air_water_merge_Feeagh$Water_Temp_2m[1000:2000], type = "l")
+lines(1000:2000, mean_pred.hyst_corr[1000:2000], col = "red")
 
 # define negative log likelihood to be minimised (4 free parameters)
 dnormNLL = function(theta) {
@@ -314,7 +315,7 @@ mtest1 = bbmle::mle2(dnormNLL,
                     method = "Nelder-Mead",
                     control = list(maxit = 1000000000),
                     skip.hessian = FALSE)
-bbmle::coef(mtest1) # is ac parameter implausible as it exceeds 30?
+bbmle::coef(mtest1) # is ac parameter implausible as it exceeds 30? yes 45
 
 # confine param ranges to plausible values
 mtest = bbmle::mle2(dnormNLL,
@@ -324,7 +325,7 @@ mtest = bbmle::mle2(dnormNLL,
                     method = "L-BFGS-B",
                     control = list(maxit = 1000000000,
                                    parscale = abs(bbmle::coef(mtest1))))
-bbmle::coef(mtest) # ac now plausible?
+bbmle::coef(mtest) # ac now plausible? yes 20
 
 model_air_to_water_Feeagh <- mtest
 usethis::use_data(model_air_to_water_Feeagh, overwrite = TRUE)
@@ -332,16 +333,21 @@ usethis::use_data(model_air_to_water_Feeagh, overwrite = TRUE)
 # ----------------------------------------------------------------------------------------------- #
 # plot validation
 
-dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/Fig_Burr_air_water_cal", "/", sep = "",
-                  collapse = NULL)
+#dirName <- paste0(system.file("", package = "fishcastr"),
+#                      "/vignettes/")
+#dir.create(dirName, showWarnings = TRUE, mode = "0777")
+
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/vignette_figures/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-#dev.new()
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/vignette_figures/air_water_temp_model/")
+dir.create(dirName, showWarnings = TRUE, mode = "0777")
+
 # calibration data Feeagh
-png(paste0(getwd(),
-           "/vignettes/vignette_figures/Fig_Burr_air_water_cal/air_water_cal_Fe.png"),
-    height = 3000, width = 4000, res =300)
-cal_stats_Fe <- plot_air_to_water_validation(Tw = cal_dataset$Tw,
+png(filename = paste0(dirName,"air_water_cal_Fe.png"), height = 3000, width = 4000, res =300)
+cal_stats_Fe <- fishcastr::plot_air_to_water_validation(Tw = cal_dataset$Tw,
                                              Ta = cal_dataset$Ta,
                                              Yday = cal_dataset$day,
                                              dates = cal_dataset$date,
@@ -349,9 +355,7 @@ cal_stats_Fe <- plot_air_to_water_validation(Tw = cal_dataset$Tw,
 invisible(dev.off())
 
 # validation data Feeagh
-png(paste0(getwd(),
-           "/vignettes/vignette_figures/Fig_Burr_air_water_cal/air_water_val_Fe.png"),
-    height = 3000, width = 4000, res =300)
+png(filename = paste0(dirName,"air_water_val_Fe.png"), height = 3000, width = 4000, res =300)
 val_stats_Fe <- fishcastr::plot_air_to_water_validation(Tw = val_dataset_LF$Tw,
                                              Ta = val_dataset_LF$Ta,
                                              Yday = val_dataset_LF$day,
@@ -360,9 +364,7 @@ val_stats_Fe <- fishcastr::plot_air_to_water_validation(Tw = val_dataset_LF$Tw,
 invisible(dev.off())
 
 # validation data Mill Race (paper chart)
-png(paste0(getwd(),
-           "/vignettes/vignette_figures/Fig_Burr_air_water_cal/air_water_val_MRpap.png"),
-    height = 3000, width = 4000, res =300)
+png(filename = paste0(dirName,"air_water_val_MRpap.png"), height = 3000, width = 4000, res =300)
 val_stats_MR1 <- fishcastr::plot_air_to_water_validation(Tw = val_dataset_MR1$Tw,
                                               Ta = val_dataset_MR1$Ta,
                                               Yday = val_dataset_MR1$day,
@@ -371,9 +373,7 @@ val_stats_MR1 <- fishcastr::plot_air_to_water_validation(Tw = val_dataset_MR1$Tw
 invisible(dev.off())
 
 # validation data Mill Race (tidbit)
-png(paste0(getwd(),
-           "/vignettes/vignette_figures/Fig_Burr_air_water_cal/air_water_val_MRtid.png"),
-    height = 3000, width = 4000, res =300)
+png(filename = paste0(dirName,"air_water_val_MRtid.png"), height = 3000, width = 4000, res =300)
 val_stats_MR2 <- fishcastr::plot_air_to_water_validation(Tw = val_dataset_MR2$Tw,
                                               Ta = val_dataset_MR2$Ta,
                                               Yday = val_dataset_MR2$day,
@@ -382,15 +382,28 @@ val_stats_MR2 <- fishcastr::plot_air_to_water_validation(Tw = val_dataset_MR2$Tw
 invisible(dev.off())
 
 # validation data Mill Race (orpheus)
-png(paste0(getwd(),
-           "/vignettes/vignette_figures/Fig_Burr_air_water_cal/air_water_val_MRorp.png"),
-    height = 3000, width = 4000, res =300)
+png(filename = paste0(dirName,"air_water_val_MRorp.png"), height = 3000, width = 4000, res =300)
 val_stats_MR3 <- fishcastr::plot_air_to_water_validation(Tw = val_dataset_MR3$Tw,
                                               Ta = val_dataset_MR3$Ta,
                                               Yday = val_dataset_MR3$day,
                                               dates = val_dataset_MR3$date,
                                               mod_air_to_water_mle = mtest)
 invisible(dev.off())
+
+# export calibration and validation stats
+cal_val_stats <- list("cal_stats_Feeagh_AWQMS" = list("stats" = cal_stats_Fe[3:5],
+                                                      "dates" = range(cal_stats_Fe[["data"]][["dates"]])),
+                      "val_stats_Feeagh_AWQMS" = list("stats" = val_stats_Fe[3:5],
+                                                      "dates" = range(val_stats_Fe[["data"]][["dates"]])),
+                      "val_stats_MR_paper_chart" = list("stats" = val_stats_MR1[3:5],
+                                                        "dates" = range(val_stats_MR1[["data"]][["dates"]])),
+                      "val_stats_MR_tidbit" = list("stats" = val_stats_MR2[3:5],
+                                                   "dates" = range(val_stats_MR2[["data"]][["dates"]])),
+                      "val_stats_MR_orpheus" = list("stats" = val_stats_MR3[3:5],
+                                                    "dates" = range(val_stats_MR3[["data"]][["dates"]])))
+
+saveRDS(cal_val_stats,file = paste0(system.file("vignettes",package = "fishcastr"),
+                                    "/vignette_figures/air_water_temp_model/air_water_temp_val_stats.rds"))
 
 # export parameter estimates as data in package
 air_to_water_Feeagh_params_ERA5_bcc <- data.frame("A" = 1,

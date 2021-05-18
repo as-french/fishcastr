@@ -18,8 +18,8 @@ download_MR_temperature <- function(){
   # ----------------------------------------------------------------------------------------------------------#
   # DOWNLOAD AND UNZIP DATA FROM EPA WEBSITE ----
   # ----------------------------------------------------------------------------------------------------------#
-  dirName <- paste0(system.file("inst", package = "fishcastr"),
-                    "/extdata/MI_MR_temp/")
+  dirName <- paste0(system.file("extdata", package = "fishcastr"),
+                    "/MI_MR_temp/")
   dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
   url = "https://data.marine.ie/data/8b82e6e3-69f0-4ebb-8ff2-2af0dad04b8a/8b82e6e3-69f0-4ebb-8ff2-2af0dad04b8a.csv"
@@ -30,7 +30,11 @@ download_MR_temperature <- function(){
   # IMPORT DATA AND SAVE AS RDS FOR COMPARISON WITH WATER TEMPERATURE MODEL PREDICTIONS
   # ----------------------------------------------------------------------------------------------------------#
   # import feeagh data removing first 7 lines and delineating by semi colon
-  data_MR <- read.table(paste0(getwd(),"/inst/extdata/MI_MR_temp/8b82e6e3-69f0-4ebb-8ff2-2af0dad04b8a.csv"), sep=",", quote="\"")[-c(1:14),]
+  data_MR <- read.table(paste0(system.file("extdata", package = "fishcastr"),
+                               "/MI_MR_temp/8b82e6e3-69f0-4ebb-8ff2-2af0dad04b8a.csv"),
+                        sep=",", quote="\"",
+                        stringsAsFactors = FALSE)[-c(1:14),]
+
   names(data_MR) <- c("date","meanT","QCcode","comments")
   #remove any values that have something other than blank in QC column
   data_MR_sub <- data_MR[data_MR$QCcode == "",1:2]
@@ -46,6 +50,6 @@ download_MR_temperature <- function(){
   data_MR_temp <- merge(date_seq, data_MR_sub, by = "date", all.x = TRUE)
 
   # store downloaded and processed data as .rds file
-  saveRDS(object = data_MR_temp, file = paste0(system.file("inst", package = "fishcastr"),
-                                                             "/extdata/data_MR_temp.rds"))
+  saveRDS(object = data_MR_temp, file = paste0(system.file("extdata", package = "fishcastr"),
+                                                             "/data_MR_temp.rds"))
 }

@@ -21,8 +21,9 @@ download_fish_data <- function(){
 
   url = "https://erddap.marine.ie/erddap/tabledap/newport_daily_fish_counts.csv"
 
-  dirName <- paste0(system.file("inst", package = "fishcastr"),
-                    "/extdata/MI_fish_counts/")
+  dirName <- paste0(system.file("extdata", package = "fishcastr"),
+                    "/MI_fish_counts/")
+
   dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
   downloader::download(url,
@@ -32,34 +33,37 @@ download_fish_data <- function(){
   # store each species downloaded data as .rds files
   # ------------------------------------------------------------------------------------- #
   # SSMOLT
-  data_ssmolt <- read.csv(paste0(system.file("inst", package = "fishcastr"),
-                                 "/extdata/MI_fish_counts/newport_daily_fish_counts.csv"),
-                          header = TRUE)[-1,c("time","salmon_smolt_count_per_day")]
+  data_ssmolt <- read.csv(paste0(system.file("extdata", package = "fishcastr"),
+                                 "/MI_fish_counts/newport_daily_fish_counts.csv"),
+                          header = TRUE,stringsAsFactors = FALSE)[-1,c("time","salmon_smolt_count_per_day")]
   data_ssmolt$time <- as.Date(data_ssmolt$time)
   names(data_ssmolt) <- c("date","ssmolt")
+  data_ssmolt$ssmolt <- as.numeric(data_ssmolt$ssmolt)
   # create .rds file in extdata folder for testing code
-  saveRDS(object = data_ssmolt, file = paste0(system.file("inst", package = "fishcastr"),
-                                              "/extdata/data_ssmolt.rds"))
+  saveRDS(object = data_ssmolt, file = paste0(system.file("extdata", package = "fishcastr"),
+                                              "/data_ssmolt.rds"))
 
   # ------------------------------------------------------------------------------------- #
   # STSMOLT
-  data_stsmolt <- read.csv(paste0(system.file("inst", package = "fishcastr"),
-                                  "/extdata/MI_fish_counts/newport_daily_fish_counts.csv"),
-                           header = TRUE)[-1,c("time","sea_trout_smolt_count_per_day")]
+  data_stsmolt <- read.csv(paste0(system.file("extdata", package = "fishcastr"),
+                                  "/MI_fish_counts/newport_daily_fish_counts.csv"),
+                           header = TRUE,stringsAsFactors = FALSE)[-1,c("time","sea_trout_smolt_count_per_day")]
   data_stsmolt$time <- as.Date(data_stsmolt$time)
   names(data_stsmolt) <- c("date","stsmolt")
+  data_stsmolt$stsmolt <- as.numeric(data_stsmolt$stsmolt)
   # create .rds file in extdata folder for testing code
-  saveRDS(object = data_stsmolt, file = paste0(system.file("inst", package = "fishcastr"),
-                                               "/extdata/data_stsmolt.rds"))
+  saveRDS(object = data_stsmolt, file = paste0(system.file("extdata", package = "fishcastr"),
+                                               "/data_stsmolt.rds"))
 
   # ------------------------------------------------------------------------------------- #
   # SEEL
-  data_seel <- read.csv(paste0(system.file("inst", package = "fishcastr"),
-                               "/extdata/MI_fish_counts/newport_daily_fish_counts.csv"),
-                        header = TRUE)[-1,c("time","eel_count_per_day")]
+  data_seel <- read.csv(paste0(system.file("extdata", package = "fishcastr"),
+                               "/MI_fish_counts/newport_daily_fish_counts.csv"),
+                        header = TRUE,stringsAsFactors = FALSE)[-1,c("time","eel_count_per_day")]
   data_seel$time <- as.Date(data_seel$time)
   names(data_seel) <- c("date","seel")
+  data_seel$seel <- as.numeric(data_seel$seel)
   # create .rds file in extdata folder for testing code
-  saveRDS(object = data_seel, file = paste0(system.file("inst", package = "fishcastr"),
-                                            "/extdata/data_seel.rds"))
+  saveRDS(object = data_seel, file = paste0(system.file("extdata", package = "fishcastr"),
+                                            "/data_seel.rds"))
 }

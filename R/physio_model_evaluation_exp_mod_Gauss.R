@@ -16,6 +16,7 @@
 #'   for usage example.
 #'
 #' @importFrom gamlss.dist dNBII rNBII
+#' @importFrom RMKdiscrete sLGP dLGP
 #' @param data_list A list of data frames of ecological counts and environmental
 #'   variables.
 #' @param species_count_lab Column header for y variable.

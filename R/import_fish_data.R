@@ -20,15 +20,15 @@
 import_fish_data <- function(species){
 
   if(species == "ssmolt"){
-    data_import <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),"/extdata/data_ssmolt.rds"))
+    data_import <- readRDS(file = paste0(system.file("extdata", package = "fishcastr"),"/data_ssmolt.rds"))
     }
 
   if(species == "stsmolt"){
-    data_import <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),"/extdata/data_stsmolt.rds"))
+    data_import <- readRDS(file = paste0(system.file("extdata", package = "fishcastr"),"/data_stsmolt.rds"))
     }
 
   if(species == "seel"){
-    data_import <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),"/extdata/data_seel.rds"))
+    data_import <- readRDS(file = paste0(system.file("extdata", package = "fishcastr"),"/data_seel.rds"))
     }
 
   return(data_import)

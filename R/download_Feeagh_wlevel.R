@@ -37,8 +37,8 @@ download_Feeagh_wlevel <- function(){
   # ----------------------------------------------------------------------------------------------------------#
   # DOWNLOAD AND UNZIP DATA FROM EPA WEBSITE ----
   # ----------------------------------------------------------------------------------------------------------#
-  dirName <- paste0(system.file("inst", package = "fishcastr"),
-                    "/extdata/EPA_Feeagh/")
+  dirName <- paste0(system.file("extdata", package = "fishcastr"),
+                    "/EPA_Feeagh/")
   dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
   url = "https://www.epa.ie/Hydronet/output/internet/stations/CAS/32070/S/complete_15min.zip"
@@ -53,7 +53,10 @@ download_Feeagh_wlevel <- function(){
   # i.e., not GR4J)
   # ----------------------------------------------------------------------------------------------------------#
   # import feeagh data removing first 7 lines and delineating by semi colon
-  complete_15min <- read.table(paste0(getwd(),"/inst/extdata/EPA_Feeagh/complete_15min/complete_15min.csv"), sep=";", quote="\"")
+  complete_15min <- read.table(paste0(system.file("extdata", package = "fishcastr"),
+                                      "/EPA_Feeagh/complete_15min/complete_15min.csv"), sep=";", quote="\"",
+                               stringsAsFactors = FALSE)
+
   # unique(complete_15min$V4) Levels:  Fair Good Unchecked
   # remove  Unchecked data
   complete_15min <- complete_15min[complete_15min$V4 != "Unchecked",]
@@ -136,17 +139,21 @@ download_Feeagh_wlevel <- function(){
   # #stlplus::plot_trend(feeagh.adj.stlplus)
 
   # satisfied adjustment is appropriate, now export
-  dirName <- paste0(system.file("inst", package = "fishcastr"),
-                    "/extdata/EPA_Feeagh/Feeagh_adj/")
+  dirName <- paste0(system.file("extdata", package = "fishcastr"),
+                    "/EPA_Feeagh/Feeagh_adj/")
   dir.create(dirName, showWarnings = TRUE, mode = "0777")
-  write.table(x = feeDaily,file = paste0(getwd(),"/inst/extdata/EPA_Feeagh/Feeagh_adj/complete_daily_mean_adjusted.csv"),row.names = FALSE,col.names = TRUE,sep = ",")
+
+  write.table(x = feeDaily, file = paste0(system.file("extdata", package = "fishcastr"),
+                                      "/EPA_Feeagh/Feeagh_adj/complete_daily_mean_adjusted.csv"),
+                                row.names = FALSE,col.names = TRUE,sep = ",")
 
   # ----------------------------------------------------------------------------------------------------------#
   # LOAD LAKE LEVEL DATA (with gaps raw from EPA)
   # ----------------------------------------------------------------------------------------------------------#
-  #Feeagh_wlevel_1976_2021_raw <- readr::read_csv(paste0(getwd(),"/inst/extdata/EPA_Feeagh/Feeagh_adj/complete_daily_mean_adjusted.csv"), col_types = readr::cols("date" = readr::col_date(format = "%Y-%m-%d")))
+  Feeagh_wlevel_1976_2021_raw <- read.csv(paste0(system.file("extdata", package = "fishcastr"),
+                                          "/EPA_Feeagh/Feeagh_adj/complete_daily_mean_adjusted.csv"),
+                                          stringsAsFactors = FALSE)
 
-  Feeagh_wlevel_1976_2021_raw <- read.csv(paste0(getwd(),"/inst/extdata/EPA_Feeagh/Feeagh_adj/complete_daily_mean_adjusted.csv"))
   Feeagh_wlevel_1976_2021_raw$date = as.Date(Feeagh_wlevel_1976_2021_raw$date)
 
   # linear interpolate any gaps of shorter than 2 days
@@ -174,14 +181,16 @@ download_Feeagh_wlevel <- function(){
 
   data_Feeagh_discharge <- data_Feeagh_discharge[data_Feeagh_discharge$date <= as.Date("2020-10-07"),]
 
-  saveRDS(object = data_Feeagh_discharge, file = paste0(system.file("inst", package = "fishcastr"),
-                                                     "/extdata/data_Feeagh_discharge.rds"))
+  saveRDS(object = data_Feeagh_discharge, file = paste0(system.file("extdata", package = "fishcastr"),
+                                                     "/data_Feeagh_discharge.rds"))
 
   # ----------------------------------------------------------------------------------------------------------#
   # with step change adding 0.072m to water level values pre-1996-08-04
-   # Feeagh_wlevel_1976_2020_corrected <- readr::read_csv(paste0(getwd(),"/inst/extdata/EPA_Feeagh/Feeagh_adj/complete_daily_mean_adjusted.csv"), col_types = readr::cols("date" = readr::col_date(format = "%Y-%m-%d")))
 
-    Feeagh_wlevel_1976_2020_corrected <- read.csv(paste0(getwd(),"/inst/extdata/EPA_Feeagh/Feeagh_adj/complete_daily_mean_adjusted.csv"))
+    Feeagh_wlevel_1976_2020_corrected <- read.csv(paste0(system.file("extdata", package = "fishcastr"),
+                                                   "/EPA_Feeagh/Feeagh_adj/complete_daily_mean_adjusted.csv"),
+                                                  stringsAsFactors = FALSE)
+
     Feeagh_wlevel_1976_2020_corrected$date <- as.Date(Feeagh_wlevel_1976_2020_corrected$date)
 
   # linear interpolate any gaps of shorter than 2 days
@@ -195,6 +204,6 @@ download_Feeagh_wlevel <- function(){
   data_Feeagh_discharge_corr <- data_Feeagh_discharge_corr[data_Feeagh_discharge_corr$date <= as.Date("2020-10-07"),]
 
   # store downloaded and processed data as .rds file
-  saveRDS(object = data_Feeagh_discharge_corr, file = paste0(system.file("inst", package = "fishcastr"),
-                                                     "/extdata/data_Feeagh_discharge_corr.rds"))
+  saveRDS(object = data_Feeagh_discharge_corr, file = paste0(system.file("extdata", package = "fishcastr"),
+                                                     "/data_Feeagh_discharge_corr.rds"))
 }

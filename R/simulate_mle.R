@@ -10,6 +10,7 @@
 #'   generated within this function, but not currently returned.
 #'
 #' @importFrom gamlss.dist dNBII rNBII
+#' @importFrom RMKdiscrete sLGP dLGP
 #' @param fittedModel A bbmle::mle2 object.
 #' @param n Number of simulations of mle2 object.
 #' @param count_lab Name of response variable.

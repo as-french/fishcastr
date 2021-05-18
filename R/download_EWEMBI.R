@@ -92,8 +92,8 @@ potsNc_pr <- list(c("https://esg.pik-potsdam.de/thredds/dodsC/isimip_dataroot_2/
 
 #di <- loadeR::dataInventory(potsNc_tas)
 
-dicName <- paste0(system.file("inst", package = "fishcastr"),
-                  "/extdata/EWEMBI_isimip.dic")
+dicName <- paste0(system.file("extdata", package = "fishcastr"),
+                  "/EWEMBI_isimip.dic")
 
 # Define the variables to be loaded. Remove those not needed.
 #variables <- c("tasmin")
@@ -185,13 +185,13 @@ data.prelim <- list("tas" = data.prelim_tas.bind,
 
 # -------------------------------------------------------------------------------------------------- #
 # EXPORT AS RAW GRIDS as .rds
-arc_dir <- paste0(system.file("inst", package = "fishcastr"),
-                 "/extdata/ISIMIP_EWEMBI/")
+arc_dir <- paste0(system.file("extdata", package = "fishcastr"),
+                 "/ISIMIP_EWEMBI/")
 dir.create(arc_dir, showWarnings = TRUE, recursive = TRUE, mode = "0777")
 
 saveRDS(object = data.prelim,
-        file = paste0(system.file("inst", package = "fishcastr"),
-                      "/extdata/ISIMIP_EWEMBI/EWEMBI_grid_potsdam.rds"))
+        file = paste0(system.file("extdata", package = "fishcastr"),
+                      "/ISIMIP_EWEMBI/EWEMBI_grid_potsdam.rds"))
 
 # -------------------------------------------------------------------------------------------------- #
 # INTERPOLATE GRIDS
@@ -214,11 +214,11 @@ grid_ewembi_1979_2016_round$petH$Data <- round(grid_ewembi_1979_2016_round$petH$
 grid_ewembi_1979_2016 <- grid_ewembi_1979_2016_round
 
 saveRDS(object = grid_ewembi_1979_2016,
-        file = paste0(system.file("inst", package = "fishcastr"),
-                      "/extdata/grid_ewembi_1979_2016.rds"))
+        file = paste0(system.file("extdata", package = "fishcastr"),
+                      "/grid_ewembi_1979_2016.rds"))
 
-grid_ewembi_1979_2016 <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),
-                                                "/extdata/grid_ewembi_1979_2016.rds"))
+grid_ewembi_1979_2016 <- readRDS(file = paste0(system.file("extdata", package = "fishcastr"),
+                                                "/grid_ewembi_1979_2016.rds"))
 
 ########## BUILD FINAL DATA --------------------------------------------------------------
 data <- grid_ewembi_1979_2016
@@ -254,6 +254,6 @@ colnames(df) <- c("date","time","tas_ewembi", "pr_ewmebi","tasmin_ewembi","tasma
 df$date <- as.Date(df$date)
 df <- df[,-2]
 data_ewembi_1979_2016 <- df
-saveRDS(object = data_ewembi_1979_2016, file = paste0(system.file("inst", package = "fishcastr"),
-                                                      "/extdata/data_ewembi_1979_2016.rds"))
+saveRDS(object = data_ewembi_1979_2016, file = paste0(system.file("extdata", package = "fishcastr"),
+                                                      "/data_ewembi_1979_2016.rds"))
 }

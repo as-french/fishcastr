@@ -16,6 +16,7 @@
 #'   activity in salmonids; Sykes et al., 2009; Zydlewski et al., 2005). See
 #'   /data-raw/model_physio_expmG_salmon.R for usage example.
 #'
+#' @importFrom RMKdiscrete sLGP dLGP
 #' @param data_list A list of data frames of ecological counts and environmental
 #'   variables.
 #' @param species_count_lab Column header for y variable.

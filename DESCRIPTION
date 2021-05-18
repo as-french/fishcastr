@@ -7,7 +7,8 @@ Authors@R:
            role = c("aut", "cre"),
            email = "Andrew.French@Marine.ie",
            comment = c(ORCID = "0000-0001-6662-4113"))
-Description: A collection of tools for generating seasonal migration forecasts for the timing of seaward movements of diadromous fishes.
+Description: A collection of tools for generating seasonal migration forecasts for the timing of 
+    seaward movements of diadromous fishes.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
@@ -45,13 +46,17 @@ Remotes:
     github::SantanderMetGroup/drought4R,
     github::SantanderMetGroup/loadeR.java,
     github::SantanderMetGroup/climate4R.UDG,
-    github::SantanderMetGroup/loadeR
+    github::SantanderMetGroup/loadeR,
+    github::SantanderMetGroup/loadeR.ECOMS,
+    github::SantanderMetGroup/visualizeR
 Suggests: 
     knitr,
     rmarkdown,
     climate4R.UDG,
     loadeR.java,
     loadeR,
+    loadeR.ECOMS,
+    visualizeR,
     hydroGOF,
     doSNOW,
     ggpubr,

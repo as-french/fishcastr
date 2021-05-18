@@ -11,9 +11,7 @@ air_to_water_Feeagh_params_ERA5_bcc <- fishcastr::air_to_water_Feeagh_params_ERA
 
 # load reanalysis (bias corrected) contains precipitation and potential evapotranspiration
 # SPRING
-#grid_ERA5_1979_2019_Jan_bc <- fishcastr::grid_ERA5_1979_2019_Jan_bc
-grid_ERA5_1979_2019_Jan_bc <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),
-                                             "/extdata/grid_ERA5_1979_2019_Jan_bc_CDS.rds"))
+grid_ERA5_1979_2019_Jan_bc <- fishcastr::grid_ERA5_1979_2019_Jan_bc
 
 # convert grid reanalysis to two column table: date, variable
 data_ERA5_1979_2019_Jan_bc <- fishcastr::convert_grid_to_dataframe(grid_obj = grid_ERA5_1979_2019_Jan_bc)[,-2]
@@ -98,9 +96,8 @@ data_dds <- data.table::rbindlist(l = list_dds_forecast_year, use.names = T,fill
 
 # --------------------------------------------------------------------------------------------------- #
 # PLOT DDS vs. COUNTS
-#data_ssmolt <- fishcastr::data_ssmolt
-data_ssmolt <- readRDS(file = paste0(system.file("inst", package = "fishcastr"),
-                                                    "/extdata/data_ssmolt.rds"))
+fishcastr::download_fish_data()
+data_ssmolt <- fishcastr::import_fish_data(species = "ssmolt")
 
 data_ssmolt_dds.merge <-Reduce(f = function(x,y){merge(x = x,
                                                        y = y,
@@ -153,16 +150,21 @@ dataset_list_nameslist <- lapply(data_list_years,
 names(dataset_list) <- dataset_list_nameslist
 
 # Create vignette sub directories ----
-dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/FigS10", "/", sep = "",
-                  collapse = NULL)
+
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/vignette_figures/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/FigS10/salmon", "/", sep = "",
-                  collapse = NULL)
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/vignette_figures/migration_prep_models/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-dirName <- paste0(getwd(),"/vignettes/vignette_figures", "/FigS9", "/", sep = "",
-                  collapse = NULL)
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/vignette_figures/migration_prep_models/salmon/")
+dir.create(dirName, showWarnings = TRUE, mode = "0777")
+
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/vignette_figures/migration_prep_models/salmon/val_plots/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
 # # try different conditional distributions ----
@@ -200,6 +202,11 @@ dir.create(dirName, showWarnings = TRUE, mode = "0777")
 #     xlims = c(250,1600)
 #   )
 #
+
+dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+                  "/vignette_figures/migration_prep_models/salmon/")
+
+library(RMKdiscrete)
 physio_generalised_Poisson <-
   fishcastr::physio_model_evaluation_exp_mod_Gauss(
     species_count_lab = "ssmolt_perc_run_int",
@@ -207,10 +214,10 @@ physio_generalised_Poisson <-
     data_list = dataset_list,
     error_distribution_name = "generalised_Poisson",
     species_name = "Atlantic salmon",
-    file_path_plot = paste0(getwd(),'/vignettes/vignette_figures/FigS9/genpois_FigS9a.png'),
-    file_path_resid_fitted_plot = paste0(getwd(),'/vignettes/vignette_figures/FigS10/salmon/genpois_FigS10b.png'),
-    file_path_dispersion_zeroinf_acf_plot = paste0(getwd(),'/vignettes/vignette_figures/FigS10/salmon/genpois_FigS10c.png'),
-    file_path_coef_profile_plot = paste0(getwd(),'/vignettes/vignette_figures/FigS10/salmon/genpois_FigS10d.png'),
+    file_path_plot = paste0(dirName,'genpois_salmon.png'),
+    file_path_resid_fitted_plot = paste0(dirName,'val_plots/resid_fitted.png'),
+    file_path_dispersion_zeroinf_acf_plot = paste0(dirName,'val_plots/dispersion.png'),
+    file_path_coef_profile_plot = paste0(dirName,'val_plots/param_profiles.png'),
     start_values = list(c = 200, mu_exmg = 500,sigma_exmg = 50, lamb = 150,phi = 5),
     lower_lims = list(c = 1, mu_exmg=300, sigma_exmg=30, lamb = 10, phi = 0.01),
     ylims = c(-1800,1800),

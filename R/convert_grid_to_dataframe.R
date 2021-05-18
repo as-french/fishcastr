@@ -93,9 +93,11 @@ if(length(dim_size) != 1){
   yymmdd <- as.Date(dates$start)
   hhmmss <- format(as.POSIXlt(dates$start), format = "%H:%M:%S")
 
+  if(!is.null(output_dir)){
   # Define metadata to generate the file name
   dir.data <- paste0(output_dir,"/",output_folder_name,"/", sep = "", collapse = NULL)
   dir.create(dir.data, showWarnings = TRUE, recursive = TRUE, mode = "0777")
+  }
 
   # Save a single file for each member
  mm_df <- lapply(1:no_iter, function(i){
@@ -112,9 +114,9 @@ if(length(dim_size) != 1){
     }
     startTime <- format(as.POSIXlt(yymmdd[1]), format = "%Y%m%d")
     endTime <- format(utils::tail(as.POSIXlt(yymmdd), n = 1), format = "%Y%m%d")
-    dirName <- paste0(dir.data, "/", member, "/", sep = "", collapse = NULL)
     if(!is.null(output_dir)){
-    dir.create(dirName, showWarnings = TRUE, recursive = TRUE, mode = "0777")
+      dirName <- paste0(dir.data, "/", member, "/", sep = "", collapse = NULL)
+      dir.create(dirName, showWarnings = TRUE, recursive = TRUE, mode = "0777")
       utils::write.table(df, paste0(dirName, "meteo_file.dat", sep = "", collapse = NULL), sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
     }
     return(df)
