@@ -23,8 +23,8 @@ library(ecmwfr)
 # SINGLE YEAR REQUEST SEAS5 data in netcdf Feb 2021 (note 1 degree resolution for SEAS5) ----
 # ----------------------------------------------------------------------------------------------------------#
 
-arc_dir <- paste0(system.file("inst", package = "fishcastr"),
-                  "/extdata/ECMWF_SEAS5")
+arc_dir <- paste0(system.file("extdata", package = "fishcastr"),
+                  "/ECMWF_SEAS5")
 dir.create(arc_dir, showWarnings = TRUE, mode = "0777")
 
 request <- list(

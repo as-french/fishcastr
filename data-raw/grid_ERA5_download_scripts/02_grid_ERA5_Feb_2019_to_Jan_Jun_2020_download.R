@@ -21,8 +21,8 @@ library(ecmwfr)
 #                    key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 #                    service = "webapi")
 
-arc_dir <- paste0(system.file("inst", package = "fishcastr"),
-                  "/extdata/ECMWF_ERA5")
+arc_dir <- paste0(system.file("extdata", package = "fishcastr"),
+                  "/ECMWF_ERA5")
 dir.create(arc_dir, showWarnings = TRUE, mode = "0777")
 
 ########

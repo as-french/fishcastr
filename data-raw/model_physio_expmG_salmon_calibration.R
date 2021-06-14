@@ -151,19 +151,19 @@ names(dataset_list) <- dataset_list_nameslist
 
 # Create vignette sub directories ----
 
-dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+dirName <- paste0(system.file("extdata", package = "fishcastr"),
                   "/vignette_figures/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+dirName <- paste0(system.file("extdata", package = "fishcastr"),
                   "/vignette_figures/migration_prep_models/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+dirName <- paste0(system.file("extdata", package = "fishcastr"),
                   "/vignette_figures/migration_prep_models/salmon/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+dirName <- paste0(system.file("extdata", package = "fishcastr"),
                   "/vignette_figures/migration_prep_models/salmon/val_plots/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
@@ -203,7 +203,7 @@ dir.create(dirName, showWarnings = TRUE, mode = "0777")
 #   )
 #
 
-dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+dirName <- paste0(system.file("extdata", package = "fishcastr"),
                   "/vignette_figures/migration_prep_models/salmon/")
 
 library(RMKdiscrete)

@@ -26,6 +26,7 @@ fishcastr::download_MR_temperature()
 
 data_MR_temp <- readRDS(file = paste0(system.file("extdata", package = "fishcastr"),
                                              "/data_MR_temp.rds"))
+
 colnames(data_MR_temp)<- c("date","Water_Temp_MR")
 
 # load ERA5 BC air Temp
@@ -74,7 +75,7 @@ data_air_water_merge_Feeagh <- merge(data_air_water_merge,
                                      by = "date")
 
 # ----------------------------------------------------------------------------------------------- #
-# define calibration dataset (lough feeagh and ERA5 2004 - 2012)
+# define calibration dataset (lough feeagh and ERA5 2004 - 2014)
 cal_dates <- c(as.Date("2004-01-01"),as.Date("2014-12-31"))
 cal_dataset <-
   data_air_water_merge_Feeagh[data.table::between(data_air_water_merge_Feeagh$date,
@@ -337,11 +338,11 @@ usethis::use_data(model_air_to_water_Feeagh, overwrite = TRUE)
 #                      "/vignettes/")
 #dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+dirName <- paste0(system.file("extdata", package = "fishcastr"),
                   "/vignette_figures/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+dirName <- paste0(system.file("extdata", package = "fishcastr"),
                   "/vignette_figures/air_water_temp_model/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
@@ -402,7 +403,7 @@ cal_val_stats <- list("cal_stats_Feeagh_AWQMS" = list("stats" = cal_stats_Fe[3:5
                       "val_stats_MR_orpheus" = list("stats" = val_stats_MR3[3:5],
                                                     "dates" = range(val_stats_MR3[["data"]][["dates"]])))
 
-saveRDS(cal_val_stats,file = paste0(system.file("vignettes",package = "fishcastr"),
+saveRDS(cal_val_stats,file = paste0(system.file("extdata",package = "fishcastr"),
                                     "/vignette_figures/air_water_temp_model/air_water_temp_val_stats.rds"))
 
 # export parameter estimates as data in package

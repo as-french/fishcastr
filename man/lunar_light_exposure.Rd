@@ -31,10 +31,10 @@ calculated as ln((sin(peak_moon_altitude) * prop_night_moon_above_horizon *
 illuminated_fraction_nadir^4) + 0.00001) + min(exposure). This function
 requires the suncalc package. This proxy does not account for opposition
 surge, but the power of 4 is intended to increase the relative difference
-between full moon exposure and other phases. However, NOTE: the log
-transformation is used to increase resolution of small changes in lunar
-light exposure at low exposure values. This can be removed by setting the
-log_result argument to FALSE.
+between full moon exposure and other phases (Krisciunas and Schaefer 1991).
+However, NOTE: the log transformation is used to increase resolution of
+small changes in lunar light exposure at low exposure values. This can be
+removed by setting the log_result argument to FALSE.
 }
 \examples{
 lunar_light_exposure(date_of_interest = seq(from = as.Date("1970-01-01"),
@@ -42,4 +42,9 @@ lunar_light_exposure(date_of_interest = seq(from = as.Date("1970-01-01"),
                                            by = "day"),
                     lat = 53.932458,
                     lon = -9.575556)
+}
+\references{
+Krisciunas, K., & Schaefer, B. E. (1991). A model of the brightness of
+moonlight. Publications of the Astronomical Society of the Pacific, 103,
+1033. https://doi.org/10.1086/132921
 }

@@ -17,7 +17,7 @@ plot_air_to_water_validation(Tw, Ta, Yday, dates, mod_air_to_water_mle)
 
 \item{mod_air_to_water_mle}{A fitted bbmle::mle2 object that models the
 relationship between air temperature and lake surface water temperature
-(load .rds model found in vignettes).}
+(see /data-raw/model_air_to_water_calibration.R).}
 }
 \value{
 A matrix of validation figures and a list of summary statistics.

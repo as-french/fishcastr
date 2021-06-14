@@ -70,14 +70,14 @@ request_Jan_2020 <- list(
   target = "download.nc"
 )
 
-dirName <- paste0(getwd(),"/inst/extdata/", "/ERA5_2020_Jan", "/", sep = "",
+dirName <- paste0(system.file("", package = "fishcastr"),"/extdata/", "/ERA5_2020_Jan", "/", sep = "",
                   collapse = NULL)
 dir.create(dirName, showWarnings = FALSE, mode = "0777")
 
 ncfile <- ecmwfr::wf_request(user = "xxxxx",
                              request = request_Jan_2020,
                              transfer = TRUE,
-                             path = paste0(getwd(),"/inst/extdata/ERA5_2020_Jan"),
+                             path = paste0(system.file("", package = "fishcastr"),"/extdata/ERA5_2020_Jan"),
                              verbose = TRUE)
 
 # ----------------------------------------------------------------------------------- #
@@ -93,14 +93,14 @@ request_Feb_June_2020 <- list(
   dataset = "reanalysis-era5-single-levels",
   target = "download.nc"
 )
-dirName <- paste0(getwd(),"/inst/extdata/", "/ERA5_2020_Feb_Jun", "/", sep = "",
+dirName <- paste0(system.file("", package = "fishcastr"),"/extdata/", "/ERA5_2020_Feb_Jun", "/", sep = "",
                   collapse = NULL)
 dir.create(dirName, showWarnings = FALSE, mode = "0777")
 
 ncfile <- ecmwfr::wf_request(user = "xxxxx",
                              request = request_Feb_June_2020,
                              transfer = TRUE,
-                             path = paste0(getwd(),"/inst/extdata/ERA5_2020_Feb_Jun"),
+                             path = paste0(system.file("", package = "fishcastr"),"/extdata/ERA5_2020_Feb_Jun"),
                              verbose = TRUE)
 
 # ----------------------------------------------------------------------------------- #
@@ -117,14 +117,14 @@ request_Jul_Nov_2020 <- list(
   target = "download.nc"
 )
 # reanalysis July beginning to November end
-dirName <- paste0(getwd(),"/inst/extdata/", "/ERA5_2020_Jul_Nov", "/", sep = "",
+dirName <- paste0(system.file("", package = "fishcastr"),"/extdata/", "/ERA5_2020_Jul_Nov", "/", sep = "",
                   collapse = NULL)
 dir.create(dirName, showWarnings = FALSE, mode = "0777")
 
 ncfile <- ecmwfr::wf_request(user = "xxxxx",
                              request = request_Jul_Nov_2020,
                              transfer = TRUE,
-                             path = paste0(getwd(),"/inst/extdata/ERA5_2020_Jul_Nov"),
+                             path = paste0(system.file("", package = "fishcastr"),"/extdata/ERA5_2020_Jul_Nov"),
                              verbose = TRUE)
 
 # ----------------------------------------------------------------------------------- #
@@ -142,14 +142,14 @@ request_Dec_1_t2m_0000_0600_2020 <- list(
   target = "download.nc"
 )
 # reanalysis December 1st 00:00 to 06:00 t2m
-dirName <- paste0(getwd(),"/inst/extdata/", "/ERA5_2020_Dec_00_t2m", "/", sep = "",
+dirName <- paste0(system.file("", package = "fishcastr"),"/extdata/", "/ERA5_2020_Dec_00_t2m", "/", sep = "",
                   collapse = NULL)
 dir.create(dirName, showWarnings = FALSE, mode = "0777")
 
 ncfile <- ecmwfr::wf_request(user = "xxxxx",
                              request = request_Dec_1_t2m_0000_0600_2020,
                              transfer = TRUE,
-                             path = paste0(getwd(),"/inst/extdata/ERA5_2020_Dec_00_t2m"),
+                             path = paste0(system.file("", package = "fishcastr"),"/extdata/ERA5_2020_Dec_00_t2m"),
                              verbose = TRUE)
 
 # ----------------------------------------------------------------------------------- #
@@ -167,14 +167,14 @@ request_Dec_1_pr_0000_0600_2020 <- list(
   target = "download.nc"
 )
 # reanalysis December 1st 00:00 to 06:00 pr
-dirName <- paste0(getwd(),"/inst/extdata/", "/ERA5_2020_Dec_00_tp", "/", sep = "",
+dirName <- paste0(system.file("", package = "fishcastr"),"/extdata/", "/ERA5_2020_Dec_00_tp", "/", sep = "",
                   collapse = NULL)
 dir.create(dirName, showWarnings = FALSE, mode = "0777")
 
 ncfile <- ecmwfr::wf_request(user = "xxxxx",
                              request = request_Dec_1_pr_0000_0600_2020,
                              transfer = TRUE,
-                             path = paste0(getwd(),"/inst/extdata/ERA5_2020_Dec_00_tp"),
+                             path = paste0(system.file("", package = "fishcastr"),"/extdata/ERA5_2020_Dec_00_tp"),
                              verbose = TRUE)
 
 # ----------------------------------------------------------------------------------- #
@@ -192,14 +192,14 @@ request_Dec_1_0700_end_month_2020 <- list(
   target = "download.nc"
 )
 # reanalysis December 1st 07:00 onwards
-dirName <- paste0(getwd(),"/inst/extdata/", "/ERA5_2020_Dec_07", "/", sep = "",
+dirName <- paste0(system.file("", package = "fishcastr"),"/extdata/", "/ERA5_2020_Dec_07", "/", sep = "",
                   collapse = NULL)
 dir.create(dirName, showWarnings = FALSE, mode = "0777")
 
 ncfile <- ecmwfr::wf_request(user = "xxxxx",
                              request = request_Dec_1_0700_end_month_2020,
                              transfer = TRUE,
-                             path = paste0(getwd(),"/inst/extdata/ERA5_2020_Dec_07"),
+                             path = paste0(system.file("", package = "fishcastr"),"/extdata/ERA5_2020_Dec_07"),
                              verbose = TRUE)
 
 # ----------------------------------------------------------------------------------- #
@@ -217,13 +217,13 @@ request_Jan_1_0000_end_month_2021 <- list(
   target = "download.nc"
 )
 # reanalysis January
-dirName <- paste0(getwd(),"/inst/extdata/", "/ERA5_2021_Jan", "/", sep = "",
+dirName <- paste0(system.file("", package = "fishcastr"),"/extdata/", "/ERA5_2021_Jan", "/", sep = "",
                   collapse = NULL)
 dir.create(dirName, showWarnings = FALSE, mode = "0777")
 ncfile <- ecmwfr::wf_request(user = "xxxxx",
                              request = request_Jan_1_0000_end_month_2021,
                              transfer = TRUE,
-                             path = paste0(getwd(),"/inst/extdata/ERA5_2021_Jan"),
+                             path = paste0(system.file("", package = "fishcastr"),"/extdata/ERA5_2021_Jan"),
                              verbose = TRUE)
 
 # ----------------------------------------------------------------------------------- #
@@ -243,14 +243,14 @@ ncfile <- ecmwfr::wf_request(user = "xxxxx",
 # load data and convert all raw grid data into form for binding grids ----
 
 # existing grid in climate4R format
-dataset_old <- readRDS(paste0(getwd(),"/data/ERA5_WATExR_tas_pr_petH_raw_op_2020_Au.rds"))
+dataset_old <- readRDS(paste0(system.file("", package = "fishcastr"),"/data/ERA5_WATExR_tas_pr_petH_raw_op_2020_Au.rds"))
 
 # freshly downloaded .nc file file paths
-dataset_July_Nov <- paste0(getwd(),"/inst/extdata/ERA5_2020_Jul_Nov/download.nc")
-dataset_Dec_00_t2m <- paste0(getwd(),"/inst/extdata/ERA5_2020_Dec_00_t2m/download.nc")
-dataset_Dec_00_tp <- paste0(getwd(),"/inst/extdata/ERA5_2020_Dec_00_tp/download.nc")
-dataset_Dec_07 <- paste0(getwd(),"/inst/extdata/ERA5_2020_Dec_07/download.nc")
-dataset_Jan <- paste0(getwd(),"/inst/extdata/ERA5_2021_Jan/download.nc")
+dataset_July_Nov <- paste0(system.file("", package = "fishcastr"),"/extdata/ERA5_2020_Jul_Nov/download.nc")
+dataset_Dec_00_t2m <- paste0(system.file("", package = "fishcastr"),"/extdata/ERA5_2020_Dec_00_t2m/download.nc")
+dataset_Dec_00_tp <- paste0(system.file("", package = "fishcastr"),"/extdata/ERA5_2020_Dec_00_tp/download.nc")
+dataset_Dec_07 <- paste0(system.file("", package = "fishcastr"),"/extdata/ERA5_2020_Dec_07/download.nc")
+dataset_Jan <- paste0(system.file("", package = "fishcastr"),"/extdata/ERA5_2021_Jan/download.nc")
 
 # ------------------------------------------------------------------------------------ #
 # Jul - Nov 2020 ----
@@ -264,7 +264,7 @@ lonLim <- c(-10,-9.5)
 latLim <- c(53.8,54.2)
 require(rJava) # need this for is.jnull function if not loading entire loadeR package
 di <- loadeR::dataInventory(dataset = dataset_July_Nov)
-dicName <- paste0(getwd(), "/inst/extdata/ERA5_ecmwf.dic")
+dicName <- paste0(system.file("", package = "fishcastr"), "/extdata/ERA5_ecmwf.dic")
 list_era5_Jul_Nov_t2m_tp <- lapply(1:length(variables), function(x) loadeR::loadGridData(dataset_July_Nov,
                                                                                  var = variables[x],
                                                                                  years = years,
@@ -350,7 +350,7 @@ latLim <- c(53.8,54.2)
 #?loadeR::loadGridData
 require(rJava) # need this for is.jnull function if not loading entire loadeR package
 di <- loadeR::dataInventory(dataset = dataset_Dec_00_t2m)
-dicName <- paste0(getwd(), "/inst/extdata/ERA5_ecmwf.dic")
+dicName <- paste0(system.file("", package = "fishcastr"), "/extdata/ERA5_ecmwf.dic")
 list_era5_Dec_00_t2m <- lapply(1:length(variables), function(x) loadeR::loadGridData(dataset_Dec_00_t2m,
                                                                                          var = variables[x],
                                                                                          years = years,
@@ -429,7 +429,7 @@ latLim <- c(53.8,54.2)
 #?loadeR::loadGridData
 require(rJava) # need this for is.jnull function if not loading entire loadeR package
 di <- loadeR::dataInventory(dataset = dataset_Dec_00_tp)
-dicName <- paste0(getwd(), "/inst/extdata/ERA5_ecmwf.dic")
+dicName <- paste0(system.file("", package = "fishcastr"), "/extdata/ERA5_ecmwf.dic")
 list_era5_Dec_00_tp <- lapply(1:length(variables), function(x) loadeR::loadGridData(dataset_Dec_00_tp,
                                                                                      var = variables[x],
                                                                                      years = years,
@@ -490,7 +490,7 @@ lonLim <- c(-10,-9.5)
 latLim <- c(53.8,54.2)
 require(rJava) # need this for is.jnull function if not loading entire loadeR package
 di <- loadeR::dataInventory(dataset = dataset_Jan)
-dicName <- paste0(getwd(), "/inst/extdata/ERA5_ecmwf.dic")
+dicName <- paste0(system.file("", package = "fishcastr"), "/extdata/ERA5_ecmwf.dic")
 list_era5_Jan_t2m_tp <- lapply(1:length(variables), function(x) loadeR::loadGridData(dataset_Jan,
                                                                                          var = variables[x],
                                                                                          years = years,
@@ -628,13 +628,13 @@ ERA5_op_bind_raw <- list("tas"= ERA5_op_bind_tas$tas,
 
 # export new op data 2021
 saveRDS(ERA5_op_bind_raw,
-        file = paste0(getwd(),"/data/ERA5_WATExR_tas_pr_petH_raw_op_2021_Sp.rds"))
+        file = paste0(system.file("", package = "fishcastr"),"/data/ERA5_WATExR_tas_pr_petH_raw_op_2021_Sp.rds"))
 # ------------------------------------------------------------------------------------------ #
 
 # BIAS Correct op data
-data_op <- readRDS(file = paste0(getwd(),"/data/ERA5_WATExR_tas_pr_petH_raw_op_2021_Sp.rds"))
+data_op <- readRDS(file = paste0(system.file("", package = "fishcastr"),"/data/ERA5_WATExR_tas_pr_petH_raw_op_2021_Sp.rds"))
 #any(is.na(data_op$petH$Data)) # no nas in reanalysis data
-obs.data <- readRDS(paste0(getwd(),"/data/Furnace_Station_1979_2019_1_2_3_4_5_6_7_8_9_10_11_12_tas_pr_petH.rds"))
+obs.data <- readRDS(paste0(system.file("", package = "fishcastr"),"/data/Furnace_Station_1979_2019_1_2_3_4_5_6_7_8_9_10_11_12_tas_pr_petH.rds"))
 #any(is.na(obs.data$pr$Data)) # no nas in obs data
 # Subset observational data to the same dates as forecast data for bias correction calibration
 obs.data <- lapply(1:length(obs.data), function(x)  {transformeR::intersectGrid(obs.data[[x]], data_op[[x]], type = "temporal", which.return = 1)})
@@ -730,7 +730,7 @@ data.bc.bind <- list("tas" = data.bc.tas.list.bind,
 
 #any(is.na(data.bc.bind))
 season <- 1:12
-dir.Rdata <-  paste0(getwd(),"/data/")
+dir.Rdata <-  paste0(system.file("", package = "fishcastr"),"/data/")
 
 # sort out NA introduced at location 9692... still don't know why the biasCorrection function introduces this NA...
 which(is.na(data.bc.bind$tas$Data)) # no NAs
@@ -799,7 +799,7 @@ usethis::use_data(era5_reanalysis_raw_Jan2021, overwrite = TRUE)
 #startTime <- format(as.POSIXlt(yymmdd[1]), format = "%Y%m%d")
 #endTime <- format(tail(as.POSIXlt(yymmdd), n = 1), format = "%Y%m%d")
 #dirName <- paste0(dir.data, lake_id, "/CLIMATE/", lake_id, "_", institution, "_", ClimateModelName, "_", ExperimentName, "_", member, "_", freq, "_", startTime, "-", endTime, "/", sep = "", collapse = NULL)
-dir.data <-  paste0(getwd(),'/inst/extdata/ERA5_bcc_op_Sp')
+dir.data <-  paste0(system.file("", package = "fishcastr"),'/extdata/ERA5_bcc_op_Sp')
 dirName <- paste0(dir.data, "/", sep = "", collapse = NULL)
 dir.create(dirName, showWarnings = TRUE, recursive = TRUE, mode = "0777")
 write.table(df, paste0(dirName,"meteo_file.dat", sep = "", collapse = NULL), sep = "\t", row.names = FALSE, col.names = FALSE, quote = FALSE)

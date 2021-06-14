@@ -64,7 +64,10 @@ Suggests:
     lme4,
     downloader,
     ecmwfr,
-    keyring
+    keyring,
+    kableExtra,
+    bookdown,
+    minidown
 VignetteBuilder: knitr
 Depends: 
     R (>= 3.5.0)

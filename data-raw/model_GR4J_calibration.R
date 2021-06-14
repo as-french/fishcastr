@@ -149,7 +149,8 @@ opts <- airGR::CreateRunOptions(airGR::RunModel_GR4J,
 #Param = c(350,0,40,0.5) # From https://wiki.ewater.org.au/display/SD41/GR4J+-+SRG
 
 
-# # choose starting set of parameters based on similar hydroclimate as defined in Harrigan 2018 et al., sup materials
+# # choose starting set of parameters based on similar hydroclimate as defined
+# in Harrigan 2018 et al., sup materials
 url = "https://hess.copernicus.org/articles/22/2023/2018/hess-22-2023-2018-supplement.zip"
 dirName <- paste0(system.file("extdata", package = "fishcastr"),
                   "/Harrigan_GR4J_params/")
@@ -251,15 +252,15 @@ hydroGOF::rmse(OutputsModel$Qsim, inp.cal$flow.mm.day) # 2.242316
 #                      "/vignettes/")
 #dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+dirName <- paste0(system.file("extdata", package = "fishcastr"),
                   "/vignette_figures/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+dirName <- paste0(system.file("extdata", package = "fishcastr"),
                   "/vignette_figures/hydrologic_model/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-#dirName <- paste0(system.file("vignettes", package = "fishcastr"),
+#dirName <- paste0(system.file("extdata", package = "fishcastr"),
 #                  "/hydrologic_model/Fig_Burr_GR4J_calib/")
 #dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
@@ -355,7 +356,7 @@ cal_stats <-
 # export validation data to rds file
 saveRDS(list("cal_stats" = cal_stats,
              "val_stats" = val_stats),
-        file = paste0(system.file("vignettes",package = "fishcastr"),
+        file = paste0(system.file("extdata",package = "fishcastr"),
                       "/vignette_figures/hydrologic_model/GR4J_cal_val_stats.rds"))
 
 GR4J_Burr_params_ERA5_bcc <- data.frame(prod.stor.cap_mm = Param[1],

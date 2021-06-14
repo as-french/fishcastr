@@ -32,8 +32,8 @@ list_years <- list(c(1979:1984),
                    c(2009:2014),
                    c(2015:2018))
 
-arc_dir <- paste0(system.file("inst", package = "fishcastr"),
-                  "/extdata/ECMWF_ERA5")
+arc_dir <- paste0(system.file("extdata", package = "fishcastr"),
+                  "/ECMWF_ERA5")
 dir.create(arc_dir, showWarnings = TRUE, mode = "0777")
 
 for(i in 1:7){

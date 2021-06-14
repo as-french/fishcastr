@@ -66,7 +66,7 @@ years <- 1993
 season <- c(2,3,4,5,6,7,8) # Spring during run (make this 7 months)
 #agg.fun <- c("mean")
 #tim <- c("DD")
-dicName <- paste0(getwd(), "/inst/extdata/SYSTEM5_ecmwf_Seasonal_25Members_SFC_online.dic")
+dicName <- paste0(getwd(), "/extdata/SYSTEM5_ecmwf_Seasonal_25Members_SFC_online.dic")
 
 # ---------------------------------------------------------------------------------------------- #
 # 2M TEMPERATURE (mean)
@@ -352,7 +352,7 @@ years <- 1996
 season <- c(2,3,4,5,6,7,8) # Spring during run (make this 7 months)
 agg.fun <- c("mean")
 tim <- c("DD")
-dicName <- paste0(getwd(), "/inst/extdata/SYSTEM5_ecmwf_Seasonal_25Members_SFC_online.dic")
+dicName <- paste0(getwd(), "/extdata/SYSTEM5_ecmwf_Seasonal_25Members_SFC_online.dic")
 
 # ---------------------------------------------------------------------------------------------- #
 # 2M TEMPERATURE (mean)
@@ -640,7 +640,7 @@ years <- 1993
 season <- c(7,8,9,10,11,12) # Autumn during run (make this 7 months)
 #agg.fun <- c("mean")
 #tim <- c("DD")
-dicName <- paste0(getwd(), "/inst/extdata/SYSTEM5_ecmwf_Seasonal_25Members_SFC_online.dic")
+dicName <- paste0(getwd(), "/extdata/SYSTEM5_ecmwf_Seasonal_25Members_SFC_online.dic")
 
 # ---------------------------------------------------------------------------------------------- #
 # 2M TEMPERATURE (mean)
@@ -927,7 +927,7 @@ years <- 1996
 season <- c(7,8,9,10,11,12) # Autumn during run (make this 7 months)
 #agg.fun <- c("mean")
 #tim <- c("DD")
-dicName <- paste0(getwd(), "/inst/extdata/SYSTEM5_ecmwf_Seasonal_25Members_SFC_online.dic")
+dicName <- paste0(getwd(), "/extdata/SYSTEM5_ecmwf_Seasonal_25Members_SFC_online.dic")
 
 # ---------------------------------------------------------------------------------------------- #
 # 2M TEMPERATURE (mean)

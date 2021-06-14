@@ -49,6 +49,9 @@ download_MR_temperature <- function(){
 
   data_MR_temp <- merge(date_seq, data_MR_sub, by = "date", all.x = TRUE)
 
+  # replace incorrect 1.8 value to 10.8 on 2000-06-05
+  data_MR_temp$meanT[which(data_MR_temp$date == as.Date("2000-06-05"))] <- 10.8
+
   # store downloaded and processed data as .rds file
   saveRDS(object = data_MR_temp, file = paste0(system.file("extdata", package = "fishcastr"),
                                                              "/data_MR_temp.rds"))

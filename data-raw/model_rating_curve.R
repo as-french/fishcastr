@@ -79,7 +79,7 @@ colnames(dist_quantiles) <- c("wlevel_m","lwr_CI","median","upr_CI","mean")
 
 # PIs (adjusts for uncertainty in point estimate for mean; i.e., takes into
 # account model parameter uncertainty (shown by CIs); uncertainty illustrated by
-# PIs is based on gamma distribution sampling errors AND uncertainty in the mean
+# PIs is based on gamma conditional distribution AND uncertainty in the mean
 # estimate)
 pred_intervals <- cbind(level_vals,
                         t(apply(vardist,
@@ -88,16 +88,8 @@ pred_intervals <- cbind(level_vals,
                         apply(vardist, MARGIN = 1, FUN = mean))
 colnames(pred_intervals) <- c("wlevel_m","lwr_CI","median","upr_CI","mean")
 
-dirName <- paste0(system.file("", package = "fishcastr"),
-                  "/vignettes/")
-dir.create(dirName, showWarnings = TRUE, mode = "0777")
-
-dirName <- paste0(system.file("vignettes", package = "fishcastr"),
-                  "/figure/")
-dir.create(dirName, showWarnings = TRUE, mode = "0777")
-
-dirName <- paste0(system.file("vignettes", package = "fishcastr"),
-                  "/figure/Fig_Burr_Rating_curve/")
+dirName <- paste0(system.file("extdata", package = "fishcastr"),
+                  "/SK_Feeagh_rating_curve/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
 png(paste0(dirName,"Rating_curve.png"), height = 1500, width = 1500, res = 300)

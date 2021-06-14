@@ -6,8 +6,8 @@
 # ----------------------------------------------------------------------------------------- #
 
 nc_path <- paste0(
-  system.file("inst", package = "fishcastr"),
-  "/extdata/ECMWF_SEAS5/download_salmon_t2m/download_salmon_t2m_unzip"
+  system.file("extdata", package = "fishcastr"),
+  "/ECMWF_SEAS5/download_salmon_t2m/download_salmon_t2m_unzip"
 )
 
 # ----------------------------------------------------------------------------------------- #
@@ -60,8 +60,8 @@ petH$Variable$varName <- "petH"
 # PR
 # ----------------------------------------------------------------------------------------- #
 nc_path <- paste0(
-  system.file("inst", package = "fishcastr"),
-  "/extdata/ECMWF_SEAS5/download_salmon_tp/download_salmon_tp_unzip"
+  system.file("extdata", package = "fishcastr"),
+  "/ECMWF_SEAS5/download_salmon_tp/download_salmon_tp_unzip"
 )
 
 tp_data <- fishcastr::read_nc_to_grid(nc_folder_path = nc_path,
@@ -100,8 +100,8 @@ months <- range(lubridate::month(data.interp$tas$Dates$start))
 vars <- names(data.interp)
 saveRDS(data.interp,
         file = paste0(
-          system.file("inst", package = "fishcastr"),
-          "/extdata/grid_SEAS5_",years[1],"_",years[2],"_",paste(months[1]:months[2],collapse = "_"),"_",
+          system.file("extdata", package = "fishcastr"),
+          "/grid_SEAS5_",years[1],"_",years[2],"_",paste(months[1]:months[2],collapse = "_"),"_",
           paste(vars,collapse = "_"),"_raw_CDS.rds"
         ))
 # ----------------------------------------------------------------------------------------- #

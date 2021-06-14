@@ -37,8 +37,8 @@
 # This defines where the .dat files will be archived - parent of r package to
 # keep out of git. This ensures static data are not stored in github.
 
-arc_dir <- paste0(system.file("inst", package = "fishcastr"),
-                  "/extdata/ISIMIP_EWEMBI")
+arc_dir <- paste0(system.file("extdata", package = "fishcastr"),
+                  "/ISIMIP_EWEMBI")
 dir.create(arc_dir, showWarnings = TRUE, recursive = TRUE, mode = "0777")
 
 #arc_dir <- paste0(sub("/[^/]+$", "", getwd()),"/climate_data/")
@@ -141,8 +141,8 @@ grid_ewembi_1979_2016 <- grid_ewembi_1979_2016_round
 #usethis::use_data(grid_ewembi_1979_2016, overwrite = TRUE)
 
 # store downloaded and processed data as .rds file
-saveRDS(object = grid_ewembi_1979_2016, file = paste0(system.file("inst", package = "fishcastr"),
-                                                   "/extdata/ISIMIP_EWEMBI/grid_ewembi_1979_2016_UC.rds"))
+saveRDS(object = grid_ewembi_1979_2016, file = paste0(system.file("extdata", package = "fishcastr"),
+                                                   "/ISIMIP_EWEMBI/grid_ewembi_1979_2016_UC.rds"))
 
 ########## BUILD FINAL DATA --------------------------------------------------------------
 data <- grid_ewembi_1979_2016
@@ -177,5 +177,5 @@ write.table(df, paste0(dirName,"meteo_file.dat", sep = "", collapse = NULL), sep
   df <- df[,-2]
   data_ewembi_1979_2016 <- df
  #usethis::use_data(data_ewembi_1979_2016, overwrite = TRUE)
-  saveRDS(object = data_ewembi_1979_2016, file = paste0(system.file("inst", package = "fishcastr"),
-                                                        "/extdata/ISIMIP_EWEMBI/data_ewembi_1979_2016_UC.rds"))
+  saveRDS(object = data_ewembi_1979_2016, file = paste0(system.file("extdata", package = "fishcastr"),
+                                                        "/ISIMIP_EWEMBI/data_ewembi_1979_2016_UC.rds"))

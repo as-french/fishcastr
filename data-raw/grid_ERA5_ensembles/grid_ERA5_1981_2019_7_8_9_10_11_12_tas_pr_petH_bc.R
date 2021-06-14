@@ -10,8 +10,8 @@
 # LOAD BC ERA5 RDATA ) (needs to be to end of August 2019; i.e., the end of the target season)
 #ERA5_data <- fishcastr::grid_ERA5_1979_2020_Jan_bc
 ERA5_data <- readRDS(file = paste0(
-  system.file("inst", package = "fishcastr"),
-  "/extdata/grid_ERA5_1979_2019_bc_CDS.rds"
+  system.file("extdata", package = "fishcastr"),
+  "/grid_ERA5_1979_2019_bc_CDS.rds"
 ))
 
 # ----------------------------------------------------------------------------------------------- #
@@ -20,8 +20,8 @@ ERA5_data <- readRDS(file = paste0(
 # SPRING
 #SEAS5_data_autumn_op <- fishcastr::grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_raw
 SEAS5_data_autumn_op <- readRDS(file = paste0(
-  system.file("inst", package = "fishcastr"),
-  "/extdata/grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_raw_CDS.rds"
+  system.file("extdata", package = "fishcastr"),
+  "/grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_raw_CDS.rds"
 ))
 
 
@@ -150,6 +150,6 @@ usethis::use_data(grid_ERA5_1981_2019_7_8_9_10_11_12_tas_pr_petH_bc, overwrite =
 
 saveRDS(grid_ERA5_1981_2019_7_8_9_10_11_12_tas_pr_petH_bc,
         file = paste0(
-          system.file("inst", package = "fishcastr"),
-          "/extdata/grid_ERA5_1981_2019_7_8_9_10_11_12_tas_pr_petH_bc_CDS.rds"
+          system.file("extdata", package = "fishcastr"),
+          "/grid_ERA5_1981_2019_7_8_9_10_11_12_tas_pr_petH_bc_CDS.rds"
         ))

@@ -60,7 +60,7 @@ years <- 1993:2016
 season <- c(7,8,9,10,11,12) # Autumn during run (make this 7 months)
 
 cdsNcML <- "http://meteo.unican.es/tds5/dodsC/Copernicus/SYSTEM5_ecmwf_Seasonal_25Members_SFC.ncml"
-dicName <- paste0(getwd(), "/inst/extdata/SYSTEM5_ecmwf_Seasonal_25Members_SFC.dic")
+dicName <- paste0(system.file("", package = "fishcastr"), "/extdata/SYSTEM5_ecmwf_Seasonal_25Members_SFC.dic")
 
 # test lapply version
 data.S5.autumn <- lapply(1:length(variables), function (x) loadeR::loadSeasonalForecast(cdsNcML,
@@ -124,7 +124,7 @@ grid_SEAS5_1993_2016_7_8_9_10_11_12_tas_pr_petH_raw$pr$InitializationDates <- In
 grid_SEAS5_1993_2016_7_8_9_10_11_12_tas_pr_petH_raw$petH$InitializationDates <- InitializationDates
 
 # export the re-forecasts 1993 to 2016
-dirName <- paste0(getwd(), "/inst/extdata/SEAS5_archive_1993_2019", sep = "", collapse = NULL)
+dirName <- paste0(system.file("", package = "fishcastr"), "/extdata/SEAS5_archive_1993_2019", sep = "", collapse = NULL)
 dir.create(dirName, showWarnings = TRUE, recursive = TRUE, mode = "0777")
 
 saveRDS(object = grid_SEAS5_1993_2016_7_8_9_10_11_12_tas_pr_petH_raw,file = paste0(dirName,"/grid_SEAS5_1993_2016_7_8_9_10_11_12_tas_pr_petH_raw.rds"))
@@ -141,7 +141,7 @@ lead.month <- 0
 years <- 2017:2019
 season <- c(7,8,9,10,11,12) # Autumn during run
 
-dicName <- paste0(getwd(), "/inst/extdata/SYSTEM5_ecmwf_Seasonal_25Members_SFC.dic")
+dicName <- paste0(system.file("", package = "fishcastr"), "/extdata/SYSTEM5_ecmwf_Seasonal_25Members_SFC.dic")
 cdsNcML <- "http://data.meteo.unican.es/tds5/dodsC/Copernicus/SYSTEM5_ecmwf_forecast_Seasonal_51Members_SFC.ncml"
 #diop <- loadeR::dataInventory(cdsNcML)
 
@@ -182,7 +182,7 @@ tasmax <- loadeR::loadSeasonalForecast(cdsNcML, var = "tas", years = years,dicti
 
 data_tas_min_max_SEAS5 <- list("tas_min" = tasmin,"tas_max" = tasmax)
 
-data_tas_min_max_SEAS5dir <- paste0(getwd(),"/inst/extdata/SF_Autumn_op_raw/S5_seas_25_7_8_9_10_11_12_tas_min_tas_max.rds")
+data_tas_min_max_SEAS5dir <- paste0(system.file("", package = "fishcastr"),"/extdata/SF_Autumn_op_raw/S5_seas_25_7_8_9_10_11_12_tas_min_tas_max.rds")
 grid_SEAS5_2017_2020_7_8_9_10_11_12_tasmin_tasmax <- readRDS(data_tas_min_max_SEAS5dir)
 grid_SEAS5_2017_2019_7_8_9_10_11_12_tasmin_tasmax <- lapply(grid_SEAS5_2017_2020_7_8_9_10_11_12_tasmin_tasmax,
                                                            function(x) transformeR::subsetGrid(grid = x,
@@ -258,6 +258,6 @@ grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_raw$tas$InitializationDates <- I
 grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_raw$pr$InitializationDates <- InitializationDates
 grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_raw$petH$InitializationDates <- InitializationDates
 
-#grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_raw <- readRDS(paste0(getwd(),"/data/grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_raw.rds"))
+#grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_raw <- readRDS(paste0(system.file("", package = "fishcastr"),"/data/grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_raw.rds"))
 
 usethis::use_data(grid_SEAS5_1993_2019_7_8_9_10_11_12_tas_pr_petH_raw, overwrite = TRUE)

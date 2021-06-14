@@ -51,12 +51,12 @@ list_years <- list(c(1993:1996),
 # 1. 2M AIR TEMPERATURE (SALMONIDS)
 # ----------------------------------------------------------------------------------------------------------#
 
-arc_dir <- paste0(system.file("inst", package = "fishcastr"),
-                  "/extdata/ECMWF_SEAS5")
+arc_dir <- paste0(system.file("extdata", package = "fishcastr"),
+                  "/ECMWF_SEAS5")
 dir.create(arc_dir, showWarnings = TRUE, mode = "0777")
 
-arc_dir <- paste0(system.file("inst", package = "fishcastr"),
-                  "/extdata/ECMWF_SEAS5/download_salmon_t2m")
+arc_dir <- paste0(system.file("extdata", package = "fishcastr"),
+                  "/ECMWF_SEAS5/download_salmon_t2m")
 dir.create(arc_dir, showWarnings = TRUE, mode = "0777")
 
 for(i in c(1:7)){
@@ -131,12 +131,12 @@ for(i in 1:7){
 # 2. PRECIPITATION (SALMONIDS)
 # ----------------------------------------------------------------------------------------------------------#
 
-arc_dir <- paste0(system.file("inst", package = "fishcastr"),
-                  "/extdata/ECMWF_SEAS5")
+arc_dir <- paste0(system.file("extdata", package = "fishcastr"),
+                  "/ECMWF_SEAS5")
 dir.create(arc_dir, showWarnings = TRUE, mode = "0777")
 
-arc_dir <- paste0(system.file("inst", package = "fishcastr"),
-                  "/extdata/ECMWF_SEAS5/download_salmon_tp")
+arc_dir <- paste0(system.file("extdata", package = "fishcastr"),
+                  "/ECMWF_SEAS5/download_salmon_tp")
 dir.create(arc_dir, showWarnings = TRUE, mode = "0777")
 
 for(i in 1:7){
@@ -202,12 +202,12 @@ for(i in 1:7){
  # 1. 2M AIR TEMPERATURE (EEL)
  # ----------------------------------------------------------------------------------------------------------#
 
- arc_dir <- paste0(system.file("inst", package = "fishcastr"),
-                   "/extdata/ECMWF_SEAS5")
+ arc_dir <- paste0(system.file("extdata", package = "fishcastr"),
+                   "/ECMWF_SEAS5")
  dir.create(arc_dir, showWarnings = TRUE, mode = "0777")
 
- arc_dir <- paste0(system.file("inst", package = "fishcastr"),
-                   "/extdata/ECMWF_SEAS5/download_eel_t2m")
+ arc_dir <- paste0(system.file("extdata", package = "fishcastr"),
+                   "/ECMWF_SEAS5/download_eel_t2m")
  dir.create(arc_dir, showWarnings = TRUE, mode = "0777")
 
  for(i in c(1:7)){
@@ -282,12 +282,12 @@ for(i in 1:7){
  # 2. PRECIPITATION (SALMONIDS)
  # ----------------------------------------------------------------------------------------------------------#
 
- arc_dir <- paste0(system.file("inst", package = "fishcastr"),
-                   "/extdata/ECMWF_SEAS5")
+ arc_dir <- paste0(system.file("extdata", package = "fishcastr"),
+                   "/ECMWF_SEAS5")
  dir.create(arc_dir, showWarnings = TRUE, mode = "0777")
 
- arc_dir <- paste0(system.file("inst", package = "fishcastr"),
-                   "/extdata/ECMWF_SEAS5/download_eel_tp")
+ arc_dir <- paste0(system.file("extdata", package = "fishcastr"),
+                   "/ECMWF_SEAS5/download_eel_tp")
  dir.create(arc_dir, showWarnings = TRUE, mode = "0777")
 
  for(i in 1:7){
