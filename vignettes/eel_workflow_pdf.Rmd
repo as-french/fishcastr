@@ -22,11 +22,6 @@ date: |
   | Corresponding author:
   | Andrew S French; address: Marine Institute, Furnace, Newport, Co. Mayo, Ireland; email: Andrew.French@marine.ie; Phone: +353 98 42300
 output:
-  bookdown::pdf_document2:
-    number_sections: no
-    toc: yes
-    toc_depth: 2
-    keep_tex: yes
   bookdown::html_document2:
     fig_retina: null
     toc: yes
@@ -35,6 +30,11 @@ output:
     keep_md: yes
     fig_caption: yes
     number_sections: no
+  bookdown::pdf_document2:
+    number_sections: no
+    toc: yes
+    toc_depth: 2
+    keep_tex: yes
   bookdown::word_document2:
     reference_docx: word-styles-reference-02.docx
     toc: yes
@@ -273,53 +273,68 @@ eel_bio_year <-
 #----------------------------------------------------------------------------------------------------------- #
 # SAVE EEL BIOYEAR DATA FOR SUPPLEMENTARY TABLE ----
 #----------------------------------------------------------------------------------------------------------- #
-tab_eel_latex <-
-  knitr::kable(
-    fishcastr::min_max_bio_year_date(
+eel_bio_year_tab <- fishcastr::min_max_bio_year_date(
       dates = eel_bio_year$date,
       bio_years = eel_bio_year$eel_year,
       biofix_day = eel_bio_year$eel_yday_biofix
-    ),
-  format = "latex",
-  caption = "\\label{tab:appendix-s1-table}\\textit{European eel (\\textnormal{A. anguilla}) forecast years defined for Burrishoole between 1981 and 2018. Forecast year start dates and end dates are defined concurrently. Forecast year start dates are denoted by the first day of the calendar year that follows a consecutive period of 10 days during which water temperatures exceeded of 11\\degree C.}"
-  , booktabs = TRUE)
+    )
 
-tab_eel_html <-
-  knitr::kable(
-    fishcastr::min_max_bio_year_date(
-      dates = eel_bio_year$date,
-      bio_years = eel_bio_year$eel_year,
-      biofix_day = eel_bio_year$eel_yday_biofix
-    ),
-  format = "html",
-  caption = "\\label{tab:appendix-s1-table}\\textit{European eel (\\textnormal{A. anguilla}) forecast years defined for Burrishoole between 1981 and 2018. Forecast year start dates and end dates are defined concurrently. Forecast year start dates are denoted by the first day of the calendar year that follows a consecutive period of 10 days during which water temperatures exceeded 11\\degree C.}"
-  , booktabs = TRUE)
+# tab_eel_latex <-
+#   knitr::kable(
+#     fishcastr::min_max_bio_year_date(
+#       dates = eel_bio_year$date,
+#       bio_years = eel_bio_year$eel_year,
+#       biofix_day = eel_bio_year$eel_yday_biofix
+#     ),
+#   format = "latex",
+#   caption = "\\label{tab:appendix-s1-table}\\textit{European eel (\\textnormal{A. anguilla}) forecast years defined for Burrishoole between 1981 and 2018. Forecast year start dates and end dates are defined concurrently. Forecast year start dates are denoted by the first day of the calendar year that follows a consecutive period of 10 days during which water temperatures exceeded of 11\\degree C.}"
+#   , booktabs = TRUE)
+# 
+# tab_eel_html <-
+#   knitr::kable(
+#     fishcastr::min_max_bio_year_date(
+#       dates = eel_bio_year$date,
+#       bio_years = eel_bio_year$eel_year,
+#       biofix_day = eel_bio_year$eel_yday_biofix
+#     ),
+#   format = "html",
+#   caption = "European eel (*A. anguilla*) forecast years defined for Burrishoole between 1981 and 2018. Forecast year start dates and end dates are defined concurrently. Forecast year start dates are denoted by the first day of the calendar year that follows a consecutive period of 10 days during which water temperatures exceeded 11 degrees Celsius."
+#   , booktabs = TRUE)
 
-eel_year_table_latex <-
-  kableExtra::kable_styling(kable_input = tab_eel_latex, position = "center", font_size = 7.5)
+#eel_year_table_latex <-
+#  kableExtra::kable_styling(kable_input = tab_eel_latex, position = "center", font_size = 7.5)
 
-eel_year_table_html <-
-  kableExtra::kable_styling(kable_input = tab_eel_html, position = "center", font_size = 7.5)
+#eel_year_table_html <-
+#  kableExtra::kable_styling(kable_input = tab_eel_html, position = "center", font_size = 12)
 
 # Create vignette sub directory ----
 dirName <-
   paste0(system.file("extdata", package = "fishcastr"),
          "/vignette_tables/")
 dir.create(dirName, showWarnings = TRUE, mode = "0777")
-saveRDS(eel_year_table_latex, file = paste0(dirName, "eel_year_table_latex.rds"))
-saveRDS(eel_year_table_html, file = paste0(dirName, "eel_year_table_html.rds"))
+#saveRDS(eel_year_table_latex, file = paste0(dirName, "eel_year_table_latex.rds"))
+#saveRDS(eel_year_table_html, file = paste0(dirName, "eel_year_table_html.rds"))
+saveRDS(eel_bio_year_tab, file = paste0(dirName, "eel_year_table.rds"))
 
 rm(list = ls(all.names = TRUE))
 invisible(gc())
 ```
+
+(ref:appendix-s1-table) *European eel (*A. anguilla*) forecast years defined for Burrishoole between 1981 and 2018. Forecast year start dates and end dates are defined concurrently. Forecast year start dates are denoted by the first day of the calendar year that follows a consecutive period of 10 days during which water temperatures exceeded 11 degrees Celsius.*
 
 ```{r appendix-s1-table, out.width="100%", eval = TRUE, fig.align = 'center', echo = FALSE}
 # ----------------------------------------------------------------------------------------------------------- #
 # LOAD SUPPLEMENTARY DATA
 # ----------------------------------------------------------------------------------------------------------- #
 eel_year_table <- readRDS(paste0(system.file("extdata", package = "fishcastr"),
-                                 "/vignette_tables/eel_year_table_latex.rds"))
-eel_year_table
+                                 "/vignette_tables/eel_year_table.rds"))
+
+tab <- knitr::kable(eel_year_table,row.names = FALSE, format = "html",
+                    caption = "(ref:appendix-s1-table)",
+                    booktabs = TRUE)
+
+library(magrittr)
+tab %>% kableExtra::kable_classic(full_width = FALSE,html_font = "Arial", font_size = 12)
 ```
 
 *Observed migration timing anomalies and phenology curves*
@@ -3166,12 +3181,12 @@ res_tab <- read.table(file = paste0(dirName,"windows_op_ERA5_eel.csv"), sep = ",
 colnames(res_tab) <- res_tab[1,]
 res_tab <- res_tab[-1,]
 
-tab <- knitr::kable(res_tab,row.names = FALSE,format = "latex",
+tab <- knitr::kable(res_tab,row.names = FALSE,format = "html",
                     caption = "(ref:figure-5a-eel-result-tab-eel-1)",
                     booktabs = TRUE)
-#library(magrittr)
-#tab %>% kableExtra::kable_classic(full_width = FALSE,html_font = "Arial")
-tab
+library(magrittr)
+tab %>% kableExtra::kable_classic(full_width = FALSE,html_font = "Arial")
+#tab
 ```
 
 (ref:figure-5a-eel-result-tab-eel-1) *Receiver Operating Characteristic Skill Scores (ROCSS) for tercile based anomalies of migration timing summary statistics under ECMWF ERA5 forcing.*
@@ -3529,11 +3544,11 @@ res_tab <- read.table(file = paste0(dirName,"windows_op_SEAS5_eel.csv"), sep = "
 colnames(res_tab) <- res_tab[1,]
 res_tab <- res_tab[-1,]
 
-tab <- knitr::kable(res_tab,row.names = FALSE,format = "latex", caption = "(ref:figure-5b-eel-result-tab-eel-1)",
+tab <- knitr::kable(res_tab,row.names = FALSE,format = "html", caption = "(ref:figure-5b-eel-result-tab-eel-1)",
                     booktabs = TRUE)
-#library(magrittr)
-#tab %>% kableExtra::kable_classic(full_width = FALSE,html_font = "Arial")
-tab
+library(magrittr)
+tab %>% kableExtra::kable_classic(full_width = FALSE,html_font = "Arial")
+#tab
 ```
 
 (ref:figure-5b-eel-result-tab-eel-1) *Receiver Operating Characteristic Skill Scores (ROCSS) for tercile based anomalies of migration timing summary statistics under ECMWF SEAS5 forcing.*

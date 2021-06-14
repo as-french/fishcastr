@@ -67,7 +67,8 @@ Suggests:
     keyring,
     kableExtra,
     bookdown,
-    minidown
+    minidown,
+    magrittr
 VignetteBuilder: knitr
 Depends: 
     R (>= 3.5.0)

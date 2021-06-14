@@ -41,6 +41,8 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v1
 
+      #- uses: r-lib/actions/setup-tinytex@v1 # lengthens run time in github actions so could leave out and compile only html vignettes (noting these are larger than pdfs)
+
       - name: Query dependencies
         run: |
           install.packages('remotes')

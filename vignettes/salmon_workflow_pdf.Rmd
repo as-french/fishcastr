@@ -1,6 +1,5 @@
 ---
-title: 'Appendix S2: A seasonal forecasting workflow for the seaward migrations of
-  Atlantic salmon smolts'
+title: 'Appendix S2: A seasonal forecasting workflow for the seaward migrations of Atlantic salmon smolts'
 subtitle: |
   | Manuscript title: A seasonal forecasting workflow for the seaward migrations of diadromous fishes
 author: |
@@ -3054,12 +3053,12 @@ res_tab <- read.table(file = paste0(dirName,"windows_op_ERA5_salmon.csv"), sep =
 colnames(res_tab) <- res_tab[1,]
 res_tab <- res_tab[-1,]
 
-tab <- knitr::kable(res_tab,row.names = FALSE, format = "latex",
+tab <- knitr::kable(res_tab,row.names = FALSE, format = "html",
                     caption = "(ref:figure-5a-salmon-result-tab-salmon-1)",
                     booktabs = TRUE)
-#library(magrittr)
-#tab %>% kableExtra::kable_classic(full_width = FALSE,html_font = "Arial")
-tab
+library(magrittr)
+tab %>% kableExtra::kable_classic(full_width = FALSE,html_font = "Arial")
+#tab
 ```
 
 ```{r figure-5a-salmon-plots-salmon-1, out.width="70%", eval=FALSE, warning=FALSE, fig.align = 'center', echo = FALSE}
@@ -3426,11 +3425,11 @@ res_tab <- read.table(file = paste0(dirName,"windows_op_SEAS5_salmon.csv"), sep 
 colnames(res_tab) <- res_tab[1,]
 res_tab <- res_tab[-1,]
 
-tab <- knitr::kable(res_tab,row.names = FALSE, format = "latex", caption = "(ref:figure-5b-salmon-result-tab-salmon-1)",
+tab <- knitr::kable(res_tab,row.names = FALSE, format = "html", caption = "(ref:figure-5b-salmon-result-tab-salmon-1)",
                     booktabs = TRUE)
-#library(magrittr)
-#tab %>% kableExtra::kable_classic(full_width = FALSE,html_font = "Arial")
-tab
+library(magrittr)
+tab %>% kableExtra::kable_classic(full_width = FALSE,html_font = "Arial")
+#tab
 ```
 
 ```{r figure-5b-salmon-plots-salmon-1, out.width="70%", eval=FALSE, warning=FALSE, fig.align = 'center', echo = FALSE}
