@@ -20,6 +20,6 @@
 #'   double} \item{rout.stor.cap_mm}{routing store capacity (mm), a double}
 #'   \item{unit.hyd.time.cons_d}{unit hydrograph time constant (d), a double}
 #'   ... }
-#' @source \url{https://www.epa.ie/hydronet/#32070}
+#' @source \url{https://epawebapp.epa.ie/hydronet/#32070}
 #'
 "GR4J_Burr_params_ERA5_bcc"

@@ -5,7 +5,7 @@
 \title{Download water level for Lough Feeagh, Burrishoole, Ireland and estimate
 discharge}
 \source{
-\url{https://www.epa.ie/hydronet/#32070}
+\url{https://epawebapp.epa.ie/hydronet/#32070}
 }
 \usage{
 download_Feeagh_wlevel()

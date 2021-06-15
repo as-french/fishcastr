@@ -14,7 +14,7 @@ double} \item{rout.stor.cap_mm}{routing store capacity (mm), a double}
 ... }
 }
 \source{
-\url{https://www.epa.ie/hydronet/#32070}
+\url{https://epawebapp.epa.ie/hydronet/#32070}
 }
 \usage{
 GR4J_Burr_params_ERA5_bcc

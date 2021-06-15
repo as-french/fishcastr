@@ -26,7 +26,7 @@
 #'
 #' @return A message indicating successful or unsuccessful download.
 #' @source
-#' \url{https://www.epa.ie/hydronet/#32070}
+#' \url{https://epawebapp.epa.ie/hydronet/#32070}
 #' @examples
 #' \dontrun{
 #' download_Feeagh_wlevel()
@@ -41,7 +41,7 @@ download_Feeagh_wlevel <- function(){
                     "/EPA_Feeagh/")
   dir.create(dirName, showWarnings = TRUE, mode = "0777")
 
-  url = "https://www.epa.ie/Hydronet/output/internet/stations/CAS/32070/S/complete_15min.zip"
+  url = "https://epawebapp.epa.ie/Hydronet/output/internet/stations/CAS/32070/S/complete_15min.zip"
   downloader::download(url,
                        destfile=paste0(dirName, "complete_15min.zip"),
                        mode="wb")

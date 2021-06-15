@@ -205,45 +205,45 @@ details):
 -   [loadeR](https://github.com/SantanderMetGroup/loadeR)
 
 ``` r
-# ----------------------------------------------------------------------------------- #
+# ----------------------------------------------------------------------------------- # 
 # SETTING UP R FOR fishcastr PACKAGE INSTALLATION (FOR WINDOWS 10)
 # ----------------------------------------------------------------------------------- #
 
 # NOTES ----
-# Package built using R version 3.6.3 on windows 10
-# Might need to disable some aspect of anti-virus software to allow packages to be installed (e.g., "Safe Files" for Bitdefender 2018v onwards)
+# Package was primarily built using R version 3.6.3 on windows 10, but has been tested in R v4
+# Might need to disable some aspect of anti-virus software to allow packages to be installed
 
 # DOWNLOAD AND INSTALL Java ----
-# Download java 12.0.2 jdk 64 bit (note version 14 was not compatible at time of testing; date 19-09-2020)
-# https://www.oracle.com/java/technologies/javase/jdk12-archive-downloads.html
+# Download java 16.0.1 jdk 64 bit
+# https://www.oracle.com/java/technologies/javase-jdk16-downloads.html
 # see https://www.oracle.com/java/technologies/javase-downloads.html for other versions
 
 # SET NEW ENVIRONMENT VARIABLE "JAVA_HOME" ----
-# either manually by adding to environment path JAVA_HOME: C:\Program Files\Java\jdk-12.0.2 
+# either manually by adding to environment path JAVA_HOME: C:\Program Files\Java\jdk-16.0.1
 # or set in r using code
-# Sys.setenv(JAVA_HOME="C:/Program Files/Java/jdk-12.0.2/")
-
-# ADD JDK bin PATH TO SYSTEM ENV PATH ----
-# C:\Program Files\Java\jdk-12.0.2\bin to system Path variable
-
-# INSTALL Rtools35 - might also work with later versions ----
-# https://cran.r-project.org/bin/windows/Rtools/history.html
+# Sys.setenv(JAVA_HOME="C:/Program Files/Java/jdk-16.0.1/")
 
 # INSTALL devtools R package ----
-# install.packages("devtools")
+ install.packages("devtools")
 
 # INSTALL rJava R package ----
-# install.packages("rJava",type = "source")
+ install.packages("rJava",INSTALL_opts=c("--no-multiarch"))
 
 # INSTALL UNICAN R packages ----
 #### noting we have installed 64-bit java only; hence "--no-multiarch"
-# devtools::install_github("SantanderMetGroup/loadeR.java", INSTALL_opts=c("--no-multiarch"))
-# devtools::install_github("SantanderMetGroup/climate4R.UDG", INSTALL_opts=c("--no-multiarch"))
-# devtools::install_github("SantanderMetGroup/loadeR", INSTALL_opts=c("--no-multiarch"))
-# devtools::install_github(c("SantanderMetGroup/transformeR",
-#                            "SantanderMetGroup/downscaleR",
-#                            "SantanderMetGroup/visualizeR",
-#                            "SantanderMetGroup/drought4R"))
+ devtools::install_github("SantanderMetGroup/loadeR.java", INSTALL_opts=c("--no-multiarch"))
+ devtools::install_github("SantanderMetGroup/climate4R.UDG", INSTALL_opts=c("--no-multiarch"))
+ devtools::install_github("SantanderMetGroup/loadeR", INSTALL_opts=c("--no-multiarch"))
+ devtools::install_github(c("SantanderMetGroup/transformeR",
+                            "SantanderMetGroup/downscaleR",
+                            "SantanderMetGroup/visualizeR",
+                            "SantanderMetGroup/drought4R"))
+
+# install additional dependencies to build vignettes (if desired)
+ install.packages("rmarkdown")
+ install.packages("bookdown")
+ install.packages("kableExtra")
+ install.packages("magrittr")
 ```
 
 ## Install `fishcastr`:
@@ -282,7 +282,7 @@ These data sources are as follows:
     temperature](http://data.marine.ie/geonetwork/srv/eng/catalog.search#/metadata/ie.marine.data:dataset.3757);
 
 -   Irish Environmental Protection Agency’s [Lough Feeagh water
-    levels](https://www.epa.ie/hydronet/#32070);
+    levels](https://epawebapp.epa.ie/hydronet/#32070);
 
 -   Potsdam Institute for Climate Impact Research’s [pseudo climate
     observations (EWEMBI) for bias correction of climate input
