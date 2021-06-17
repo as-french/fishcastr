@@ -94,7 +94,7 @@ The following sections correspond to numbered items **1 a** through **3 b** in *
 
 ### *Fish counts*
 
-Here, we present complete seaward migrating anadromous brown trout smolt counts recorded between 1981 and 2019 in Burrishoole. **Figure \@ref(fig:catchment-specific-data-1-trout)** illustrates the width of the temporal window (~30 consecutive calendar days) during which downstream migrating trout smolts are expected in the Burrishoole fish traps. Note the moderate dispersion of annual counts relative to the phenology curve described by the 1981 - 2019 average daily count.
+Here, we present complete seaward migrating anadromous brown trout smolt counts recorded between 1981 and 2019 in Burrishoole. **Figure \@ref(fig:catchment-specific-data-1-trout)** illustrates the width of the temporal window (~100 consecutive calendar days) during which downstream migrating trout smolts are expected in the Burrishoole fish traps. Note the moderate dispersion of annual counts relative to the phenology curve described by the 1981 - 2019 average daily count.
 
 ```{r catchment-specific-data-fish, out.width="100%", eval=FALSE, echo = FALSE}
 # ---------------------------------------------------------------------------------------------------------- #
