@@ -238,20 +238,21 @@ details):
                             "SantanderMetGroup/downscaleR",
                             "SantanderMetGroup/visualizeR",
                             "SantanderMetGroup/drought4R"))
-
-# install additional dependencies to build vignettes (if desired)
- install.packages("rmarkdown")
- install.packages("bookdown")
- install.packages("kableExtra")
- install.packages("magrittr")
 ```
 
 ## Install `fishcastr`:
 
 ``` r
-install.packages("devtools")
+# WITHOUT VIGNETTES
 devtools::install_github("as-french/fishcastr",
                          build_vignettes = FALSE)
+
+# WITH VIGNETTES
+# install additional dependencies to build html vignettes (if desired)
+install.packages("bookdown")
+install.packages("kableExtra")
+devtools::install_github("as-french/fishcastr",
+                         build_vignettes = TRUE)
 ```
 
 # Accessing raw data
@@ -397,7 +398,11 @@ issue, please raise it at:
 `fishcastr` was built as part of the ClimateJPI ERA4CS WATExR project
 2017 - 2021 (<https://watexr.eu>).
 
-ASF, EJ, EdE, TM, RP and MD were funded by the Irish Environment
+The package was built using Hadley Wickham’s [R
+packages](https://r-pkgs.org/index.html). Also see
+<https://www.oreilly.com/library/view/r-packages/9781491910580/>
+
+ASF, EJ, EdE, TNM, RP and MD were funded by the Irish Environment
 Protection Agency (EPA) as part of the European ERA4CS ClimateJPI WATExR
 research project which received co-funding from the European Union
 (Grant 690462). SHG, MDF, MI, DM-B and RM are grateful to the MINECO-AE

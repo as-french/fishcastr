@@ -333,8 +333,8 @@ tab <- knitr::kable(eel_year_table,row.names = FALSE, format = "html",
                     caption = "(ref:appendix-s1-table)",
                     booktabs = TRUE)
 
-library(magrittr)
-tab %>% kableExtra::kable_classic(full_width = FALSE,html_font = "Arial", font_size = 12)
+kableExtra::kable_classic(kable_input = tab,
+                                  full_width = FALSE,html_font = "Arial", font_size = 12)
 ```
 
 *Observed migration timing anomalies and phenology curves*
@@ -3184,9 +3184,9 @@ res_tab <- res_tab[-1,]
 tab <- knitr::kable(res_tab,row.names = FALSE,format = "html",
                     caption = "(ref:figure-5a-eel-result-tab-eel-1)",
                     booktabs = TRUE)
-library(magrittr)
-tab %>% kableExtra::kable_classic(full_width = FALSE,html_font = "Arial")
-#tab
+
+kableExtra::kable_classic(kable_input = tab, full_width = FALSE,html_font = "Arial")
+
 ```
 
 (ref:figure-5a-eel-result-tab-eel-1) *Receiver Operating Characteristic Skill Scores (ROCSS) for tercile based anomalies of migration timing summary statistics under ECMWF ERA5 forcing.*
@@ -3546,8 +3546,8 @@ res_tab <- res_tab[-1,]
 
 tab <- knitr::kable(res_tab,row.names = FALSE,format = "html", caption = "(ref:figure-5b-eel-result-tab-eel-1)",
                     booktabs = TRUE)
-library(magrittr)
-tab %>% kableExtra::kable_classic(full_width = FALSE,html_font = "Arial")
+
+kableExtra::kable_classic(kable_input = tab, full_width = FALSE,html_font = "Arial")
 #tab
 ```
 

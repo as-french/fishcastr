@@ -3056,8 +3056,8 @@ res_tab <- res_tab[-1,]
 tab <- knitr::kable(res_tab,row.names = FALSE, format = "html",
                     caption = "(ref:figure-5a-salmon-result-tab-salmon-1)",
                     booktabs = TRUE)
-library(magrittr)
-tab %>% kableExtra::kable_classic(full_width = FALSE,html_font = "Arial")
+
+kableExtra::kable_classic(kable_input = tab, full_width = FALSE,html_font = "Arial")
 #tab
 ```
 
@@ -3427,8 +3427,8 @@ res_tab <- res_tab[-1,]
 
 tab <- knitr::kable(res_tab,row.names = FALSE, format = "html", caption = "(ref:figure-5b-salmon-result-tab-salmon-1)",
                     booktabs = TRUE)
-library(magrittr)
-tab %>% kableExtra::kable_classic(full_width = FALSE,html_font = "Arial")
+
+kableExtra::kable_classic(kable_input = tab, full_width = FALSE,html_font = "Arial")
 #tab
 ```
 

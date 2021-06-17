@@ -1,6 +1,7 @@
 Package: fishcastr
 Title: Generate Seasonal Migration Timing Forecasts for Diadromous Fishes
-Version: 0.0.0.9000
+Version: 0.0.1
+Date: 2021-06-17
 Authors@R: 
     person(given = "Andrew",
            family = "French",
@@ -66,9 +67,9 @@ Suggests:
     ecmwfr,
     keyring,
     kableExtra,
-    bookdown,
-    minidown,
-    magrittr
-VignetteBuilder: knitr
+    magrittr,
+    bookdown
+VignetteBuilder: knitr,
+    bookdown
 Depends: 
     R (>= 3.5.0)
