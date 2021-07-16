@@ -5,7 +5,8 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/as-french/fishcastr/workflows/R-CMD-check/badge.svg)](https://github.com/as-french/fishcastr/actions)
+[![R-CMD-check](https://github.com/as-french/fishcastr/workflows/R-CMD-check/badge.svg)](https://github.com/as-french/fishcastr/actions) [![DOI](https://zenodo.org/badge/345983155.svg)](https://zenodo.org/badge/latestdoi/345983155)
+
 <!-- badges: end -->
 
 # What is fishcastr?
